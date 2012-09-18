@@ -1,0 +1,18 @@
+Package: hapFabia
+Title: hapFabia: Identification of rare and short haplotype clusters in
+        large sequencing data
+Version: 0.99.0
+Date: 2012-09-01
+Author: Sepp Hochreiter <hochreit@bioinf.jku.at>
+Maintainer: Sepp Hochreiter <hochreit@bioinf.jku.at>
+Depends: R (>= 2.12.0), Biobase, fabia (>= 2.3.1)
+Imports: methods, graphics, grDevices, stats, utils, KernSmooth
+LinkingTo:
+Description: Identification of rare and short haplotype clusters in large sequencing data by FABIA biclustering. The package supports VCF formats and is based on sparse matrix operations. Provides visualization of haplotype clusters in different formats. File converting procedures are written in C.
+License: LGPL (>= 2.1)
+Collate: AllClasses.R AllGenerics.R hapFabia.R
+        methods-Factorization-class.R methods-HaploCluster-class.R
+        methods-HaploClusterList-class.R zzz.R
+URL: http://www.bioinf.jku.at/software/hapFabia/hapFabia.html
+biocViews: Genetics, GeneticVariability, SNP, Sequencing,
+        Visualization, Clustering

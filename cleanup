@@ -1,0 +1,32 @@
+rm -f src/*.o src/*.so src/*.dll
+rm -f src/commandLine/*.o src/commandLine/*.so src/commandLine/*.dll
+rm -f inst/commandLine/i386/split_sparse_matrix
+rm -f inst/commandLine/i386/vcftoFABIA
+rm -f inst/commandLine/i386/split_sparse_matrix.exe
+rm -f inst/commandLine/i386/vcftoFABIA.exe
+rm -f inst/commandLine/x86_64/split_sparse_matrix
+rm -f inst/commandLine/x86_64/vcftoFABIA
+rm -f inst/commandLine/x86_64/split_sparse_matrix.exe
+rm -f inst/commandLine/x86_64/vcftoFABIA.exe
+rm -f inst/commandLine/ppc/split_sparse_matrix
+rm -f inst/commandLine/ppc/vcftoFABIA
+rm -f inst/commandLine/ppc/split_sparse_matrix.exe
+rm -f inst/commandLine/ppc/vcftoFABIA.exe
+rm -f inst/commandLine/ppc64/split_sparse_matrix
+rm -f inst/commandLine/ppc64/vcftoFABIA
+rm -f inst/commandLine/ppc64/split_sparse_matrix.exe
+rm -f inst/commandLine/ppc64/vcftoFABIA.exe
+rm -f src/commandLine/split_sparse_matrix
+rm -f src/commandLine/vcftoFABIA
+rm -f src/commandLine/split_sparse_matrix.exe
+rm -f src/commandLine/vcftoFABIA.exe
+rm -f inst/commandLine/*
+rmdir inst/commandLine/i386
+rmdir inst/commandLine/x86_64
+rmdir inst/commandLine/ppc
+rmdir inst/commandLine/ppc64
+rmdir inst/commandLine
+rm -f inst/doc/*.aux inst/doc/*.log inst/doc/*.tex
+find . -name \*~ -exec rm {} \;
+find . -name \*bak -exec rm {} \;
+
