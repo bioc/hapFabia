@@ -15,7 +15,7 @@
 
 
 
-\title{Tools to analyze results of the package \pkg{fabia}}
+\title{Tools to analyze results of \pkg{fabia}}
 \description{
 
   These tools allow to analyze results of the package \pkg{fabia}. They

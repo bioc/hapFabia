@@ -2,18 +2,18 @@
 
 \alias{plotHaplotypeCluster}
 
-\title{plotHaplotypeCluster: Plots a haplotype cluster given individuals, tagSNVs, and their physical positions}
+\title{Plots a haplotype cluster given genotype data and tagSNVs}
 
 \description{
 
   \code{plotHaplotypeCluster}: \R implementation of \code{plotHaplotypeCluster}.
 
-  A haplotype cluster is plotted where individuals
-  to plot are provided together with tagSNVs and their
-  physical positions.
-  The model, i.e. the tagSNVs, is shown.
-  Also annotations of tagSNVs
-  like the minor allele is the base of another genome can
+  A haplotype cluster is plotted where individuals that
+  are plotted must be provided together with tagSNVs and their
+  physical positions. The individuals are provided as genotyping matrix.
+  The model, i.e. the tagSNVs, is shown, too.
+  Annotations of tagSNVs
+  like match with another genome (Neandertal, Denisova) can
   be visualized.
 
 
@@ -31,7 +31,7 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
   of the \pkg{fabia} function \code{readSamplesSpfabia}.}
   \item{tagSNV}{tagSNVs given as numbers if all SNVs are enumerated.}
   \item{physPos}{physical position of tagSNVs in bp.}
-  \item{colRamp}{passed to \code{snpPlot}: color representation.}
+  \item{colRamp}{passed to \code{matrixPlot}: color representation.}
   \item{val}{vector of 3 components containing values for representation
     of reference allele, minor allele that is not tagSNV,
    minor allele that is tagSNV, respectively.}
@@ -40,9 +40,9 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
   \item{labelsNA}{labels for the individuals.}
   \item{prange}{vector of two integer values giving the begin and end of
    a subsegment of the segment for zooming in.}
-  \item{labelsNA1}{labels for modelobtained by \pkg{fabia}; other tagSNV
-    annotations like the agreement of the minor allele with other
-    genomes can be provided.}
+ \item{labelsNA1}{labels for tagSNVs by the model obtained by \pkg{fabia}; other
+   tagSNV annotations like match with another genome (Neandertal, Denisova) can
+  be visualized.}
 
 
 }

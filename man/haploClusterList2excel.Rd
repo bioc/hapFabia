@@ -4,8 +4,7 @@
 \alias{haploClusterList2excel,HaploClusterList-method}
 \alias{haploClusterList2excel,HaploClusterList,character-method}
 
-\title{haploClusterList2excel: Store haplotype cluster list from an
-  object of class \code{HaploClusterList} in EXCEL / csv format}
+\title{Store a haplotype cluster list in EXCEL / csv format}
 
 \description{
 

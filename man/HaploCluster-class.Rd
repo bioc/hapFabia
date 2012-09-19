@@ -139,10 +139,10 @@
 \alias{plot,HaploCluster,missing-method}
 
 
-\title{HaploCluster instances}
+\title{HaploCluster instances and methods}
 
 \description{\code{HaploCluster} is a class to store characteristics of
-  a haplotype cluster in its instances.
+  a haplotype cluster in one of its instances.
   Characteristics of a haplotype cluster include its genomic
   position, its length, the individuals/chromosomes that belong to it,
   the tagSNVs that tag/mark it, etc.
@@ -156,7 +156,8 @@
   \item{\code{bicluster_id}}{ID of the bicluster the haplotype cluster was found in.}
   \item{\code{chromosome}}{the chromosome.}
   \item{\code{haploClusterPos}}{genomic location of the haplotype cluster.}
-  \item{\code{haploClusterLength}}{length of the haplotype cluster.}
+  \item{\code{haploClusterLength}}{length of the haplotype cluster in
+  the number of SNVs. For the length in kbp: \code{max(tagSNVPositions(x))-min(tagSNVPositions(x))}.}
   \item{\code{numberIndividuals}}{number of samples belonging to the haplotype cluster.}
   \item{\code{numbertagSNVs}}{number tagSNVs marking the haplotype cluster.}
   \item{\code{individuals}}{IDs of individuals or chromosomes belonging to the haplotype cluster.}
@@ -433,7 +434,7 @@
     \item{\bold{Plot}}{Plots a haplotype cluster where the SNVs within
     the cluster are shown. Minor alleles of tagSNVs are marked by a
     particular color. Minor
-    alleles of other SNVs (privat, common, from other clusters, etc) are
+    alleles of other SNVs (private, common, from other clusters, etc) are
     marked by a different color.  The model from \pkg{fabia} is also shown.}
 
 

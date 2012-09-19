@@ -381,7 +381,8 @@ sim <- function(x,y,simv="minD",minInter=2) {
 
 
 
-iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE) {
+iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2)
+{
 
 
 labelsA <- c()
@@ -445,7 +446,7 @@ if (is.null(annotationFile)) {
 #indi4 <- gsub(",",";",indi4)
 #indiA <- cbind(indi1,indi2,indi3,indi4)
 
-resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,haploClusterLength=haploClusterLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes)
+resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,haploClusterLength=haploClusterLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes,cut=cut,procMinIndivids=procMinIndivids,thresPrune=thresPrune,simv=simv,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
 
 
 haploClusterList2excel(resHapFabia$mergedHaploClusterList,paste(fileName,pRange,".csv",sep=""))
@@ -637,6 +638,7 @@ if ((startRun>1)&&(length(countsA2[,3])>1)) {
 
 
 avhaploClusterPos <- c()
+avhaploClusterLengthSNV <- c()
 avhaploClusterLength <- c()
 avnoIndivid <- c()
 avnoTagSNVs <- c()
@@ -688,7 +690,8 @@ allCount1 <- allCount1 + 1
 vt <- mergedHaploClusterList[[haploClusterC]]
 
 avhaploClusterPos <- c(avhaploClusterPos,haploClusterPos(vt))
-avhaploClusterLength <- c(avhaploClusterLength,haploClusterLength(vt))
+avhaploClusterLengthSNV <- c(avhaploClusterLengthSNV,haploClusterLength(vt))
+avhaploClusterLength <- c(avhaploClusterLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
 avnoIndivid <- c(avnoIndivid,numberIndividuals(vt))
 avnoTagSNVs <- c(avnoTagSNVs,numbertagSNVs(vt))
 
@@ -711,6 +714,7 @@ nohaploClusters <- allCount1
 
 
 avhaploClusterPosS <- summary(avhaploClusterPos)
+avhaploClusterLengthSNVS <- summary(avhaploClusterLengthSNV)
 avhaploClusterLengthS <- summary(avhaploClusterLength)
 avnoIndividS <- summary(avnoIndivid)
 avnoTagSNVsS <- summary(avnoTagSNVs)
@@ -723,9 +727,9 @@ avnoindividualPerTagSNVS <- summary(avnoindividualPerTagSNV)
 
 
 
-save(startRun,endRun,nohaploClusters,avhaploClusterPos,avhaploClusterLength,avnoIndivid,avnoTagSNVs,avnoFreq,avnoGroupFreq,avnotagSNVChange,avnotagSNVsPerIndividual,avnoindividualPerTagSNV,avhaploClusterPosS,avhaploClusterLengthS,avnoIndividS,avnoTagSNVsS,avnoFreqS,avnoGroupFreqS,avnotagSNVChangeS,avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS,file=paste("analyzeResult",runIndex,".Rda",sep=""))
+save(startRun,endRun,nohaploClusters,avhaploClusterPos,avhaploClusterLengthSNV,avhaploClusterLength,avnoIndivid,avnoTagSNVs,avnoFreq,avnoGroupFreq,avnotagSNVChange,avnotagSNVsPerIndividual,avnoindividualPerTagSNV,avhaploClusterPosS,avhaploClusterLengthSNVS,avhaploClusterLengthS,avnoIndividS,avnoTagSNVsS,avnoFreqS,avnoGroupFreqS,avnotagSNVChangeS,avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS,file=paste("analyzeResult",runIndex,".Rda",sep=""))
 
-return(list(startRun=startRun,endRun=endRun,nohaploClusters=nohaploClusters,avhaploClusterPos=avhaploClusterPos,avhaploClusterLength=avhaploClusterLength,avnoIndivid=avnoIndivid,avnoTagSNVs=avnoTagSNVs,avnoFreq=avnoFreq,avnoGroupFreq=avnoGroupFreq,avnotagSNVChange=avnotagSNVChange,avnotagSNVsPerIndividual=avnotagSNVsPerIndividual,avnoindividualPerTagSNV=avnoindividualPerTagSNV,avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS))
+return(list(startRun=startRun,endRun=endRun,nohaploClusters=nohaploClusters,avhaploClusterPos=avhaploClusterPos,avhaploClusterLengthSNV=avhaploClusterLengthSNV,avhaploClusterLength=avhaploClusterLength,avnoIndivid=avnoIndivid,avnoTagSNVs=avnoTagSNVs,avnoFreq=avnoFreq,avnoGroupFreq=avnoGroupFreq,avnotagSNVChange=avnotagSNVChange,avnotagSNVsPerIndividual=avnotagSNVsPerIndividual,avnoindividualPerTagSNV=avnoindividualPerTagSNV,avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthSNVS=avhaploClusterLengthSNVS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS))
 
 
 
@@ -847,13 +851,11 @@ mintagSNVs <- round(mintagSNVsFactor*thresA)
 
 
 # Fabia call
-# sparseMatrixPostfix="_mat" is fixed --- should be changed
 res <- spfabia(X=paste(prefixPath,fileName,pRange,sparseMatrixPostfix,sep=""),p=p,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,samples=individuals,iter=iter,quant=quant,lowerB=lowerBindivid,upperB=upperBindivid,eps=eps)
 
 
 # Load individuals to Ls of interest: load minor alleles of the Ls
 
-# sparseMatrixPostfix="_mat" is fixed --- should be changed
 sPF <- samplesPerFeature(X=paste(prefixPath,fileName,pRange,sparseMatrixPostfix,sep=""),samples=individuals,lowerB=lowerBindivid,upperB=upperBindivid)
 
 if (nchar(annotPostfix)>0) {
@@ -868,7 +870,7 @@ if (nchar(annotPostfix)>0) {
 #annot[[8]] <- info of vcf file
 #annot[[9]] <- fields in vcf file
 #annot[[10]] <- frequency
-#annot[[11]] <- changed if major allele is actually minor allele
+#annot[[11]] <- 1 = changed if major allele is actually minor allele otherwise 0
 
 
     annot <- read.table(paste(prefixPath,fileName,pRange,annotPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE,skip=2)
@@ -887,6 +889,7 @@ if (nchar(annotPostfix)>0) {
 
     annot[[2]] <- as.numeric(annot[[2]]) # physical position
     annot[[10]] <- as.numeric(annot[[10]]) # SNV frequency
+    annot[[11]] <- as.numeric(annot[[11]]) # changed
 
 }
 
@@ -1002,7 +1005,7 @@ mergedHaploClusterList1 <- setStatistics(mergedHaploClusterList1)
 mergedHaploClusterList2 <- setStatistics(mergedHaploClusterList2)
 mergedHaploClusterList <- setStatistics(mergedHaploClusterList)
 
-save(mergedHaploClusterList,res,sPF,annot,haploClusterList1,haploClusterList2,mergedHaploClusterList1,mergedHaploClusterList2,file=paste(fileName,pRange,"_haploClusterList.Rda",sep=""))
+# save(mergedHaploClusterList,res,sPF,annot,haploClusterList1,haploClusterList2,mergedHaploClusterList1,mergedHaploClusterList2,file=paste(fileName,pRange,"_haploClusterList.Rda",sep=""))
 
 return(list(mergedHaploClusterList=mergedHaploClusterList,res=res,sPF=sPF,annot=annot,haploClusterList1=haploClusterList1,haploClusterList2=haploClusterList2,mergedHaploClusterList1=mergedHaploClusterList1,mergedHaploClusterList2=mergedHaploClusterList2))
 
@@ -1291,7 +1294,7 @@ annot[[7]] <- dummy
 annot[[8]] <- dummy
 annot[[9]] <- dummy
 annot[[10]] <- freq
-annot[[11]] <- dummyC
+annot[[11]] <- as.numeric(dummyC)
 
 
 names(annot) <- c("chromosome","position","snvNames","snvMajor","snvMinor","quality","pass","info","fields","frequency","changed")
@@ -1636,7 +1639,7 @@ annot[[7]] <- dummy
 annot[[8]] <- dummy
 annot[[9]] <- dummy
 annot[[10]] <- freq
-annot[[11]] <- dummyC
+annot[[11]] <- as.numeric(dummyC)
 
 
 names(annot) <- c("chromosome","position","snvNames","snvMajor","snvMinor","quality","pass","info","fields","frequency","changed")

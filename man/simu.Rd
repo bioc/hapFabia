@@ -1,33 +1,40 @@
 \name{simu}
 \docType{data}
 \alias{simu}
-\title{hapFabia Data: simulation (simulation data for \code{hapFabia}) }
+\title{Example simulation data for \code{hapFabia}}
 \description{
 
-  The data obtaind by \code{simulateForFabia} in binary to
-  write to files.
+  The data obtained by \code{simulateForFabia} in binary format.
   
 }
 \usage{simu}
-\format{contains a list \code{simu} with  variables \code{namesL}, \code{haploN},
-  \code{snvs}, \code{annot}, \code{alleleIimp} which are sample names,
+\format{contains a list \code{simu} with  variables
+  \enumerate{
+    \item \code{namesL},
+    \item \code{haploN},
+    \item \code{snvs},
+    \item \code{annot},
+    \item \code{alleleIimp} which contains the information on the
+    implanted haplotype cluster: sample names,
   number of chromosomes/individuals,
-  number of tagSNVs, annotation of tagSNVs, the data
+  number of tagSNVs, annotation of tagSNVs, the genotype data
   where 0 = reference an 1 = minor allele.
-
+}
   \code{annot} is a list with entries:
-  \code{chromosome}, 
-  \code{position},
-  \code{snvNames},  
-  \code{snvMajor},  
-  \code{snvMinor},  
-  \code{quality},   
-  \code{pass},     
-  \code{info},      
-  \code{fields},    
-  \code{frequency}, and 
-  \code{changed}.
-   
+  \enumerate{
+   \item \code{chromosome}, 
+   \item \code{position},
+   \item \code{snvNames},  
+   \item \code{snvMajor},  
+   \item \code{snvMinor},  
+   \item \code{quality},   
+   \item \code{pass},     
+   \item \code{info},      
+   \item \code{fields},    
+   \item \code{frequency}, and 
+   \item \code{changed}.
+ }
+  
   }
  
 \source{from \code{simulateForFabia}}

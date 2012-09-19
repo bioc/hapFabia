@@ -2,7 +2,7 @@
 
 \alias{split_sparse_matrix}
 
-\title{split_sparse_matrix: Split genotype data in sparse matrix format into segments}
+\title{Splits genotyping data in sparse matrix format into segments}
 
 \description{
 
@@ -21,7 +21,7 @@ segmentSize=10000,shiftSize=5000,annotation=TRUE)
   \item{fileName}{string giving the genotype data in sparse matrix format
    without type. Attention: no type!}
   \item{sparseMatrixPostfix}{postfix string for sparse matrix format.}
-  \item{segmentSize}{number of SNVs or SNPs in one segment.}
+  \item{segmentSize}{number of SNVs in one segment.}
   \item{shiftSize}{number of SNVs between beginning of adjacent segments
   that is the number of SNVs the segments are shifted.}
   \item{annotation}{boolean variable indicating whether a annotation file is available.}
@@ -141,9 +141,9 @@ shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
-snps <- ina[2]
+snvs <- ina[2]
 over <- segmentSize%/%shiftSize
-N1 <- snps%/%shiftSize
+N1 <- snvs%/%shiftSize
 endRunA <- (N1-over+2)
 
 #####analyze each segment#######
@@ -163,21 +163,23 @@ anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
 shift=shiftSize,segmentSize=segmentSize)
 print("Number haplotype clusters:")
 print(anaRes$nohaploClusters)
-print("Average haplotye cluster length:")
+print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
+print(anaRes$avhaploClusterLengthSNVS)
+print("Statistics on haplotye cluster length in bp:")
 print(anaRes$avhaploClusterLengthS)
-print("Average number of individuals belonging to haplotye clusters:")
+print("Statistics on number of individuals belonging to haplotye clusters:")
 print(anaRes$avnoIndividS)
-print("Average number of tagSNVs of haplotye clusters:")
+print("Statistics on number of tagSNVs of haplotye clusters:")
 print(anaRes$avnoTagSNVsS)
-print("Average MAF of tagSNVs of haplotye clusters:")
+print("Statistics on MAF of tagSNVs of haplotye clusters:")
 print(anaRes$avnoFreqS)
-print("Average MAF within the group of tagSNVs of haplotye clusters:")
+print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
 print(anaRes$avnoGroupFreqS)
-print("Average number of changes between major and minor allele frequency:")
+print("Statistics on number of changes between major and minor allele frequency:")
 print(anaRes$avnotagSNVChangeS)
-print("Averge number of tagSNVs per individual of a haplotype cluster:")
+print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
 print(anaRes$avnotagSNVsPerIndividualS)
-print("Average number of individuals that have the minor allele of tagSNVs:")
+print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 print(anaRes$avnoindividualPerTagSNVS)
 
 #####load result for segment 50#######

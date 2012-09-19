@@ -87,7 +87,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
   long snps=0;
   int lineC=0;
   int countL=0,samples=0,posG=0,GTpos=0,DSpos=0,bo=0;
-  char *p,*p1,*saveptr1,*saveptr2;
+  char *p,*p1,*saveptr1=NULL,*saveptr2=NULL;
   char *line = NULL;
   size_t len = 0;
   ssize_t read;
@@ -132,7 +132,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
   pFile = fopen (sst,"r");
 
-  if (!(pFile>0)) {
+  if (pFile==NULL) {
     Rprintf("File >%s< not found! Stop.\n", sst);
     return(-1);
   }
@@ -162,7 +162,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	
 	header_lines = j;
 
-	Rprintf ("SNPs: %d\n", snps);
+	Rprintf ("SNVs: %d\n", snps);
 	
 	snps+=10;
 	
@@ -283,7 +283,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
       //##################################################################
 
 	if (j%1000==0) {
-	  Rprintf("Read SNP: %d\r",j);
+	  Rprintf("Read SNV: %d\r",j);
 	}
 
 
@@ -369,7 +369,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
 
 		if (GTpos==0) {
-		  Rprintf("Error in SNP %d and Line %d: no GT found!\n",(countL- header_lines), countL);
+		  Rprintf("Error in SNV %d and Line %d: no GT found!\n",(countL- header_lines), countL);
 		  return(-1);
 		}
 		break;
@@ -423,7 +423,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
   snps= j+1;
  
-  Rprintf ("\n Reconfirmed SNPs: %d\n", snps);
+  Rprintf ("\n Reconfirmed SNVs: %d\n", snps);
 
 
 
@@ -489,12 +489,12 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     strcat(sst,agr1);
     strcat(sst,"_annot.txt");
     pFile = fopen (sst,"w");
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);
       return(-1);
     }
     fprintf(pFile,"Individuals: %d\n",individuals);  
-    fprintf(pFile,"SNPs       : %d\n",(int) snps);  
+    fprintf(pFile,"SNVs       : %d\n",(int) snps);  
     for(j = 0; j < snps; j ++)
     {
       fprintf(pFile,"%d %d %s %s %s %s %s %s %s %.8f %d\n",chrom[j],pos[j], snpName[j], major[j], minor[j],qual[j],filter[j],info[j],format[j],freq[j],change[j]);
@@ -507,7 +507,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     strcat(sst,agr1);
     strcat(sst,"_mat.txt");
     pFile = fopen (sst,"w");
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);
       return(-1);
     }
@@ -560,7 +560,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     strcat(sst,agr1);
     strcat(sst,"_matG.txt");
     pFile = fopen (sst,"w");
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);
       return(-1);
     }
@@ -597,7 +597,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     strcat(sst,agr1);
     strcat(sst,"_matD.txt");
     pFile = fopen (sst,"w");
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);
       return(-1);
     }

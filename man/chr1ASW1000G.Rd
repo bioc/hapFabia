@@ -1,7 +1,7 @@
 \name{chr1ASW1000G}
 \docType{data}
 \alias{chr1ASW1000G}
-\title{hapFabia Data: chr1ASW1000G genotype data in  \code{vcf} format}
+\title{Example genotype data in  \code{vcf} format}
 \description{
 
   Genotype data in \code{vcf} format.

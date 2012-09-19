@@ -4,8 +4,8 @@
 \alias{setStatistics,HaploClusterList-method}
 
 
-\title{setStatistics: Computes and stores the statistics of a haplotype cluster
-  list given as an object of the class \code{HaploClusterList}.}
+\title{Computes and stores the statistics of a haplotype cluster
+  list}
 
 \description{
 
@@ -13,17 +13,24 @@
 
   Computes the statistics of a haplotype cluster
   list given as an object of the class \code{HaploClusterList}.
-  In the slot \code{statistics} of this object the summary statistics
-  across the list of
-  following characteristics are stored in a list:
-  physical position, length, number individuals, number tagSNVS,
-  tagSNV frequency, tagSNV group frequency, tagSNV change between
-  minor and major allele, tagSNVs per individual, individuals per
+  In the slot \code{statistics} of an object of the class
+  \code{HaploClusterList} the summary statistics
+  across the list of haplotype clusters are stored.
+  Following characteristics are stored in the list \code{statistics}:
+  \enumerate{
+    \item "avhaploClusterPosS": physical position
+\item "avhaploClusterLengthSNVS": length in SNVs
+\item "avhaploClusterLengthS": length in bp
+\item "avnoIndividS": number individuals
+\item "avnoTagSNVsS": number tagSNVs
+\item "avnoFreqS": tagSNV frequency
+\item "avnoGroupFreqS": tagSNV group frequency
+\item "avnotagSNVChangeS":  tagSNV change between
+  minor and major allele
+\item "avnotagSNVsPerIndividualS": tagSNVs per individual
+\item "avnoindividualPerTagSNVS": individuals per
   tagSNV.
-  The names of the list elements are:
-  "avhaploClusterPosS", "avhaploClusterLengthS", "avnoIndividS",
-  "avnoTagSNVsS", "avnoFreqS", "avnoGroupFreqS", "avnotagSNVChangeS",
-   "avnotagSNVsPerIndividualS", "avnoindividualPerTagSNVS".
+  }
 }
 
 \usage{

@@ -2,8 +2,7 @@
 \docType{data}
 \alias{mergedHaploClusterList}
 
-\title{hapFabia Data: \code{mergedHaploClusterList} is a result of
-  \code{hapFabia} given as instance of the class \code{HaploClusterList}}
+\title{Example haplotype cluster list as a result of \code{hapFabia}}
 
 \description{
 

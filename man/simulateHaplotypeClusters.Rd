@@ -2,7 +2,7 @@
 
 \alias{simulateHaplotypeClusters}
 
-\title{simulateHaplotypeClusters: Constructs simulation data with rare variants and implanted haplotype clusters}
+\title{Generates simulated genotyping data with haplotype clusters}
 
 \description{
 

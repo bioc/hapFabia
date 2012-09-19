@@ -2,13 +2,13 @@
 
 \alias{identifyDuplicates}
 
-\title{identifyDuplicates: Identify duplicated haplotype clusters in different results}
+\title{Identify duplicates of haplotype clusters}
 
 \description{
 
   \code{identifyDuplicates}: \R implementation of \code{identifyDuplicates}.
 
-  Haplotype Clusters that are identical in different results are
+  Haplotype clusters that are identical in different results are
   identified. 
   Used in combination
   with \code{iterateSegments} for splitting chromosome in overlapping segments.
@@ -31,11 +31,11 @@ identifyDuplicates(fileName,startRun=1,endRun,
 }
 \details{
 
-  Haplotype Clusters that are identical in
+  Haplotype clusters that are identical in
   different results are identified and the result written to a file.
-  For analysis across the whole chromosome or genome this
+  For analysis across a whole chromosome this
   information is important in order to avoid
-  double counting.
+  multiple counting of features from the same cluster.
   Used subsequently to \code{iterateSegments} which analyzes
   segments of a chromosome.
   Provides important information for \code{analyzeHaploClusters}
@@ -158,9 +158,9 @@ shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
-snps <- ina[2]
+snvs <- ina[2]
 over <- segmentSize%/%shiftSize
-N1 <- snps%/%shiftSize
+N1 <- snvs%/%shiftSize
 endRunA <- (N1-over+2)
 
 #####analyze each segment#######
@@ -180,21 +180,23 @@ anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
 shift=shiftSize,segmentSize=segmentSize)
 print("Number haplotype clusters:")
 print(anaRes$nohaploClusters)
-print("Average haplotye cluster length:")
+print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
+print(anaRes$avhaploClusterLengthSNVS)
+print("Statistics on haplotye cluster length in bp:")
 print(anaRes$avhaploClusterLengthS)
-print("Average number of individuals belonging to haplotye clusters:")
+print("Statistics on number of individuals belonging to haplotye clusters:")
 print(anaRes$avnoIndividS)
-print("Average number of tagSNVs of haplotye clusters:")
+print("Statistics on number of tagSNVs of haplotye clusters:")
 print(anaRes$avnoTagSNVsS)
-print("Average MAF of tagSNVs of haplotye clusters:")
+print("Statistics on MAF of tagSNVs of haplotye clusters:")
 print(anaRes$avnoFreqS)
-print("Average MAF within the group of tagSNVs of haplotye clusters:")
+print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
 print(anaRes$avnoGroupFreqS)
-print("Average number of changes between major and minor allele frequency:")
+print("Statistics on number of changes between major and minor allele frequency:")
 print(anaRes$avnotagSNVChangeS)
-print("Averge number of tagSNVs per individual of a haplotype cluster:")
+print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
 print(anaRes$avnotagSNVsPerIndividualS)
-print("Average number of individuals that have the minor allele of tagSNVs:")
+print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 print(anaRes$avnoindividualPerTagSNVS)
 
 #####load result for segment 50#######

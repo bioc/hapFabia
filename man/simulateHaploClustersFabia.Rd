@@ -2,15 +2,16 @@
 
 \alias{simulateHaploClustersFabia}
 
-\title{simulateHaploClustersFabia:  Constructs simulation data with rare variants and implanted haplotype clusters for \pkg{fabia}}
+\title{Generates simulated genotyping data with haplotype clusters for \pkg{fabia}}
 
 \description{
 
   \code{simulateHaploClustersFabia}: \R implementation of \code{simulateHaploClustersFabia}.
 
-   For bicluster algorithm \pkg{fabia}
-   genotype data with rare variants is simulated and
-   subsequently haplotype clusters implanted.
+   Genotype data is simulated which contains rare variants and
+   implanted haplotype clusters.
+   Output is written for the bicluster algorithm \pkg{fabia}.
+
 
 }
 \usage{

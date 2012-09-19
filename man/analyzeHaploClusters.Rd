@@ -2,8 +2,8 @@
 
 \alias{analyzeHaploClusters}
 
-\title{analyzeHaploClusters: A loop over all extracted haplotype
-  clusters for descriptive statistics}
+\title{Loop over extracted haplotype
+  clusters to supply a descriptive statistics}
 
 \description{
 
@@ -24,23 +24,25 @@ analyzeHaploClusters(fileName,runIndex="",
 }
 \arguments{
   \item{fileName}{file name prefix without type of the result of \code{hapFabia}; Attention no type!}
-  \item{runIndex}{a string that marks this run if splitting the analysis.}
-  \item{annotPostfix}{postfix string for the annotation file.}
+  \item{runIndex}{a string that marks the output of
+    this run if splitting the analysis
+    into subsets of segments defined by \code{startRun} and \code{endRun}.}
+  \item{annotPostfix}{postfix string for the SNV annotation file.}
  \item{startRun}{first segment.}
  \item{endRun}{last segment.}
  \item{shift}{distance between start of adjacent segments.}
- \item{segmentSize}{number of SNVs or SNPs in a segment.}
+ \item{segmentSize}{number of SNVs in a segment.}
 
 }
 \details{
 
   The functions provides a loop over all detected
-  haplotype clusters or IBD tracts
+  haplotype clusters 
   in order to compute descriptive statistics. The loop goes over the segments
-  that are analyzed by  \code{iterateSegments}.
-  Duplicates are ignored and must be identified in a
+  that have been analyzed by \code{iterateSegments}.
+  Duplicates are ignored at this analysis and must be identified in a
   preceding step via \code{identifyDuplicates}.
-  Other statistics and annotations are possible if the
+  Other statistics and annotations can be computed if the
   code is changed accordingly.
 
   Implementation in \R.
@@ -52,7 +54,10 @@ list containing:
  \item{endRun}{last segment.}
   \item{nohaploClusters}{number of haplotype clusters.}
   \item{avhaploClusterPos}{vector of physical locations of haplotype clusters.}
-  \item{avhaploClusterLength}{vector of lengths of haplotype clusters.}
+  \item{avhaploClusterLengthSNV}{vector of lengths of haplotype clusters
+    given in number of SNVs.}
+  \item{avhaploClusterLength}{vector of lengths of haplotype clusters in
+    bp.}
   \item{avnoIndividp}{vector of number of individuals that belong to the
     haplotype cluster.}
   \item{avnoTagSNVs}{vector of number of tagSNVs that mark the haplotype
@@ -190,9 +195,9 @@ shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
-snps <- ina[2]
+snvs <- ina[2]
 over <- segmentSize%/%shiftSize
-N1 <- snps%/%shiftSize
+N1 <- snvs%/%shiftSize
 endRunA <- (N1-over+2)
 
 #####analyze each segment#######
@@ -212,21 +217,23 @@ anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
 shift=shiftSize,segmentSize=segmentSize)
 print("Number haplotype clusters:")
 print(anaRes$nohaploClusters)
-print("Average haplotye cluster length:")
+print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
+print(anaRes$avhaploClusterLengthSNVS)
+print("Statistics on haplotye cluster length in bps:")
 print(anaRes$avhaploClusterLengthS)
-print("Average number of individuals belonging to haplotye clusters:")
+print("Statistics on number of individuals belonging to haplotye clusters:")
 print(anaRes$avnoIndividS)
-print("Average number of tagSNVs of haplotye clusters:")
+print("Statistics on number of tagSNVs of haplotye clusters:")
 print(anaRes$avnoTagSNVsS)
-print("Average MAF of tagSNVs of haplotye clusters:")
+print("Statistics on MAF of tagSNVs of haplotye clusters:")
 print(anaRes$avnoFreqS)
-print("Average MAF within the group of tagSNVs of haplotye clusters:")
+print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
 print(anaRes$avnoGroupFreqS)
-print("Average number of changes between major and minor allele frequency:")
+print("Statistics on number of changes between major and minor allele frequency:")
 print(anaRes$avnotagSNVChangeS)
-print("Averge number of tagSNVs per individual of a haplotype cluster:")
+print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
 print(anaRes$avnotagSNVsPerIndividualS)
-print("Average number of individuals that have the minor allele of tagSNVs:")
+print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 print(anaRes$avnoindividualPerTagSNVS)
 
 #####load result for segment 50#######

@@ -1,7 +1,7 @@
 \name{hapRes}
 \docType{data}
 \alias{hapRes}
-\title{hapFabia Data: hapRes (result of \code{hapFabia}) }
+\title{Example result of \code{hapFabia} }
 \description{
 
   Results of a \code{hapFabia} call.

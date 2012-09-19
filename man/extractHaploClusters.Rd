@@ -5,8 +5,8 @@
 
 
 
-\title{extractHaploClusters: Method to extract haplotype clusters from a
-  \code{fabia} result given as \code{Factorization} object}
+\title{Extract haplotype clusters from a
+  \code{fabia} result}
 
 \description{
 
@@ -27,30 +27,40 @@
 }
 \arguments{
   \item{res}{result of \code{fabia} given as \code{Factorization} object.}
-  \item{sPF}{genotype data obtained by \code{fabia} procedure \code{samplesPerFeature}; it gives for each SNV the individuals/chromosomes that possess the minor allele.}
-  \item{annot}{annotation for the tagSNVs as an object of the class \code{data.frame}; if it is \code{NULL} then a dummy annotation is generated.}
-  \item{chrom}{the chromosome.}
-  \item{labelsA}{labels for the individuals; if it is \code{NULL} then a dummy labels by enumerating individuals are generated.}
- \item{ps}{quantile above which the L values are considered for haplotype cluster extraction.}
-  \item{psZ}{quantile above which the largest Z values are considered for haplotype cluster extraction.}
+  \item{sPF}{genotype data obtained by \code{fabia} procedure
+    \code{samplesPerFeature}; it gives for each SNV the
+    individuals/chromosomes that possess the minor allele.} 
+  \item{annot}{annotation for the tagSNVs as an object of the class
+    \code{data.frame}; if it is \code{NULL} then a dummy annotation is
+    generated.} 
+  \item{chrom}{the chromosome the genotyping data stems from.}
+  \item{labelsA}{labels for the individuals; if it is \code{NULL} then
+    dummy labels by enumerating individuals are generated.} 
+ \item{ps}{quantile above which the L values are considered for
+   haplotype cluster extraction.} 
+  \item{psZ}{quantile above which the largest Z values are considered
+    for haplotype cluster extraction.} 
   \item{inteA}{number of SNVs in a histogram bin which correspond to the
     desired haplotype cluster length.}
   \item{thresA}{threshold for histogram counts above which SNVs are
     viewed to be locally accumulated in a histogram bin.}
- \item{mintagSNVs}{threshold for minimal tagSNV overlap of segments in a haplotype cluster.}
+ \item{mintagSNVs}{threshold for minimal tagSNV overlap of segments in a
+   haplotype cluster.} 
    \item{off}{offset of the histogram.}
    \item{procMinIndivids}{percent of cluster individuals that must have
      the minor allele to consider an SNV as haplotype cluster tagSNV.}
    \item{thresPrune}{threshold on the probability of having minimal
-     distance to neigboring tagSNVs; used to prune off SNVs at the border of haplotype clusters.}
+     distance to neighboring tagSNVs; used to prune off SNVs at the
+     border of haplotype clusters.} 
 }
 \details{
 
 
-  The threshold  \code{thresA} for counts in a bin indicating
-  accumulations is supplied and computed in
-  \code{hapFabia} which calls this method.
-  Distance probabilities for pruning are based on an exponential distribution with
+  The threshold  \code{thresA} for counts in a bin, which indicates
+  SNV accumulations, is computed and provided by
+  \code{hapFabia} when calling this method.
+  Distance probabilities for pruning are based on an exponential
+  distribution with 
   the median distance between tagCNVs as parameter (one over the rate).
   Thus, the counts are assumed to be Poisson distributed.
   At the haplotype cluster border, SNVs that have a large

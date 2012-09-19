@@ -5,13 +5,14 @@
 \alias{setAnnotation,HaploClusterList,character-method}
 
 
-\title{setAnnotation: Fills in the tagSNV annotation of haplotype
-  clusters given in an object of the class \code{HaploClusterLis}.}
+\title{Fills in annotations of tagSNVs of a list of haplotype
+  clusters}
 
 \description{
   \code{setAnnotation}: \R implementation of \code{setAnnotation}.
+
   Fills in the tagSNV annotation of haplotype
-  clusters given in an object of the class \code{HaploClusterLis}.
+  clusters given in an object of the class \code{HaploClusterList}.
   The annotation must be given in a file where the first column contains
   the position of the SNV and the second the chromosome.
   The other columns give the

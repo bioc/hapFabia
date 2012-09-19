@@ -231,6 +231,7 @@ function(haploClusterList) {
 
 
 avhaploClusterPos <- c()
+avhaploClusterLengthSNV <- c()
 avhaploClusterLength <- c()
 avnoIndivid <- c()
 avnoTagSNVs <- c()
@@ -255,7 +256,8 @@ for (haploClusterC in 1:nohaploClusters)  {
 vt <- haploClusterList[[haploClusterC]]
 
 avhaploClusterPos <- c(avhaploClusterPos,haploClusterPos(vt))
-avhaploClusterLength <- c(avhaploClusterLength,haploClusterLength(vt))
+avhaploClusterLengthSNV <- c(avhaploClusterLengthSNV,haploClusterLength(vt))
+avhaploClusterLength <- c(avhaploClusterLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
 avnoIndivid <- c(avnoIndivid,numberIndividuals(vt))
 avnoTagSNVs <- c(avnoTagSNVs,numbertagSNVs(vt))
 
@@ -270,6 +272,7 @@ avnoindividualPerTagSNV <- c(avnoindividualPerTagSNV,individualPerTagSNV(vt))
 
 
 avhaploClusterPosS <- summary(avhaploClusterPos)
+avhaploClusterLengthSNVS <- summary(avhaploClusterLengthSNV)
 avhaploClusterLengthS <- summary(avhaploClusterLength)
 avnoIndividS <- summary(avnoIndivid)
 avnoTagSNVsS <- summary(avnoTagSNVs)
@@ -282,7 +285,7 @@ avnoindividualPerTagSNVS <- summary(avnoindividualPerTagSNV)
 
 
 
-statistics(haploClusterList) <- list(avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS)
+statistics(haploClusterList) <- list(avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthSNVS=avhaploClusterLengthSNVS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS)
 
 haploClusterList
 

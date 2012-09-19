@@ -1,12 +1,12 @@
 \name{findDenseRegions}
 \alias{findDenseRegions}
-\title{findDenseRegions: Find accumulations of values via histogram counts}
+\title{Find accumulations of values via histogram counts}
 \description{
 
   \code{findDenseRegions}: \R implementation of \code{findDenseRegions}.
 
   Extracts histogram bins which counts are larger than a threshold.
-  Only L values larger than a given quantile are considered.
+  Only values larger than a given quantile are considered.
 }
 \usage{
 
@@ -26,7 +26,7 @@ findDenseRegions(obs,p=0.9,inte=500,thres=11,off=0)
   Extracts histogram bins which counts are larger than a threshold.
   The threshold is supplied and can be computed according to some assumptions
   on expected bin counts.
-  Only L values larger than a given quantile are considered.
+  Only values larger than a given quantile are considered.
 
 
 

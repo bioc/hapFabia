@@ -1,7 +1,7 @@
 \name{res}
 \docType{data}
 \alias{res}
-\title{hapFabia Data: res (result of \code{spfabia})}
+\title{Example result of \code{spfabia}}
 \description{
 
   Result of a \pkg{fabia} call.

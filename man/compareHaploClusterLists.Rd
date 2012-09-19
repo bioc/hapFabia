@@ -4,9 +4,8 @@
 \alias{compareHaploClusterLists,HaploClusterList-method}
 \alias{compareHaploClusterLists,HaploClusterList,ANY,character,ANY,ANY,numeric,numeric-method}
 
-\title{compareHaploClusterLists: Compare haplotype clusters of one or
-  two haplotype cluster list(s) given as \code{HaploClusterList} object
-  by hierarchical clustering}
+\title{Hierarchical clustering of haplotype
+  clusters stored in haplotype cluster list(s)}
 
 \description{
 
@@ -30,23 +29,28 @@
   \item{haploClusterList2}{optional: second list of haplotype clusters
     given as  \code{HaploClusterList} object.}
   \item{simv}{similarity measure:
-    \code{minD} (percentage of smaller explained by larger set),
+    \code{minD} (percentage of the smaller set explained by the larger set),
     \code{jaccard} (Jaccard index),
     \code{dice} (Dice index), or
-    \code{maxD};
+    \code{maxD} (percentage of the larger set explained by the smaller set);
     default \code{minD}.}
   \item{pTagSNVs}{optional: exponent for tagSNV similarity.}
   \item{pIndivid}{optional: exponent for individuals similarity.}
-  \item{minTagSNVs}{required minimal number of overlapping SNVs; default 6.}
-  \item{minIndivid}{required minimal number of overlapping individuals; default 2.}
+  \item{minTagSNVs}{required minimal number of overlapping SNVs to assign
+  similarity different from zero; default 6.} 
+\item{minIndivid}{required minimal number of
+  overlapping individuals to assign
+  similarity different from zero; default 2.}
 }
 
 \details{
 
   Similarities are separately computed for SNVs and for individuals using
-  one of the similarity measure: \code{"minD"} (percentage of smaller explained by larger set),
+  one of the similarity measure: \code{"minD"} (percentage of the
+  smaller set explained by the larger set), 
   \code{"jaccard"} (Jaccard index), \code{"dice"} (Dice index),
-  or  \code{"maxD"}.
+  or  \code{"maxD"}
+  (percentage of the larger set explained by the smaller set).
   One minus the product between SNV similarity and
   individuals similarity is the final value
   used for clustering.

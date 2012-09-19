@@ -1,10 +1,11 @@
 \name{makePipelineFile}
 \alias{makePipelineFile}
-\title{makePipelineFile: Make \code{pipleline.R} for  \code{source("Pipleline.R")}}
+\title{Generate \code{pipleline.R}}
 \description{
 
   \code{makePipelineFile} creates \code{pipleline.R} for sourcing with
-  \code{source("pipleline.R")} to run a whole haplotype cluster extraction pipeline.
+  \code{source("pipleline.R")} to run a whole haplotype cluster
+  extraction pipeline.
 
 
 }
@@ -16,7 +17,7 @@ makePipelineFile(fileName,shiftSize=5000,segmentSize=10000)
 \arguments{
  \item{fileName}{file name of the genotype file in \code{vcf} format}
  \item{shiftSize}{distance between start of adjacent segments.}
- \item{segmentSize}{number of SNVs or SNPs in a segment.}
+ \item{segmentSize}{number of SNVs in a segment.}
 
 }
 \details{

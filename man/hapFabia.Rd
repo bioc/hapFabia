@@ -2,7 +2,7 @@
 
 \alias{hapFabia}
 
-\title{hapFabia: Haplotype cluster extraction by FABIA}
+\title{Haplotype cluster extraction by FABIA}
 
 \description{
 
@@ -33,7 +33,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  \item{fileName}{name of the file that contains the genotype matrix in sparse format.}
  \item{prefixPath}{path to the genotype file.}
  \item{sparseMatrixPostfix}{postfix string for the sparse matrix.}
- \item{annotPostfix}{postfix string for the annotation file.}
+ \item{annotPostfix}{postfix string for the SNV annotation file.}
  \item{individualsPostfix}{postfix string for the file containing the
  names of the individuals.}
  \item{labelsA}{annotation of the individuals as matrix individuals x 4 
@@ -86,7 +86,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  Then it disentangles haplotype clusters and prunes off spurious correlated SNVs.
  Finally, it merges similar and broken up haplotype clusters.
 
- Annotation file for tagSNVs:
+ Annotation file \code{..._annot.txt} for SNVs:
 \enumerate{
  \item  first line: number individuals;
  \item  second line: number SNVs;
@@ -97,7 +97,8 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  allele".
  }
  
- The annotation file for individuals contains per individual a line with
+ \code{labelsA} is a matrix ("number individuals" x 4),
+ where for each individual following characteristics are given:
  \enumerate{
    \item id;
    \item subPopulation;
@@ -105,8 +106,9 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
    \item platform.
  }
  
- This function computes the probability of observing \eqn{k}{k} or more
- correlated SNVs in a histogram bin. The minimal \eqn{k}{k} which pushes the
+ The probability of observing \eqn{k}{k} or more
+ correlated SNVs in a histogram bin is computed.
+ The minimal \eqn{k}{k} which pushes the
  probability below the threshold \code{thresCount} is used to find
  accumulation of correlated SNVs that are assumed to belong to a
  haplotype cluster.

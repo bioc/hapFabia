@@ -4,17 +4,18 @@
 \alias{mergeHaploClusterLists,HaploClusterList-method}
 \alias{mergeHaploClusterLists,HaploClusterList,ANY,vector-method}
 
-\title{mergeHaploClusterLists: Merging and combining haplotype clusters or IBD tracts}
+\title{Merging haplotype clusters}
 
 \description{
 
   \code{mergeHaploClusterLists}: \R implementation of \code{mergeHaploClusterLists}.
 
   Merges and combines the haplotype clusters of one or two list(s).
-  A vector vector gives for each cluster in the
-   haplotype cluster list its new cluster membership as an interger
+  A vector gives for each cluster in the
+   haplotype cluster list its new cluster membership as an integer
    number.
-  Called by \code{hapFabia}.
+  Called by \code{hapFabia} where new membership is determined by
+  hierarchical clustering.
 
 }
 \usage{
@@ -27,15 +28,13 @@
   \item{haploClusterList1}{object of class \code{HaploClusterList}.}
   \item{haploClusterList2}{optional: second object of class HaploClusterList.}
  \item{clustHaploClustList}{vector giving for each cluster in the
-   haplotype cluster list its new cluster membership as an interger number.}
+   haplotype cluster list its new cluster membership as an integer number.}
 
 }
 \details{
-  A vector givesfor each haplotype clusters its membership
-  to a new cluster as an integer number.
-  Haplotype clusters that belong to the same new cluster are merged,
-  where for example individuals
-  and tagSNVs of each cluster are merged.
+  A vector gives for each haplotype cluster its new membership
+  as an integer number.
+  Haplotype clusters that belong to the same new cluster are merged.
 
   Implementation in \R.
 }

@@ -57,7 +57,7 @@
 
 
 
-\title{HaploClusterList instances}
+\title{HaploClusterList instances and methods}
 
 \description{\code{HaploClusterList} is a class to store a list of
   haplotype clusters with its statistics.
@@ -201,7 +201,7 @@
     cluster list, where the SNVs within
     the cluster are shown. Minor alleles of tagSNVs are marked by a
     particular color. Minor
-    alleles of other SNVs (privat, common, from other clusters, etc) are
+    alleles of other SNVs (private, common, from other clusters, etc) are
     marked by a different color.  The model from \pkg{fabia} is also
     shown. 
     Asks for the next plot by pushing a key.

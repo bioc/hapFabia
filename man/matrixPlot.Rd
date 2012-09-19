@@ -2,7 +2,7 @@
 
 \alias{matrixPlot}
 
-\title{matrixPlot: Basic plot function for haplotype clusters}
+\title{Basic plot function for haplotype clusters}
 
 \description{
 

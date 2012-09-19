@@ -2,13 +2,13 @@
 
 \alias{sim}
 
-\title{sim: Similarity measure for haplotype cluster tagSNVs or individuals}
+\title{Similarity measures for haplotype clusters}
 
 \description{
 
   \code{sim}: \R implementation of \code{sim}.
 
-  Similarity measure for haplotype cluster tagSNVs or individuals.
+  Similarity measure for haplotype clusters, tagSNVs, and individuals.
 
 }
 \usage{
@@ -27,13 +27,14 @@ sim(x,y,simv="minD",minInter=2)
 }
 \details{
 
-  Similarity measure for haplotype cluster tagSNVs or individuals.
+  Similarity measure for haplotype clusters, tagSNVs, and individuals.
 
   Implementation in \R.
 
 }
 \value{
-  \item{erg}{the similarity measure between 0 and 1 where 0 is not similar and 1 is identical.}
+  \item{erg}{the similarity measure between 0 and 1, where 0 is not
+    similar and 1 is identical.}
 
     }
 \seealso{

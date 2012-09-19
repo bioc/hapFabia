@@ -87,7 +87,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
     strcat(sst,agr2);
     pFile = fopen(sst,"r");
 
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< not found! Stop.\n", sst);
       return(-1);
     }
@@ -129,7 +129,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 	}
 	strcat(sst,agr2);
 	pFile1 = fopen(sst,"w");
-	if (!(pFile1>0)) {
+	if (pFile1==NULL) {
 	  Rprintf("File >%s< cannot be opened! Stop.\n", sst);
 	  return(-1);
 	}
@@ -198,7 +198,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 	{
 	    
 	  pFile1 = fopen(fileN[i1],"a");
-	  if (!(pFile1>0)) {
+	  if (pFile1==NULL) {
 	    Rprintf("File >%s< cannot be opened! Stop.\n", fileN[i1]);
 	    return(-1);
 	  }
@@ -269,14 +269,14 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
     strcat(sst,agr1);
     strcat(sst,"_annot.txt");
     pFile = fopen(sst,"r");
-    if (!(pFile>0)) {
+    if (pFile==NULL) {
       Rprintf("File >%s< not found! Stop.\n", sst);
       return(-1);
     }
  
 
     fscanf(pFile,"Individuals: %d\n",&individuals);  
-    fscanf(pFile,"SNPs       : %d\n",&snps);  
+    fscanf(pFile,"SNVs       : %d\n",&snps);  
  
 
 
@@ -309,7 +309,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 	}
 	strcat(sst,"_annot.txt");
 	pFile1 = fopen(sst,"w");
-	if (!(pFile1>0)) {
+	if (pFile1==NULL) {
 	  Rprintf("File >%s< cannot be opened! Stop.\n", sst);
 	  return(-1);
 	}
@@ -345,7 +345,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 
      for (i=i1; i<j1; i++) { 
        pFile1 = fopen(fileN1[i],"a");
-       if (!(pFile1>0)) {
+       if (pFile1==NULL) {
 	 Rprintf("File >%s< cannot be opened! Stop.\n", fileN1[i]);
 	 return(-1);
        }

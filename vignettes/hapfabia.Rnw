@@ -110,7 +110,7 @@ shed light on the evolutionary history of humans.
 
 \begin{figure*}[htb!]
 \includegraphics[width=\textwidth]{./figures/pedi}
-\caption{The DNA segment marked in yellow decended from a founder to
+\caption{The DNA segment marked in yellow descended from a founder to
   different individuals which constitute a haplotype
   cluster by possessing the DNA segment.\label{fig:pedi}}
 \end{figure*}
@@ -123,7 +123,7 @@ Biclustering combines linkage disequilibrium (LD) information across individuals
 correlations of SNVs and identity by descent (IBD) information along the chromosome
 via contiguous identical alleles.
 The LD information enters HapFABIA through
-FABIA implemented in the package \Rpackage{fabia}
+FABIA implemented in the package \Rpackage{Fabio}
 which detects correlations of multiple SNVs by a factor
 analysis model. The IBD information enters HapFABIA through
 identification of haplotype clusters as local agglomerations of correlated SNVs.
@@ -137,7 +137,7 @@ identification of haplotype clusters as local agglomerations of correlated SNVs.
 \caption{Different approaches to detect haplotype clusters. The $y$-axis
 enumerates individuals and the $x$-axis SNVs. Yellow and violet bars
 indicate major and minor alleles, respectively. Haplotype cluster
-segements are marked in gold.
+segments are marked in gold.
 Panel {\bf A}: Linkage disequilibrium (LD) is computed for two SNVs
 across all samples. Identity by descent (IBD) is detected for two
 individuals for a long haplotype region.
@@ -166,23 +166,31 @@ homozygous regions that is two occurrences of a
 haplotype in one diploid individual via their factors.
 Overlapping haplotype clusters in one diploid individual
 are represented through the additivity of biclusters in the FABIA model.
-Examples of haplotype clusters found by hapFabia are given in
+Examples of haplotype clusters found by hapFabia in chromosome~1 data from the
+1000Genomes project are given in
 Fig.~\ref{fig:example1} and Fig.~\ref{fig:example2}.
 
 \begin{figure*}[p]
 \includegraphics[width=0.9\textwidth]{./figures/example1}
-\caption{Example of a haplotype cluster. The $y$-axis
+\caption{Example of a haplotype cluster in chromosome~1 found in the
+  1000Genomes project data. The $y$-axis
 gives the chromosomes and the $x$-axis consecutive SNVs/Indels/SVs. Yellow
 indicates major alleles, violet minor alleles of tagSNVs, and blue
 minor alleles of other SNVs.
 ``model L'' indicates tagSNVs
-identified by hapFabia in violet.   \label{fig:example1}}
+identified by hapFabia in violet.
+A probable phasing error can be seen in line 3 and 4 at individual NA18522.
+Another phasing error can be seen in the last but four and the last but five
+line at individual NA19435. \label{fig:example1}}
 \end{figure*}
 
 \begin{figure*}[p]
 \includegraphics[width=0.9\textwidth]{./figures/example8}
-\caption{Another example of a haplotype cluster. See Fig.~\ref{fig:example1}
- for a description.\label{fig:example2}}
+\caption{Another example of a haplotype cluster from chromosome~1 of
+  the 1000Genomes project. See Fig.~\ref{fig:example1}
+ for a description.
+ Again probable phasing errors at individuals NA18516, NA19310, and
+ NA19384.  \label{fig:example2}}
 \end{figure*}
 
 \clearpage
@@ -238,9 +246,9 @@ R> split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,
 R>
 R> #####compute how many segments we have#######
 R> ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
-R> snps <- ina[2]
+R> noSNVs <- ina[2]
 R> over <- segmentSize%/%shiftSize
-R> N1 <- snps%/%shiftSize
+R> N1 <- noSNVs%/%shiftSize
 R> endRunA <- (N1-over+2)
 R>
 R> #####analyze each segment#######
@@ -260,21 +268,23 @@ R> anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
 +  shift=shiftSize,segmentSize=segmentSize)
 R> print("Number haplotype clusters:")
 R> print(anaRes$nohaploClusters)
-R> print("Average haplotye cluster length:")
+R> print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
+R> print(anaRes$avhaploClusterLengthSNVS)
+R> print("Statistics on haplotye cluster length in kbps:")
 R> print(anaRes$avhaploClusterLengthS)
-R> print("Average number of individuals belonging to haplotye clusters:")
+R> print("Statistics on number of individuals belonging to haplotye clusters:")
 R> print(anaRes$avnoIndividS)
-R> print("Average number of tagSNVs of haplotye clusters:")
+R> print("Statistics on number of tagSNVs of haplotye clusters:")
 R> print(anaRes$avnoTagSNVsS)
-R> print("Average MAF of tagSNVs of haplotye clusters:")
+R> print("Statistics on MAF of tagSNVs of haplotye clusters:")
 R> print(anaRes$avnoFreqS)
-R> print("Average MAF within the group of tagSNVs of haplotye clusters:")
+R> print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
 R> print(anaRes$avnoGroupFreqS)
-R> print("Average number of changes between major and minor allele frequency:")
+R> print("Statistics on number of changes between major and minor allele frequency:")
 R> print(anaRes$avnotagSNVChangeS)
-R> print("Averge number of tagSNVs per individual of a haplotype cluster:")
+R> print("Statistics on tagSNVs per individual of a haplotype cluster:")
 R> print(anaRes$avnotagSNVsPerIndividualS)
-R> print("Average number of individuals that have the minor allele of tagSNVs:")
+R> print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 R> print(anaRes$avnoindividualPerTagSNVS)
 R>
 R> #####load result for segment 50#######
@@ -298,11 +308,12 @@ R> plot(haploCluster,filename=paste(fileName,pRange,"_mat",sep=""))
 R>    ##attention: filename without type ".txt"
 \end{Sinput}
 First the packages \Rpackage{hapFabia} and \Rpackage{fabia} are loaded.
-Then \texttt{filename.vcf} is converted by \Rfunction{vcftoFABIA} to sparse matrix format
-\texttt{filename\_mat.txt} where the annotation file
-\texttt{filename\_annot.txt} and the  label for the individuals
+Then \texttt{filename.vcf}
+is converted by \Rfunction{vcftoFABIA} to sparse matrix format
+\texttt{filename\_mat.txt}, where the SNV annotation file
+\texttt{filename\_annot.txt} and the label for the individuals
 \texttt{filename\_individuals.txt}
-are generated.
+are generated, too.
 The function \Rfunction{split\_sparse\_matrix} splits
 chromosome 1 into segments of length 10,000 SNVs with a distance of
 5,000 SNVs between the segments.
@@ -312,15 +323,15 @@ Using the function \Rfunction{iterateSegments} haplotype clusters are
 identified in these segments and the results stored in a EXCEL like
 \texttt{.csv} format and as \R data object.
 The function \Rfunction{identifyDuplicates} marks and memorizes
-duplicates of haplotype custers which occur because the segments overlap.
-Next the function \Rfunction{analyzeIBDs} analyzes the results where
+duplicates of haplotype clusters which occur because the segments overlap.
+Next the function \Rfunction{analyzeHaploClusters} analyzes the results where
 duplicates as marked in previous step are not considered.
 Results are listed by \texttt{anaRes}.
 
 The next example shows how to view all haplotype clusters of a segment, for
 which we chose segment 50 which corresponds to chromosome 1 interval
 from 245,000 to 255,000 ($(50-1)*5000 = 245000$).
-Then we plot a specific haplotype cluster, in this case the first (\texttt{ibdC=1}),
+Then we plot a specific haplotype cluster, in this case the first (\texttt{haploClusterList[[1]]}),
 which can also be used to store a \texttt{.pdf} or a \texttt{.fig} for
 editing with Xfig.
 Examples of this plot function are given in
@@ -336,10 +347,23 @@ R> source("pipeline.R")
 \end{Sinput}
 NOTE: sourcing may take a while for large datasets.
 
+The next example shows how to use the pipeline.
+
 
 \subsection{Examples}
 
 Next we show an example how to use  \Rpackage{hapFabia}.
+This example shows how to run the whole pipeline if the genotype data
+is given as \texttt{.vcf} file.
+The data is first converted to a
+sparse matrix format by \texttt{vcftoFABIA} and then
+divided into overlapping segments by
+\texttt{split\_sparse\_matrix}.
+Then the haplotype clusters are extracted by \texttt{iterateSegments} and
+duplicates due to overlapping segment marked by \texttt{identifyDuplicates}.
+Subsequently the haplotype clusters are analyzed by
+\texttt{analyzeHaploClusters}, where only simple statistics are computed.
+
 
 Work in a temporary directory.
 <<gotoTempDir>>=
@@ -354,24 +378,74 @@ library(fabia)
 @
 
 Load data and write to \texttt{vcf} file.
+In a real application the data is already given, therefore this chunk
+of code would not be necessary.
 <<makeVCFfile>>=
 data(chr1ASW1000G)
 write(chr1ASW1000G,file="chr1ASW1000G.vcf")
 @
 
-Create the analysis pipeline.
+Create the analysis pipeline were segments are only 1,000 SNVs
+(that is about 100 kbps), while default is 10,000 SNVs (that is about
+1Mbp).
 <<createPipeline>>=
 makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000)
 @
 
+Now the pipeline can be executed by sourcing it.
 <<executePipeline,fig=FALSE,results=hide>>=
 source("pipeline.R")
 @
 
-Following files are produced:
-<<createPipeline>>=
+Next we list the produced files, where
+\texttt{\_N1\_N2\_} indicates that the file contains information
+concerning the segment that starts at N1 and ends at N2,
+\texttt{\_ALL.Rda} stores just the number of individuals and the number of SNVs,
+\texttt{\_individuals.txt} contains annotation for the individuals (in
+particular their names),
+\texttt{\_mat.txt}
+denotes phased genotype data in sparse matrix format,
+\texttt{\_matD.txt} contains the genotype data as dosage in sparse
+matrix format,
+\texttt{\_matG.txt} contains unphased genotype data in sparse
+matrix format,
+\texttt{\_annot.txt} supplies
+information on the SNVs,
+\texttt{\_resAnno.Rda} is the result from hapFabia,
+the result is also available as  \texttt{csv} file with extension
+\texttt{\_csv.txt}.
+
+Following files have been generated:
+<<listFiles>>=
 list.files(pattern="chr1")
 @
+
+Following shows the results of calling the function
+\texttt{analyzeHaploClusters} in the pipeline:
+<<showResultSummary>>=
+print("Number haplotype clusters:")
+print(anaRes$nohaploClusters)
+print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
+print(anaRes$avhaploClusterLengthSNVS)
+print("Statistics on haplotye cluster length in kbps:")
+print(anaRes$avhaploClusterLengthS)
+print("Statistics on number of individuals belonging to haplotye clusters:")
+print(anaRes$avnoIndividS)
+print("Statistics on number of tagSNVs of haplotye clusters:")
+print(anaRes$avnoTagSNVsS)
+print("Statistics on MAF of tagSNVs of haplotye clusters:")
+print(anaRes$avnoFreqS)
+print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
+print(anaRes$avnoGroupFreqS)
+print("Statistics on number of changes between major and minor allele frequency:")
+print(anaRes$avnotagSNVChangeS)
+print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
+print(anaRes$avnotagSNVsPerIndividualS)
+print("Statistics on number of individuals that have the minor allele of tagSNVs:")
+print(anaRes$avnoindividualPerTagSNVS)
+@
+
+
 
 
 Next we load segment 5 and there the first  and second haplotype cluster
@@ -379,7 +453,8 @@ Next we load segment 5 and there the first  and second haplotype cluster
 posAll <- 5
 start <- (posAll-1)*shiftSize
 end <- start + segmentSize
-pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FALSE),sep="")
+pRange <- paste("_",format(start,scientific=FALSE),"_",
+                format(end,scientific=FALSE),sep="")
 load(file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
 haploClusterList <- resHapFabia$mergedHaploClusterList
 summary(haploClusterList)
@@ -854,9 +929,9 @@ values of the FABIA model parameters $\la_i$.
 The threshold ``Lt''  (fixed to 0.1)
 gives the percentage of largest $\la_i$ values that are
 used for the histogram.
-The HapFABIA parameter ``IBDlength''
+The HapFABIA parameter ``haploClusterLength''
 gives the largest haplotype cluster (in kbp or centiMorgans) to be considered.
-The histogram bin size in number of SNVs is computed from ``IBDlength''
+The histogram bin size in number of SNVs is computed from ``haploClusterLength''
 using the average genomic distance between adjacent SNVs.
 To account for haplotype clusters that exceed bin borders, the histogram is
 computed a second time with bins shifted by half the bin size.
@@ -899,7 +974,7 @@ If $k_{\textrm{min}}$ is the minimum $k$ for which
 Eq.~\eqref{eq:counts} is below the threshold ``thresCount'', then all
 bins with counts $k \geq k_{\textrm{min}}$ are selected.
 In our experiments, we allow haplotype clusters of only two individuals
-(IBD runs), and therefore set $t=2$.
+(like for IBD), and therefore set $t=2$.
 
 
 
@@ -922,9 +997,9 @@ gives the percentage of top $z$-scores that are considered.
 {\bf Step 2:}
 In this step, haplotype clusters in a selected bin are disentangled, considering only
 SNVs and individuals that have been assigned to the bin.
-A haplotype cluster is initialized by an IBD run between
+A haplotype cluster is initialized by
 two core individuals that are identical at $m$ or more minor alleles.
-The number $m$ is computed as $m = \textrm{minSNPsFactor} \times
+The number $m$ is computed as $m = \textrm{mintagSNVsFactor} \times
 k_{\textrm{min}}$.
 All individuals that are identical in least $m$ minor alleles
 to one of the two core haplotype cluster individuals are
@@ -1019,7 +1094,7 @@ plotL(res,n=1,p=0.95,w=NULL,type="histogram",intervv=50,off=0,t="p",cex=1)
 @
 <<plotLpointsP,fig=TRUE>>=
 data(res)
-plotL(res,n=1,p=0.95,w=NULL,type="histogram",intervv=50,off=0,t="p",cex=1)
+plotL(res,n=1,p=0.95,w=NULL,type="points",intervv=50,off=0,t="p",cex=1)
 @
 <<plotLpointsW,fig=TRUE>>=
 data(res)

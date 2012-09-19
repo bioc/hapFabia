@@ -1,6 +1,6 @@
 \name{hapFabiaVersion}
 \alias{hapFabiaVersion}
-\title{Display version info for package \pkg{fabiaData}}
+\title{Display version info for package \pkg{hapFabia}}
 \description{
   \code{hapFabiaVersion} displays version information about the
   package.
@@ -19,7 +19,7 @@ hapFabiaVersion()
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\\code{\link{haploClusterList2excel}},
+\code{\link{haploClusterList2excel}},
 \code{\link{identifyDuplicates}},
 \code{\link{iterateSegments}},
 \code{\link{makePipelineFile}},
