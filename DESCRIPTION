@@ -1,18 +1,15 @@
 Package: hapFabia
-Title: hapFabia: Identification of rare and short haplotype clusters in
-        large sequencing data
-Version: 0.99.0
-Date: 2012-09-01
+Title: hapFabia: Identification of rare and short haplotype clusters in large sequencing data
+Version: 0.99.1
+Date: 2012-09-25
 Author: Sepp Hochreiter <hochreit@bioinf.jku.at>
 Maintainer: Sepp Hochreiter <hochreit@bioinf.jku.at>
 Depends: R (>= 2.12.0), Biobase, fabia (>= 2.3.1)
 Imports: methods, graphics, grDevices, stats, utils, KernSmooth
 LinkingTo:
-Description: Identification of rare and short haplotype clusters in large sequencing data by FABIA biclustering. The package supports VCF formats and is based on sparse matrix operations. Provides visualization of haplotype clusters in different formats. File converting procedures are written in C.
+Description: A package to identify rare and short haplotype clusters in large sequencing data by FABIA biclustering. Individuals that inherited a particular DNA segment from the same founder constitute a haplotype cluster by sharing minor alleles of single nucleotide variants (SNVs) that tag/mark this segment. Knowledge of haplotype clusters are relevant for phasing of genotyping data, association studies, and for population genetics, where they shed light on the evolutionary history of humans. The package supports VCF formats, is based on sparse matrix operations, and provides visualization of haplotype clusters in different formats. 
 License: LGPL (>= 2.1)
-Collate: AllClasses.R AllGenerics.R hapFabia.R
-        methods-Factorization-class.R methods-HaploCluster-class.R
-        methods-HaploClusterList-class.R zzz.R
+Collate: AllClasses.R AllGenerics.R hapFabia.R methods-Factorization-class.R methods-HaploCluster-class.R methods-HaploClusterList-class.R zzz.R
 URL: http://www.bioinf.jku.at/software/hapFabia/hapFabia.html
-biocViews: Genetics, GeneticVariability, SNP, Sequencing,
-        Visualization, Clustering
+biocViews: Genetics, GeneticVariability, SNP, Sequencing, Visualization, Clustering
+
