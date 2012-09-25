@@ -11,5 +11,5 @@ Description: A package to identify rare and short haplotype clusters in large se
 License: LGPL (>= 2.1)
 Collate: AllClasses.R AllGenerics.R hapFabia.R methods-Factorization-class.R methods-HaploCluster-class.R methods-HaploClusterList-class.R zzz.R
 URL: http://www.bioinf.jku.at/software/hapFabia/hapFabia.html
-biocViews: Genetics, GeneticVariability, SNP, Sequencing, Visualization, Clustering
+biocViews: Genetics, GeneticVariability, SNP, Sequencing, HighThroughputSequencing, Visualization, Clustering, SequenceMatching, Homo_sapiens, Software
 
