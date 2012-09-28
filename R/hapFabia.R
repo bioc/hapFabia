@@ -411,25 +411,125 @@ pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FAL
 
 if (is.null(annotationFile)) {
     labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
-    if (haplotypes) {
-        lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+    if (length(labelsAA[,2])<2) {
+        if (haplotypes) {
+            lA <- as.vector(unlist(rbind(1:individualsN,1:individualsN)))
+        } else {
+            lA <- as.vector(1:individualsN)
+        }
     } else {
-        lA <- as.vector(labelsAA[,2])
+        if (haplotypes) {
+            lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+        } else {
+            lA <- as.vector(labelsAA[,2])
+        }
     }
     indiA <-  cbind(as.character(lA),as.character(lA),as.character(lA),as.character(lA))
 } else {
     indit <- read.table(annotationFile, header = FALSE, sep = "\t", quote = "",as.is=TRUE)
+    lind <- length(indit)
+    if (lind<4) {
+        inditA <- read.table(annotationFile, header = FALSE, sep = " ", quote = "",as.is=TRUE)
+        if (length(inditA)>lind) {
+            indit <- inditA
+            lind <- length(inditA)
+        }
+    }
+
     if (haplotypes) {
-        indi1 <- as.vector(unlist(rbind(indit[,1],indit[,1]))) # because haplotypes individuals are doubled
-        indi2 <- as.vector(unlist(rbind(indit[,2],indit[,2])))
-        indi3 <- as.vector(unlist(rbind(indit[,3],indit[,3])))
-        indi4 <- as.vector(unlist(rbind(indit[,4],indit[,4])))
+        if (lind>0) {
+            indi1 <- as.vector(unlist(rbind(indit[,1],indit[,1]))) # because haplotypes individuals are doubled
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(unlist(rbind(1:individualsN,1:individualsN)))
+            } else {
+                lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+            }
+            indi1 <- as.character(lA)
+        }
+        if (lind>1) {
+            indi2 <- as.vector(unlist(rbind(indit[,2],indit[,2])))
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(unlist(rbind(1:individualsN,1:individualsN)))
+            } else {
+                lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+            }
+            indi2 <- as.character(lA)
+        }
+        if (lind>2) {
+            indi3 <- as.vector(unlist(rbind(indit[,3],indit[,3])))
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(unlist(rbind(1:individualsN,1:individualsN)))
+            } else {
+                lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+            }
+            indi3 <- as.character(lA)
+        }
+        if (lind>3) {
+            indi4 <- as.vector(unlist(rbind(indit[,4],indit[,4])))
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(unlist(rbind(1:individualsN,1:individualsN)))
+            } else {
+                lA <- as.vector(unlist(rbind(labelsAA[,2],labelsAA[,2])))
+            }
+            indi4 <- as.character(lA)
+        }
      } else {
-        indi1 <- as.vector(indit[,1])
-        indi2 <- as.vector(indit[,2])
-        indi3 <- as.vector(indit[,3])
-        indi4 <- as.vector(indit[,4])
-     }
+        if (lind>0) {
+            indi1 <- as.vector(indit[,1])
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(1:individualsN)
+            } else {
+                lA <- as.vector(labelsAA[,2])
+            }
+            indi1 <- as.character(lA)
+        }
+        if (lind>1) {
+            indi2 <- as.vector(indit[,2])
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(1:individualsN)
+            } else {
+                lA <- as.vector(labelsAA[,2])
+            }
+            indi2 <- as.character(lA)
+        }
+        if (lind>2) {
+            indi3 <- as.vector(indit[,3])
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(1:individualsN)
+            } else {
+                lA <- as.vector(labelsAA[,2])
+            }
+            indi3 <- as.character(lA)
+        }
+        if (lind>3) {
+            indi4 <- as.vector(indit[,4])
+        } else {
+            labelsAA <- read.table(paste(prefixPath,fileName,individualsPostfix,sep=""),header = FALSE, sep = " ", quote = "",as.is = TRUE)
+            if (length(labelsAA[,2])<2) {
+                lA <- as.vector(1:individualsN)
+            } else {
+                lA <- as.vector(labelsAA[,2])
+            }
+            indi4 <- as.character(lA)
+        }
+    }
+    indi1 <- gsub(",",";",indi1)
+    indi2 <- gsub(",",";",indi2)
+    indi3 <- gsub(",",";",indi3)
     indi4 <- gsub(",",";",indi4)
     indiA <- cbind(indi1,indi2,indi3,indi4)
     labelsA <- indiA
