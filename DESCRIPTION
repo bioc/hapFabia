@@ -1,6 +1,6 @@
 Package: hapFabia
 Title: hapFabia: Identification of rare and short haplotype clusters in large sequencing data
-Version: 0.99.1
+Version: 1.0.0
 Date: 2012-09-25
 Author: Sepp Hochreiter <hochreit@bioinf.jku.at>
 Maintainer: Sepp Hochreiter <hochreit@bioinf.jku.at>
