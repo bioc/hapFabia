@@ -139,9 +139,9 @@ shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
-snvs <- ina[2]
+noSNVs <- ina[2]
 over <- segmentSize%/%shiftSize
-N1 <- snvs%/%shiftSize
+N1 <- noSNVs%/%shiftSize
 endRunA <- (N1-over+2)
 
 #####analyze each segment#######
