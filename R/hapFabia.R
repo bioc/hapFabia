@@ -1027,7 +1027,7 @@ if (is.null(labelsA)) {
 off1 <- 0
 
 
-haploClusterList1 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="1",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off1,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
+haploClusterList1 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off1,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
 
 # merge haplotypes
 
@@ -1052,7 +1052,7 @@ if ( lengthList(haploClusterList1) > 1) {
 
 off2=inteA%/%2
 
-haploClusterList2 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="1",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off2,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
+haploClusterList2 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off2,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
 
 # merge haplotypes
 
