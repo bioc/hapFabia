@@ -474,6 +474,13 @@ while (ie == 1) {
 
       haploCluster_res_idx = haploCluster_res_idx + 1
 
+
+      chrom <- names(which.max(table(annot[[1]][tagSNV])))[1]
+
+      if ( !is.character(chrom) || (nchar(chrom)==0) || (nchar(chrom)>2 )) {
+          chrom <- ""
+      }
+
       res_t <- new("HaploCluster",ID=haploCluster_res_idx,bicluster_id=n,chromosome=chrom,haploClusterPos=haploClusterPos,haploClusterLength=haploClusterLength,numberIndividuals=lq1A,numbertagSNVs=lq2A,individuals=individual,tagSNVs=tagSNV,populationIndividuals=labelsEUA,idIndividuals=labelsNAA,labelIndividuals=labels_ALLA,platformIndividuals=labelsPlatformA,coreClusterIndividuals=labelsNA2,tagSNVPositions=physRangeA,tagSNVAlleles=allelesA,tagSNVNames=tagSNVNamesA,tagSNVFreq=tagSNVFreqA,tagSNVGroupFreq=tagSNVGroupFreqA,tagSNVChange=tagSNVChangeA,tagSNVsPerIndividual=tagSNVsPerIndividual,individualPerTagSNV=individualPerTagSNV,tagSNVAnno=tagSNVAnnoA)
 
       haploCluster_res[[haploCluster_res_idx]] <- res_t
