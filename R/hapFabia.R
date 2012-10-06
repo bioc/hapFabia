@@ -546,7 +546,7 @@ if (is.null(annotationFile)) {
 #indi4 <- gsub(",",";",indi4)
 #indiA <- cbind(indi1,indi2,indi3,indi4)
 
-resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,haploClusterLength=haploClusterLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes,cut=cut,procMinIndivids=procMinIndivids,thresPrune=thresPrune,simv=simv,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
+resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,haploClusterLength=haploClusterLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes,cut=cut,procMinIndivids=procMinIndivids,thresPrune=thresPrune,simv=simv,minTagSNVs=minTagSNVs,minIndivid=minIndivid,avSNVsDist=avSNVsDist,SNVclusterLength=SNVclusterLength)
 
 
 haploClusterList2excel(resHapFabia$mergedHaploClusterList,paste(fileName,pRange,".csv",sep=""))
