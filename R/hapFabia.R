@@ -381,7 +381,7 @@ sim <- function(x,y,simv="minD",minInter=2) {
 
 
 
-iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2)
+iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 {
 
 
@@ -836,7 +836,7 @@ return(list(startRun=startRun,endRun=endRun,nohaploClusters=nohaploClusters,avha
 }
 
 
-hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2) {
+hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100) {
 
 # fileName:            the file name of the sparse matrix in sparse format.
 # prefixPath:          path of the data file
@@ -895,7 +895,17 @@ message("   Non-negative factors and loadings ------------------: ",non_negative
 message("   Results written to files ---------------------------: ",write_file)
 message("   Data normalized ------------------------------------: ",norm)
 message("   Minimal value of the variational parameter ---------: ",lap)
+if (haploClusterLength>0) {
 message("   Haplotype cluster length in kbp --------------------: ",haploClusterLength)
+message("   Average distance between SNVs in bases -------------: ",avSNVsDist)
+} else {
+if (SNVclusterLength>0)
+{
+message("   Number of SNVs in histogram bin --------------------: ",SNVclusterLength)
+} else {
+message("   Number of SNVs in histogram bin --------------------: 100")
+}
+}
 message("   % largest Ls for haplotype cluster extraction ------: ",Lt)
 message("   % largest Zs for haplotype cluster extraction ------: ",Zt)
 message("   p-value threshold for random histogram counts ------: ",thresCount)
@@ -912,6 +922,7 @@ message("   Threshold for pruning border tagSNVs ---------------: ",thresPrune)
 message("   Similarity measure for merging clusters ------------: ",simv)
 message("   Minimum matching tagSNVs for cluster similarity ----: ",minTagSNVs)
 message("   Minimum matching individuals for cluster similarity : ",minIndivid)
+message("   Minimum matching individuals for cluster similarity : ",minIndivid)
 message("                      ")
 message("                      ")
 
@@ -926,7 +937,23 @@ require("fabia")
 ps <- 1 - Lt
 # psZ: quantile above which to consider Zs
 psZ <- 1 - Zt
-inteA <- haploClusterLength*10 # histogram length gives inteA/10 kbp DNA length
+
+
+# compute histogram length
+if (haploClusterLength>0) {
+    if (avSNVsDist>0) {
+        inteA <- haploClusterLength*(1000/avSNVsDist)
+    } else {
+        inteA <- haploClusterLength*10
+    }
+} else {
+    if (SNVclusterLength>0)
+    {
+       inteA <- SNVclusterLength
+    } else {
+       inteA <- 100
+    }
+}
 
 ina <- as.numeric(readLines(paste(prefixPath,fileName,pRange,sparseMatrixPostfix,".txt",sep=""),n=2))
 if (length(individuals)>1) {

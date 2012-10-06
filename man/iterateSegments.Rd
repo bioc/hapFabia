@@ -25,7 +25,7 @@ iterateSegments(startRun=1,endRun,shift=5000,segmentSize=10000,
    lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,
    thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,
    haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
-   simv="minD",minTagSNVs=6,minIndivid=2)
+   simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
 }
 \arguments{
@@ -74,6 +74,12 @@ iterateSegments(startRun=1,endRun,shift=5000,segmentSize=10000,
  otherwise the similarity is set to zero.}
 \item{minIndivid}{passed to hapFabia: minimum matching individuals for cluster similarity;
  otherwise the similarity is set to zero.}
+ \item{avSNVsDist}{passed to hapFabia: average distance between SNVs in nucleotides - used
+ together with \code{haploClusterLength} to compute the number of SNVs
+ in the histogram bins; default=100 (from the
+ 1000GenomesProject).}
+\item{SNVclusterLength}{passed to hapFabia: if \code{haploClusterLength=0} then the number
+ of SNVs in the histogram bins can be given directly; default 100.}
 
 
 }
