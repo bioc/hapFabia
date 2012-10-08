@@ -2,3 +2,23 @@ VERSION 1.0.0
 -------------
 
 The beginning
+
+CHANGES IN VERSION 1.0.1
+------------------------
+NEW FEATURES
+
+    o chromosome number automatically extracted from annotation
+    o annotation file now tab or blank separated (automatically checked)
+
+CHANGES IN VERSION 1.0.2
+------------------------
+
+NEW FEATURES
+
+    o new parameter: distance between SNVs for computing bin sizes
+    o new parameter: bin size in terms of SNVs directly
+    o default are now genotype data
+
+
+
+

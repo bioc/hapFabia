@@ -491,8 +491,6 @@ Implementation in \R.
 old_dir <- getwd()
 setwd(tempdir())
 
-library(fabia)
-
 data(hapRes)
 data(simu)
 namesL <- simu[["namesL"]]

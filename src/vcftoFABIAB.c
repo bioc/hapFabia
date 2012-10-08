@@ -505,7 +505,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
     sst[0]=0;
     strcat(sst,agr1);
-    strcat(sst,"_mat.txt");
+    strcat(sst,"_matH.txt");
     pFile = fopen (sst,"w");
     if (pFile==NULL) {
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);

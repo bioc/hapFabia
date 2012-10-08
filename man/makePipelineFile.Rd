@@ -11,13 +11,16 @@
 }
 \usage{
 
-makePipelineFile(fileName,shiftSize=5000,segmentSize=10000) 
+makePipelineFile(fileName,shiftSize=5000,segmentSize=10000,haplotypes=FALSE,dosage=FALSE) 
 
 }
 \arguments{
  \item{fileName}{file name of the genotype file in \code{vcf} format}
  \item{shiftSize}{distance between start of adjacent segments.}
  \item{segmentSize}{number of SNVs in a segment.}
+ \item{haplotypes}{should haplotypes (phased genotypes) be used; default
+   FALSE.}
+ \item{dosage}{should dosages be used if haplotypes is FALSE; default FALSE.}
 
 }
 \details{

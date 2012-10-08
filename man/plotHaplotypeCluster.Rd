@@ -96,8 +96,6 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
 old_dir <- getwd()
 setwd(tempdir())
 
-library(fabia)
-
 data(hapRes)
 
 data(simu)
