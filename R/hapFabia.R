@@ -1,4 +1,4 @@
-makePipelineFile  <- function(fileName,shiftSize=5000,segmentSize=10000) {
+makePipelineFile  <- function(fileName,shiftSize=5000,segmentSize=10000,haplotypes=FALSE,dosage=FALSE) {
 sourcefile <- file.path(system.file(package="hapFabia"),"pipeline/pipeline.R")
 
 source1 <- readLines(sourcefile)
@@ -7,6 +7,16 @@ write(paste("#####define segments, overlap, filename #######",sep=""),file="pipe
 write(paste("shiftSize <- ",shiftSize,sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
 write(paste("segmentSize <- ",segmentSize,sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
 write(paste("fileName <- \'",fileName,"\' # without type",sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
+if (haplotypes) {
+    write("haplotypes <- TRUE",file="pipeline.R",append=TRUE,ncolumns=100)
+} else {
+    write("haplotypes <- FALSE",file="pipeline.R",append=TRUE,ncolumns=100)
+}
+if (dosage) {
+    write("dosage <- TRUE",file="pipeline.R",append=TRUE,ncolumns=100)
+} else {
+    write("dosage <- FALSE",file="pipeline.R",append=TRUE,ncolumns=100)
+}
 
 write.table(source1,file="pipeline.R",append=TRUE,quote = FALSE,row.names = FALSE,col.names = FALSE)
 
@@ -381,7 +391,7 @@ sim <- function(x,y,simv="minD",minInter=2) {
 
 
 
-iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
+iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 {
 
 
@@ -836,7 +846,7 @@ return(list(startRun=startRun,endRun=endRun,nohaploClusters=nohaploClusters,avha
 }
 
 
-hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100) {
+hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100) {
 
 # fileName:            the file name of the sparse matrix in sparse format.
 # prefixPath:          path of the data file
@@ -870,6 +880,11 @@ message("                      ")
 message("Running hapFabia with:")
 message("   Prefix string for file name of data files --------- : ",fileName)
 message("   Path of data files ---------------------------------: ",prefixPath)
+if (haplotypes) {
+message("   Phased genotype data (haplotypes) ------------------")
+} else {
+message("   Genotype data --------------------------------------")
+}
 message("   Postfix string for file in sparse matrix format ----: ",sparseMatrixPostfix)
 message("   Postfix string for file containing individual names : ",individualsPostfix)
 if (is.null(labelsA)) {

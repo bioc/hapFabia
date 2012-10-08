@@ -206,16 +206,18 @@ To prepare the data for \Rpackage{hapFabia} we have to perform
 preprocessing steps.
 First \texttt{filename.vcf.gz}
 must be 1.\ uncompressed, then 2.\ converted to the sparse matrix
-format, and then 3.\ split into segments. The following command line
+format, 3. copy genotype matrix to the matrix that is processed,
+and then 4.\ split into segments. The following command line
 commands perform these steps:
 \begin{enumerate}
 \item \texttt{gunzip filename.vcf.gz}
 \item \texttt{./vcftoFABIA filename ./}
+\item \texttt{cp filename\_matG.txt filename\_mat.txt}
 \item \texttt{./split\_sparse\_matrix filename \_mat.txt 10000 5000 1}
 \end{enumerate}
-The command line tools for step 2.\ and 3.\ are provided by the package
+The command line tools for steps 2.\ to 4.\ are provided by the package
 \Rpackage{hapFabia} in \texttt{inst/commandline/arch/}.
-However step 2.\ and 3.\ can be performed in \R as well (see below).
+However step 2.\ to 4.\ can be performed in \R as well (see below).
 The commandline parameters for \texttt{vcftoFABIA} are
 1) filename without \texttt{.vcf} and 2) path to the file.
 The commandline parameters for \texttt{split\_sparse\_matrix} are
@@ -233,14 +235,17 @@ R> shiftSize <- 5000
 R> segmentSize <- 10000
 R> fileName="filename" # without type
 R>
-R> #####load libraries#######
+R> #####load library#######
 R> library(hapFabia)
-R> library(fabia)
 R>
 R> #####convert from .vcf to _mat.txt: step 2. above#######
 R> vcftoFABIA(fileName=fileName)
 R>
-R> #####split/ generate segments: step 3. above#######
+#####copy genotype matrix to matrix: step 3. above#######
+R> file.copy(paste(fileName,"_matG.txt",sep=""),
++  paste(fileName,"_mat.txt",sep=""))
+R>
+R> #####split/ generate segments: step 4. above#######
 R> split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,
 +  shiftSize=shiftSize,annotation=TRUE)
 R>
@@ -257,7 +262,7 @@ R> iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,
 +  segmentSize=segmentSize,fileName=fileName,individuals=0,
 +  upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,
 +  Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,
-+  pMAF=0.035,haplotypes=TRUE)
++  pMAF=0.035,haplotypes=FALSE)
 R>
 R> #####identify duplicates#######
 R> identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,
@@ -310,7 +315,10 @@ R>    ##attention: filename without type ".txt"
 First the packages \Rpackage{hapFabia} and \Rpackage{fabia} are loaded.
 Then \texttt{filename.vcf}
 is converted by \Rfunction{vcftoFABIA} to sparse matrix format
-\texttt{filename\_mat.txt}, where the SNV annotation file
+\texttt{filename\_matH.txt} (haplotype data),
+\texttt{filename\_matG.txt} (genotype data),
+\texttt{filename\_matD.txt} (dosage data),
+where the SNV annotation file
 \texttt{filename\_annot.txt} and the label for the individuals
 \texttt{filename\_individuals.txt}
 are generated, too.
@@ -341,7 +349,7 @@ Fig.~\ref{fig:example1} and Fig.~\ref{fig:example2}.
 An \R source file  \Rfunction{pipeline.R} of above pipeline
 can be created and executed as follows:
 \begin{Sinput}
-R> makePipelineFile("filename",shiftSize=5000,segmentSize=10000)
+R> makePipelineFile("filename",shiftSize=5000,segmentSize=10000,haplotypes=FALSE)
 R>
 R> source("pipeline.R")
 \end{Sinput}
@@ -371,10 +379,9 @@ old_dir <- getwd()
 setwd(tempdir())
 @
 
-First the packages are loaded.
+First the package is loaded.
 <<loadLibs>>=
 library(hapFabia)
-library(fabia)
 @
 
 Load data and write to \texttt{vcf} file.
@@ -389,7 +396,7 @@ Create the analysis pipeline were segments are only 1,000 SNVs
 (that is about 100 kbps), while default is 10,000 SNVs (that is about
 1Mbp).
 <<createPipeline>>=
-makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000)
+makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000,haplotypes=TRUE)
 @
 
 Now the pipeline can be executed by sourcing it.
@@ -403,7 +410,7 @@ concerning the segment that starts at N1 and ends at N2,
 \texttt{\_ALL.Rda} stores just the number of individuals and the number of SNVs,
 \texttt{\_individuals.txt} contains annotation for the individuals (in
 particular their names),
-\texttt{\_mat.txt}
+\texttt{\_matG.txt}
 denotes phased genotype data in sparse matrix format,
 \texttt{\_matD.txt} contains the genotype data as dosage in sparse
 matrix format,

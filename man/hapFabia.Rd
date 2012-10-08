@@ -23,7 +23,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
    p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
    write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,
-   haplotypes=TRUE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
+   haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 }
 
@@ -77,7 +77,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  otherwise the similarity is set to zero.}
 \item{minIndivid}{Minimum matching individuals for cluster similarity;
  otherwise the similarity is set to zero.}
- \item{avSNVsDist}{average distance between SNVs in nucleotides - used
+ \item{avSNVsDist}{average distance between SNVs in base pairs - used
  together with \code{haploClusterLength} to compute the number of SNVs
  in the histogram bins; default=100 (from the
  1000GenomesProject).}
@@ -194,8 +194,6 @@ List containing
 
 old_dir <- getwd()
 setwd(tempdir())
-
-library(fabia)
 
 data(simu)
 

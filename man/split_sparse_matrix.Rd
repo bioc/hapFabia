@@ -82,8 +82,8 @@ setwd(tempdir())
 data(chr1ASW1000G)
 write(chr1ASW1000G,file="chr1ASW1000G.vcf")
 
-#Create the analysis pipeline.
-makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000)
+#Create the analysis pipeline for haplotype data (1000Genomes)
+makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000,haplotypes=TRUE)
 
 source("pipeline.R")
 
@@ -127,23 +127,35 @@ setwd(old_dir)
 shiftSize <- 5000
 segmentSize <- 10000
 fileName="filename" # without type
+haplotypes <- TRUE
+dosage <- FALSE
 
-#####load libraries#######
+#####load library#######
 library(hapFabia)
-library(fabia)
 
-#####convert from .vcf to _mat.txt: step 2. above#######
+#####convert from .vcf to _mat.txt#######
 vcftoFABIA(fileName=fileName)
 
-#####split/ generate segments: step 3. above#######
+#####copy haplotype, genotype, or dosage matrix to matrix#######
+if (haplotypes) {
+    file.copy(paste(fileName,"_matH.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+} else {
+    if (dosage) {
+        file.copy(paste(fileName,"_matD.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+    } else {
+        file.copy(paste(fileName,"_matG.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+    }
+}
+
+#####split/ generate segments#######
 split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,
 shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
 noSNVs <- ina[2]
-over <- segmentSize%/%shiftSize
-N1 <- noSNVs%/%shiftSize
+over <- segmentSize\%/\%shiftSize
+N1 <- noSNVs\%/\%shiftSize
 endRunA <- (N1-over+2)
 
 #####analyze each segment#######
@@ -152,7 +164,7 @@ iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,
 segmentSize=segmentSize,fileName=fileName,individuals=0,
 upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,
 Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,
-pMAF=0.03,haplotypes=TRUE)
+pMAF=0.03,haplotypes=haplotypes)
 
 #####identify duplicates#######
 identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,

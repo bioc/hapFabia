@@ -1,12 +1,22 @@
 
-#####load libraries#######
+#####load library#######
 library(hapFabia)
-library(fabia)
 
-#####convert from .vcf to _mat.txt: step 2. above#######
+#####convert from .vcf to _mat.txt#######
 vcftoFABIA(fileName=fileName)
 
-#####split/ generate segments: step 3. above#######
+#####copy haplotype, genotype, or dosage matrix to matrix#######
+if (haplotypes) {
+    file.copy(paste(fileName,"_matH.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+} else {
+    if (dosage) {
+        file.copy(paste(fileName,"_matD.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+    } else {
+        file.copy(paste(fileName,"_matG.txt",sep=""), paste(fileName,"_mat.txt",sep=""))
+    }
+}
+
+#####split/ generate segments#######
 split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,shiftSize=shiftSize,annotation=TRUE)
 
 #####compute how many segments we have#######
@@ -18,7 +28,7 @@ endRunA <- (N1-over+2)
 
 #####analyze each segment#######
 #####may be done by parallel runs#######
-iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize,fileName=fileName,individuals=0,upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=TRUE)
+iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize,fileName=fileName,individuals=0,upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=haplotypes)
 
 #####identify duplicates#######
 identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize)
