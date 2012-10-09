@@ -241,9 +241,15 @@ for (i in 1:haploN) {
 }
 
 
-hapRes <- hapFabia(fileName="dataSim1fabia",
-   prefixPath="",upperBP=0.15,p=10,iter=1,
-   haploClusterLength=10,pMAF=0.1)
+hapRes <- hapFabia(fileName="dataSim1fabia",prefixPath="",
+   sparseMatrixPostfix="_mat",
+   annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
+   labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
+   p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
+   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
+   haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
+   simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
 summary(hapRes$mergedHaploClusterList)
 
@@ -257,9 +263,15 @@ simulateHaploClustersFabia(fileprefix="dataSim",
    implanted=10,length=50,minors=30,mismatches=0,
    mismatchImplanted=0.5,overlap=50)
 
-hapRes <- hapFabia(fileName="dataSim2fabia",
-   prefixPath="",upperBP=0.15,p=10,iter=1,
-   haploClusterLength=10,pMAF=0.1)
+hapRes <- hapFabia(fileName="dataSim2fabia",prefixPath="",
+   sparseMatrixPostfix="_mat",
+   annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
+   labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
+   p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
+   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
+   haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
+   simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
 ## Summary of the haplotype cluster list
 summary(hapRes$mergedHaploClusterList)

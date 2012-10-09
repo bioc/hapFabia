@@ -28,7 +28,8 @@ endRunA <- (N1-over+2)
 
 #####analyze each segment#######
 #####may be done by parallel runs#######
-iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize,fileName=fileName,individuals=0,upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=haplotypes)
+iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize,fileName=fileName,individuals=0,upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=haplotypes,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
+simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
 #####identify duplicates#######
 identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,shift=shiftSize,segmentSize=segmentSize)
