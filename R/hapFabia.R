@@ -881,9 +881,9 @@ message("Running hapFabia with:")
 message("   Prefix string for file name of data files --------- : ",fileName)
 message("   Path of data files ---------------------------------: ",prefixPath)
 if (haplotypes) {
-message("   Phased genotype data (haplotypes) ------------------")
+message("   Data consists of phased genotypes (haplotypes) -----")
 } else {
-message("   Genotype data --------------------------------------")
+message("   Data consists of unphased genotypes ----------------")
 }
 message("   Postfix string for file in sparse matrix format ----: ",sparseMatrixPostfix)
 message("   Postfix string for file containing individual names : ",individualsPostfix)
@@ -926,11 +926,6 @@ message("   % largest Zs for haplotype cluster extraction ------: ",Zt)
 message("   p-value threshold for random histogram counts ------: ",thresCount)
 message("   Min. % of segments overlap in haplotype clusters ---: ",mintagSNVsFactor)
 message("   Averaged and corrected minor allele frequency ------: ",pMAF)
-if (haplotypes) {
-message("   Data consists of phased genotypes (haplotypes) -----")
-} else {
-message("   Data consists of unphased genotypes ----------------")
-}
 message("   Cutoff for merging haplotype clusters --------------: ",cut)
 message("   % of cluster individuals a tagSNV must tag ---------: ",procMinIndivids)
 message("   Threshold for pruning border tagSNVs ---------------: ",thresPrune)
