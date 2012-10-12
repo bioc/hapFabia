@@ -432,10 +432,20 @@
   \describe{
 
     \item{\bold{Plot}}{Plots a haplotype cluster where the SNVs within
-    the cluster are shown. Minor alleles of tagSNVs are marked by a
+    the cluster are shown. In the plot the $y$-axis
+gives the individuals or the chromosomes
+and the $x$-axis consecutive SNVs.
+Minor alleles of tagSNVs are marked by a
     particular color. Minor
     alleles of other SNVs (private, common, from other clusters, etc) are
-    marked by a different color.  The model from \pkg{fabia} is also shown.}
+    marked by a different color.  The model from \pkg{fabia} is also
+    shown.
+     The default color coding uses yellow
+for major alleles, violet for minor alleles of tagSNVs, and blue
+for minor alleles of other SNVs.
+\code{model L} indicates tagSNVs
+identified by hapFabia in violet.
+}
 
 
 

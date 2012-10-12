@@ -276,7 +276,7 @@ R> print("Number haplotype clusters:")
 R> print(anaRes$nohaploClusters)
 R> print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
 R> print(anaRes$avhaploClusterLengthSNVS)
-R> print("Statistics on haplotye cluster length in kbps:")
+R> print("Statistics on haplotye cluster length in bp:")
 R> print(anaRes$avhaploClusterLengthS)
 R> print("Statistics on number of individuals belonging to haplotye clusters:")
 R> print(anaRes$avnoIndividS)
@@ -435,7 +435,7 @@ print("Number haplotype clusters:")
 print(anaRes$nohaploClusters)
 print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
 print(anaRes$avhaploClusterLengthSNVS)
-print("Statistics on haplotye cluster length in kbps:")
+print("Statistics on haplotye cluster length in bp:")
 print(anaRes$avhaploClusterLengthS)
 print("Statistics on number of individuals belonging to haplotye clusters:")
 print(anaRes$avnoIndividS)
@@ -480,12 +480,19 @@ setwd(old_dir)
 
 
 
-Plot the first haplotype cluster in segment 5
+Plot the first haplotype cluster in segment 5.
+In the plot the $y$-axis
+gives the individuals or the chromosomes
+and the $x$-axis consecutive SNVs. The default color coding uses yellow
+for major alleles, violet for minor alleles of tagSNVs, and blue
+for minor alleles of other SNVs.
+``model L'' indicates tagSNVs
+identified by hapFabia in violet.
 <<plotHaplotype1,fig=TRUE>>=
 plot(haploCluster1,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
 @
 
-Plot the second haplotype cluster in segment 5
+Plot the second haplotype cluster in segment 5.
 <<plotHaplotype2,fig=TRUE>>=
 plot(haploCluster2,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
 @
@@ -578,6 +585,13 @@ new_dir <- getwd()
 setwd(old_dir)
 @
 
+Again, in the plot the $y$-axis
+gives the individuals or the chromosomes
+and the $x$-axis consecutive SNVs. The default color coding uses yellow
+for major alleles, violet for minor alleles of tagSNVs, and blue
+for minor alleles of other SNVs.
+``model L'' indicates tagSNVs
+identified by hapFabia in violet.
 <<plotHaplotype3,fig=TRUE>>=
 plot(haploCluster,filename=paste(new_dir,"/dataSim1fabia_mat",sep=""))
 @
