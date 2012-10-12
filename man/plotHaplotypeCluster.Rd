@@ -55,6 +55,14 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
   Other annotations of tagSNVs can
   be visualized.
 
+In the plot the $y$-axis
+gives the individuals or the chromosomes
+and the $x$-axis consecutive SNVs. The default color coding uses yellow
+for major alleles, violet for minor alleles of tagSNVs, and blue
+for minor alleles of other SNVs.
+\code{model L} indicates tagSNVs
+identified by hapFabia in violet.
+
   Implementation in \R.
 
 }
