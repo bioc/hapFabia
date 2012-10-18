@@ -932,7 +932,6 @@ message("   Threshold for pruning border tagSNVs ---------------: ",thresPrune)
 message("   Similarity measure for merging clusters ------------: ",simv)
 message("   Minimum matching tagSNVs for cluster similarity ----: ",minTagSNVs)
 message("   Minimum matching individuals for cluster similarity : ",minIndivid)
-message("   Minimum matching individuals for cluster similarity : ",minIndivid)
 message("                      ")
 message("                      ")
 
