@@ -1,43 +1,25 @@
-\name{simu}
+\name{mergedIBDsegmentList}
 \docType{data}
-\alias{simu}
-\title{Example simulation data for \code{hapFabia}}
+\alias{mergedIBDsegmentList}
+
+\title{Example IBD segment list as a result of \code{hapFabia}}
+
 \description{
 
-  The data obtained by \code{simulateForFabia} in binary format.
+  Result of a \code{hapFabia} call
+  given as instance of the class \code{IBDsegmentList}.
+  The object \code{mergedIBDsegmentList}
+  contains the extracted IBD segments.
   
 }
-\usage{simu}
-\format{contains a list \code{simu} with  variables
-  \enumerate{
-    \item \code{namesL},
-    \item \code{haploN},
-    \item \code{snvs},
-    \item \code{annot},
-    \item \code{alleleIimp} which contains the information on the
-    implanted IBD segment: sample names,
-  number of chromosomes/individuals,
-  number of tagSNVs, annotation of tagSNVs, the genotype data
-  where 0 = reference an 1 = minor allele.
-}
-  \code{annot} is a list with entries:
-  \enumerate{
-   \item \code{chromosome}, 
-   \item \code{position},
-   \item \code{snvNames},  
-   \item \code{snvMajor},  
-   \item \code{snvMinor},  
-   \item \code{quality},   
-   \item \code{pass},     
-   \item \code{info},      
-   \item \code{fields},    
-   \item \code{frequency}, and 
-   \item \code{changed}.
- }
+
+\usage{mergedIBDsegmentList}
+
+\format{
+  object \code{mergedIBDsegmentList} of the class \code{IBDsegmentList}
   
-  }
- 
-\source{from \code{simulateForFabia}}
+}
+\source{result of a call of \code{hapFabia} }
 \seealso{
 \code{\link{IBDsegment-class}},
 \code{\link{IBDsegmentList-class}},

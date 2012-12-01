@@ -1,26 +1,26 @@
 \name{setStatistics}
 
 \alias{setStatistics}
-\alias{setStatistics,HaploClusterList-method}
+\alias{setStatistics,IBDsegmentList-method}
 
 
-\title{Computes and stores the statistics of a haplotype cluster
+\title{Computes and stores the statistics of an IBD segment
   list}
 
 \description{
 
   \code{setStatistics}: \R implementation of \code{setStatistics}.
 
-  Computes the statistics of a haplotype cluster
-  list given as an object of the class \code{HaploClusterList}.
+  Computes the statistics of an IBD segment
+  list given as an object of the class \code{IBDsegmentList}.
   In the slot \code{statistics} of an object of the class
-  \code{HaploClusterList} the summary statistics
-  across the list of haplotype clusters are stored.
+  \code{IBDsegmentList} the summary statistics
+  across the list of IBD segments are stored.
   Following characteristics are stored in the list \code{statistics}:
   \enumerate{
-    \item "avhaploClusterPosS": physical position
-\item "avhaploClusterLengthSNVS": length in SNVs
-\item "avhaploClusterLengthS": length in bp
+    \item "avIBDsegmentPosS": physical position
+\item "avIBDsegmentLengthSNVS": length in SNVs
+\item "avIBDsegmentLengthS": length in bp
 \item "avnoIndividS": number individuals
 \item "avnoTagSNVsS": number tagSNVs
 \item "avnoFreqS": tagSNV frequency
@@ -35,12 +35,12 @@
 
 \usage{
 
-\S4method{setStatistics}{HaploClusterList}(haploClusterList)
+\S4method{setStatistics}{IBDsegmentList}(IBDsegmentList)
 
 
 }
 \arguments{
-  \item{haploClusterList}{object of class \code{HaploClusterList}.}
+  \item{IBDsegmentList}{object of class \code{IBDsegmentList}.}
 
 }
 \details{
@@ -51,34 +51,34 @@
 
 }
 \value{
-object of class  \code{HaploClusterList} with statistics set
+object of class  \code{IBDsegmentList} with statistics set
     }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -94,17 +94,17 @@ annot <- hapRes$annot
 nnL <- length(Z(res)[1,])
 labelsA <- cbind(as.character(1:nnL),as.character(1:nnL),
    as.character(1:nnL),as.character(1:nnL))
-resHaploClusterList <-
-  extractHaploClusters(res=res,sPF=sPF,annot=annot,
+resIBDsegmentList <-
+  extractIBDsegments(res=res,sPF=sPF,annot=annot,
   chrom="1",labelsA=labelsA,ps=0.9,psZ=0.8,inteA=50,
   thresA=6,mintagSNVs=6,off=0,procMinIndivids=0.1,
   thresPrune=1e-3)
 
-summary(resHaploClusterList)
+summary(resIBDsegmentList)
 
-resHaploClusterList <- setStatistics(resHaploClusterList)
+resIBDsegmentList <- setStatistics(resIBDsegmentList)
 
-summary(resHaploClusterList)
+summary(resIBDsegmentList)
 
 
 }
@@ -117,4 +117,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}

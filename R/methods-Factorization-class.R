@@ -159,7 +159,7 @@ function(res,n=1,p=NULL,w=NULL,intervv=500,off=0) {
 
 
 
-setMethod("extractHaploClusters",signature(res="Factorization",sPF="list",annot="data.frame",chrom="character",labelsA="matrix",ps="numeric",psZ="numeric",inteA="numeric",thresA="numeric",mintagSNVs="numeric",off="numeric",procMinIndivids="numeric",thresPrune="numeric"),
+setMethod("extractIBDsegments",signature(res="Factorization",sPF="list",annot="data.frame",chrom="character",labelsA="matrix",ps="numeric",psZ="numeric",inteA="numeric",thresA="numeric",mintagSNVs="numeric",off="numeric",procMinIndivids="numeric",thresPrune="numeric"),
 function(res,sPF,annot=NULL,chrom="",labelsA=NULL,ps=0.9,psZ=0.8,inteA=500,thresA=11,mintagSNVs=8,off=0,procMinIndivids=0.1,thresPrune=1e-3) {
 
     if (missing(res)) {
@@ -201,8 +201,8 @@ if (is.null(annot)) {
 
 }
 
-haploCluster_res <- new("HaploClusterList",haploClusters=list(),lengthList=0)
-haploCluster_res_idx <- 0
+IBDsegment_res <- new("IBDsegmentList",IBDsegments=list(),lengthList=0)
+IBDsegment_res_idx <- 0
 
 max_n <- ncol(L(res))
 
@@ -459,8 +459,8 @@ while (ie == 1) {
 
 
       physRangeA <- as.vector(annot[[2]][tagSNV])
-      haploClusterLength <-  physRangeA[lq2A]-physRangeA[1]
-      haploClusterPos <- (physRangeA[lq2A]+physRangeA[1])%/%2
+      IBDsegmentLength <-  physRangeA[lq2A]-physRangeA[1]
+      IBDsegmentPos <- (physRangeA[lq2A]+physRangeA[1])%/%2
       allelesA <- as.vector(paste(annot[[4]][tagSNV],":",annot[[5]][tagSNV],sep=""))
       tagSNVNamesA <- as.vector(annot[[3]][tagSNV])
       tagSNVFreqA <- as.vector(annot[[10]][tagSNV])
@@ -472,7 +472,7 @@ while (ie == 1) {
       individualPerTagSNV <- as.vector(colSums(matA))
       tagSNVAnnoA <- rep(as.list(""),length(tagSNV))
 
-      haploCluster_res_idx = haploCluster_res_idx + 1
+      IBDsegment_res_idx = IBDsegment_res_idx + 1
 
 
       chrom <- names(which.max(table(annot[[1]][tagSNV])))[1]
@@ -481,9 +481,9 @@ while (ie == 1) {
           chrom <- ""
       }
 
-      res_t <- new("HaploCluster",ID=haploCluster_res_idx,bicluster_id=n,chromosome=chrom,haploClusterPos=haploClusterPos,haploClusterLength=haploClusterLength,numberIndividuals=lq1A,numbertagSNVs=lq2A,individuals=individual,tagSNVs=tagSNV,populationIndividuals=labelsEUA,idIndividuals=labelsNAA,labelIndividuals=labels_ALLA,platformIndividuals=labelsPlatformA,coreClusterIndividuals=labelsNA2,tagSNVPositions=physRangeA,tagSNVAlleles=allelesA,tagSNVNames=tagSNVNamesA,tagSNVFreq=tagSNVFreqA,tagSNVGroupFreq=tagSNVGroupFreqA,tagSNVChange=tagSNVChangeA,tagSNVsPerIndividual=tagSNVsPerIndividual,individualPerTagSNV=individualPerTagSNV,tagSNVAnno=tagSNVAnnoA)
+      res_t <- new("IBDsegment",ID=IBDsegment_res_idx,bicluster_id=n,chromosome=chrom,IBDsegmentPos=IBDsegmentPos,IBDsegmentLength=IBDsegmentLength,numberIndividuals=lq1A,numbertagSNVs=lq2A,individuals=individual,tagSNVs=tagSNV,populationIndividuals=labelsEUA,idIndividuals=labelsNAA,labelIndividuals=labels_ALLA,platformIndividuals=labelsPlatformA,coreClusterIndividuals=labelsNA2,tagSNVPositions=physRangeA,tagSNVAlleles=allelesA,tagSNVNames=tagSNVNamesA,tagSNVFreq=tagSNVFreqA,tagSNVGroupFreq=tagSNVGroupFreqA,tagSNVChange=tagSNVChangeA,tagSNVsPerIndividual=tagSNVsPerIndividual,individualPerTagSNV=individualPerTagSNV,tagSNVAnno=tagSNVAnnoA)
 
-      haploCluster_res[[haploCluster_res_idx]] <- res_t
+      IBDsegment_res[[IBDsegment_res_idx]] <- res_t
 
 
         ig <- ig + 1
@@ -526,7 +526,7 @@ while (ie == 1) {
 }
 
 
-return(haploCluster_res)
+return(IBDsegment_res)
 
 }
 )

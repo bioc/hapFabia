@@ -2,14 +2,14 @@
 
 \alias{hapFabia}
 
-\title{Haplotype cluster extraction by FABIA}
+\title{IBD segment extraction by FABIA}
 
 \description{
 
   \code{hapFabia}: \R implementation of the \emph{hapFabia} method.
 
-  \code{hapFabia} extracts \bold{rare and short haplotype clusters}
-  from phased or unphased genotypes and is designed for rare variants
+  \code{hapFabia} extracts \bold{short IBD segments} tagged by rare variants
+  from phased or unphased genotypes. hapFabia is designed for rare variants
   in very large sequencing data.
   The method is based on FABIA biclustering and utilizes the package
   \pkg{fabia}.
@@ -21,7 +21,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
    annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
    labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,
    p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
-   write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,
+   write_file=0,norm=0,lap=100.0,IBDsegmentLength=50,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,
    haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
@@ -39,7 +39,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  \item{labelsA}{annotation of the individuals as matrix individuals x 4 
 (individual ID,
  subpopulation, population, genotyping platform).}
- \item{pRange}{indicates which DNA segment is processed.}
+ \item{pRange}{indicates which DNA interval is processed.}
  \item{individuals}{vector of individuals that are included into the analysis; default = 0 (all individuals).}
  \item{lowerBP}{lower bound on minor allele frequencies (MAF); however at least two occurrences are required to remove private SNVs.}
  \item{upperBP}{upper bound  on minor allele frequencies (MAF) to extract rare variants.}
@@ -53,20 +53,20 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  \item{write_file}{fabia results are written to files (L in sparse format), default = 0 (not written).}
  \item{norm}{fabia data normalization; default 1 (no normalization).}
  \item{lap}{minimal value of fabia's variational parameter; default 100.0.}
- \item{haploClusterLength}{expected typical haplotype cluster length in kbp.}
- \item{Lt}{percentage of largest fabia L values to consider for haplotype cluster extraction.}
- \item{Zt}{percentage of largest fabia Z values to consider for haplotype cluster extraction.}
+ \item{IBDsegmentLength}{expected typical IBD segment length in kbp.}
+ \item{Lt}{percentage of largest fabia L values to consider for IBD segment extraction.}
+ \item{Zt}{percentage of largest fabia Z values to consider for IBD segment extraction.}
  \item{thresCount}{p-value of random histogram hit; default 1e-5.}
  \item{mintagSNVsFactor}{percentage of the histogram tagSNVs count
-   threshold (\code{mintagSNVs} in \code{extractHaploClusters});
-   used to define minimal overlap of individual segments in a haplotype cluster; default 3/4.}
+   threshold (\code{mintagSNVs} in \code{extractIBDsegments});
+   used to define minimal overlap of individual intervals in an IBD segment; default 3/4.}
  \item{pMAF}{averaged and corrected (for non-uniform distributions) minor allele frequency.}
 \item{haplotypes}{\code{haplotypes = TRUE} indicates phased genotypes
  that is two chromosomes per individual otherwise unphased genotypes.}
-\item{cut}{cutoff for merging haplotype clusters after a hierarchical
+\item{cut}{cutoff for merging IBD segments after a hierarchical
  clustering; default 0.8.}
 \item{procMinIndivids}{Percentage of cluster individuals a tagSNV must
- tag to be considered as tagSNV for the haplotype cluster.}
+ tag to be considered as tagSNV for the IBD segment.}
 \item{thresPrune}{Threshold for pruning border tagSNVs based on an
  exponential distribution where border tagSNVs with large distances to
  the next tagSNV are pruned.}
@@ -78,19 +78,21 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
 \item{minIndivid}{Minimum matching individuals for cluster similarity;
  otherwise the similarity is set to zero.}
  \item{avSNVsDist}{average distance between SNVs in base pairs - used
- together with \code{haploClusterLength} to compute the number of SNVs
- in the histogram bins; default=100 (from the
- 1000GenomesProject).}
-\item{SNVclusterLength}{if \code{haploClusterLength=0} then the number
+ together with \code{IBDsegmentLength} to compute the number of SNVs
+ in the histogram bins; default=100.}
+\item{SNVclusterLength}{if \code{IBDsegmentLength=0} then the number
  of SNVs in the histogram bins can be given directly; default 100.}
 }
 \details{
 
- This function uses a genotype matrix in sparse matrix format and extracts haplotype clusters by
+  This function uses a genotype matrix in sparse matrix format
+  and extracts IBD segments by
  biclustering.
- First, it performs Fabia biclustering and then extracts local accumulations of loadings.
- Then it disentangles haplotype clusters and prunes off spurious correlated SNVs.
- Finally, it merges similar and broken up haplotype clusters.
+ First, it performs Fabia biclustering and then extracts local
+ accumulations of loadings.
+ Then it disentangles IBD segments and prunes off spurious correlated SNVs.
+ Finally, it merges similar IBD segments to account for larger IBD
+  segments that were broken during the analysis.
 
  Annotation file \code{..._annot.txt} for SNVs:
 \enumerate{
@@ -117,7 +119,7 @@ hapFabia(fileName,prefixPath="",sparseMatrixPostfix="_mat",
  The minimal \eqn{k}{k} which pushes the
  probability below the threshold \code{thresCount} is used to find
  accumulation of correlated SNVs that are assumed to belong to a
- haplotype cluster.
+ IBD segment.
 
  Let \eqn{p}{p} be the probability of a random
  minor allele match between \eqn{t}{t} individuals.
@@ -139,50 +141,50 @@ The value \eqn{q}{q} is given by the parameter \code{pMAF}.
 }
 \value{
 List containing
- \item{mergedhaploClusterList}{an object of the class
-   \code{HaploClusterList} that contains the extracted haplotype clusters
+ \item{mergedIBDsegmentList}{an object of the class
+   \code{IBDsegmentList} that contains the extracted IBD segments
    that were extracted from two histograms with different offset.}
  \item{res}{the result of FABIA.}
  \item{sPF}{individuals per loading of this FABIA result.}
  \item{annot}{annotation for the genotype data.}
- \item{haploClusterList1}{an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the first histogram.}
- \item{haploClusterList2}{an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the second histogram.}
- \item{mergedhaploClusterList1}{an object of the class
-   \code{HaploClusterList} that contains the merged result of the first haplotype cluster
+ \item{IBDsegmentList1}{an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the first histogram.}
+ \item{IBDsegmentList2}{an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the second histogram.}
+ \item{mergedIBDsegmentList1}{an object of the class
+   \code{IBDsegmentList} that contains the merged result of the first IBD segment
    extraction (redundancies removed).}
- \item{mergedhaploClusterList2}{an object of the class
-   \code{HaploClusterList} that contains the merged result of the second haplotype cluster
+ \item{mergedIBDsegmentList2}{an object of the class
+   \code{IBDsegmentList} that contains the merged result of the second IBD segment
    extraction (redundancies removed).}
 
  }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -246,18 +248,18 @@ hapRes <- hapFabia(fileName="dataSim1fabia",prefixPath="",
    annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
    labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
    p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
-   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   write_file=0,norm=0,lap=100.0,IBDsegmentLength=10,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
    haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
-summary(hapRes$mergedHaploClusterList)
+summary(hapRes$mergedIBDsegmentList)
 
-plot(hapRes$mergedHaploClusterList[[1]],filename="dataSim1fabia_mat")
+plot(hapRes$mergedIBDsegmentList[[1]],filename="dataSim1fabia_mat")
 
 
 ### Another Example
-simulateHaploClustersFabia(fileprefix="dataSim",
+simulateIBDsegmentsFabia(fileprefix="dataSim",
    minruns=2,maxruns=2,snvs=1000,individualsN=100,
    avDistSnvs=100,avDistMinor=10,noImplanted=1,
    implanted=10,length=50,minors=30,mismatches=0,
@@ -268,26 +270,26 @@ hapRes <- hapFabia(fileName="dataSim2fabia",prefixPath="",
    annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
    labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
    p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
-   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   write_file=0,norm=0,lap=100.0,IBDsegmentLength=10,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
    haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
-## Summary of the haplotype cluster list
-summary(hapRes$mergedHaploClusterList)
+## Summary of the IBD segment list
+summary(hapRes$mergedIBDsegmentList)
 
-## Summary of the haplotype cluster 
-summary(hapRes$mergedHaploClusterList[[1]])
+## Summary of the IBD segment 
+summary(hapRes$mergedIBDsegmentList[[1]])
 
 
-## Plot a haplotype cluster
-plot(hapRes$mergedHaploClusterList[[1]],filename="dataSim2fabia_mat")
+## Plot an IBD segment
+plot(hapRes$mergedIBDsegmentList[[1]],filename="dataSim2fabia_mat")
 
 \dontrun{
 ## It is interactive, thus dontrun!
 
-## Plot a haplotype cluster list
-plot(hapRes$mergedHaploClusterList,filename="dataSim2fabia_mat")
+## Plot an IBD segment list
+plot(hapRes$mergedIBDsegmentList,filename="dataSim2fabia_mat")
 
 }
 
@@ -307,4 +309,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 \concept{genetics,haplotype,identity by descent,bicluster,next
   generation sequencing,genotype,single nucleotide polymorphism,single
   nucleotide variation,rare variants,rare SNVs, rare
-  haplotype clusters,short haplotype clusters, IBD}
+  IBD segments,short IBD segments, IBD}

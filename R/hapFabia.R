@@ -1,11 +1,11 @@
-makePipelineFile  <- function(fileName,shiftSize=5000,segmentSize=10000,haplotypes=FALSE,dosage=FALSE) {
+makePipelineFile  <- function(fileName,shiftSize=5000,intervalSize=10000,haplotypes=FALSE,dosage=FALSE) {
 sourcefile <- file.path(system.file(package="hapFabia"),"pipeline/pipeline.R")
 
 source1 <- readLines(sourcefile)
 
 write(paste("#####define segments, overlap, filename #######",sep=""),file="pipeline.R",ncolumns=100)
 write(paste("shiftSize <- ",shiftSize,sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
-write(paste("segmentSize <- ",segmentSize,sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
+write(paste("intervalSize <- ",intervalSize,sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
 write(paste("fileName <- \'",fileName,"\' # without type",sep=""),file="pipeline.R",append=TRUE,ncolumns=100)
 if (haplotypes) {
     write("haplotypes <- TRUE",file="pipeline.R",append=TRUE,ncolumns=100)
@@ -241,7 +241,7 @@ axis(LEFT <-2, at=1:length(yLabels), labels=yLabels, las= HORIZONTAL<-1,cex.axis
 
 
 
-plotHaplotypeCluster <- function(Lout,tagSNV,physPos=NULL,colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,labelsNA=NULL,prange=NULL,labelsNA1 = c("model L") ) {
+plotIBDsegment <- function(Lout,tagSNV,physPos=NULL,colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,labelsNA=NULL,prange=NULL,labelsNA1 = c("model L") ) {
 
     if (missing(Lout)) {
         stop("Genotype data 'Lout' is missing. Stopped.")
@@ -391,7 +391,7 @@ sim <- function(x,y,simv="minD",minInter=2) {
 
 
 
-iterateSegments <- function(startRun=1,endRun,shift=5000,segmentSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
+iterateIntervals <- function(startRun=1,endRun,shift=5000,intervalSize=10000,annotationFile=NULL,fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,IBDsegmentLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 {
 
 
@@ -408,7 +408,7 @@ save(individualsN,snvs,file=paste(fileName,"_All",".Rda",sep=""))
 for (posAll in startRun:endRun)  {
 
 start <- (posAll-1)*shift
-end <- start + segmentSize
+end <- start + intervalSize
 
 if (end > snvs)  {
 
@@ -556,10 +556,10 @@ if (is.null(annotationFile)) {
 #indi4 <- gsub(",",";",indi4)
 #indiA <- cbind(indi1,indi2,indi3,indi4)
 
-resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,haploClusterLength=haploClusterLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes,cut=cut,procMinIndivids=procMinIndivids,thresPrune=thresPrune,simv=simv,minTagSNVs=minTagSNVs,minIndivid=minIndivid,avSNVsDist=avSNVsDist,SNVclusterLength=SNVclusterLength)
+resHapFabia <- hapFabia(fileName=fileName,prefixPath=prefixPath,sparseMatrixPostfix=sparseMatrixPostfix,annotPostfix=annotPostfix,individualsPostfix=individualsPostfix,labelsA=labelsA,pRange=pRange,individuals=individuals,lowerBP=lowerBP,upperBP=upperBP,p=p,iter=iter,quant=quant,eps=eps,alpha=alpha,cyc=cyc,non_negative=non_negative,write_file=write_file,norm=norm,lap=lap,IBDsegmentLength=IBDsegmentLength,Lt = Lt,Zt = Zt,thresCount=thresCount,mintagSNVsFactor=mintagSNVsFactor,pMAF=pMAF,haplotypes=haplotypes,cut=cut,procMinIndivids=procMinIndivids,thresPrune=thresPrune,simv=simv,minTagSNVs=minTagSNVs,minIndivid=minIndivid,avSNVsDist=avSNVsDist,SNVclusterLength=SNVclusterLength)
 
 
-haploClusterList2excel(resHapFabia$mergedHaploClusterList,paste(fileName,pRange,".csv",sep=""))
+IBDsegmentList2excel(resHapFabia$mergedIBDsegmentList,paste(fileName,pRange,".csv",sep=""))
 
 save(resHapFabia,annot,file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
 
@@ -570,7 +570,7 @@ save(resHapFabia,annot,file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
 
 
 
-identifyDuplicates <- function(fileName,startRun=1,endRun,shift=5000,segmentSize=10000) {
+identifyDuplicates <- function(fileName,startRun=1,endRun,shift=5000,intervalSize=10000) {
 
 
 snvs <- 0
@@ -580,14 +580,14 @@ annot <-  c()
 
 load(file=paste(fileName,"_All",".Rda",sep=""))
 
-avhaploClusterLength <- list()
-avhaploClusterPos <- list()
+avIBDsegmentLength <- list()
+avIBDsegmentPos <- list()
 count <- 0
 
 for (posAll in startRun:endRun)  {
 
 start <- (posAll-1)*shift
-end <- start + segmentSize
+end <- start + intervalSize
 
 if (end > snvs)  {
 
@@ -600,29 +600,29 @@ pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FAL
 
 load(file=paste(fileName,pRange,"_resAnno.Rda",sep=""))
 
-mergedHaploClusterList <- resHapFabia$mergedHaploClusterList
+mergedIBDsegmentList <- resHapFabia$mergedIBDsegmentList
 
-nohaploClusters <- lengthList(mergedHaploClusterList)
+noIBDsegments <- lengthList(mergedIBDsegmentList)
 
 
-if (nohaploClusters>0)  {
+if (noIBDsegments>0)  {
 
-count <- count + nohaploClusters
+count <- count + noIBDsegments
 
-avhaploClusterPos[[posAll]] <-  sapply(haploClusters(mergedHaploClusterList),function(x) {haploClusterPos(x)}  , simplify=FALSE)
+avIBDsegmentPos[[posAll]] <-  sapply(IBDsegments(mergedIBDsegmentList),function(x) {IBDsegmentPos(x)}  , simplify=FALSE)
 
-avhaploClusterLength[[posAll]] <-  sapply(haploClusters(mergedHaploClusterList),function(x) {haploClusterLength(x)}  , simplify=FALSE)
+avIBDsegmentLength[[posAll]] <-  sapply(IBDsegments(mergedIBDsegmentList),function(x) {IBDsegmentLength(x)}  , simplify=FALSE)
 
 }
 }
 
 
-haploClusterPos <- unlist(avhaploClusterPos)
-haploClusterLength <- unlist(avhaploClusterLength)
+IBDsegmentPos <- unlist(avIBDsegmentPos)
+IBDsegmentLength <- unlist(avIBDsegmentLength)
 
-haploClusterSim <- cbind(haploClusterPos,haploClusterLength)
+IBDsegmentSim <- cbind(IBDsegmentPos,IBDsegmentLength)
 
-dups <- duplicated(haploClusterSim)
+dups <- duplicated(IBDsegmentSim)
 
 un <- which(dups==FALSE)
 
@@ -644,7 +644,7 @@ resDA <- list()
 for (posAll in startRun:endRun)  {
 
 start <- (posAll-1)*shift
-end <- start + segmentSize
+end <- start + intervalSize
 
 if (end > snvs)  {
 
@@ -657,24 +657,24 @@ pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FAL
 
 load(file=paste(fileName,pRange,"_resAnno.Rda",sep=""))
 
-mergedHaploClusterList <- resHapFabia$mergedHaploClusterList
+mergedIBDsegmentList <- resHapFabia$mergedIBDsegmentList
 
-nohaploClusters <- lengthList(mergedHaploClusterList)
+noIBDsegments <- lengthList(mergedIBDsegmentList)
 
-if (nohaploClusters>0)  {
+if (noIBDsegments>0)  {
 
-for (haploClusterC in 1:nohaploClusters)  {
+for (IBDsegmentC in 1:noIBDsegments)  {
 
 allCount <- allCount + 1
 
-resD1 <- c(allCount,haploClusterC,posAll)
+resD1 <- c(allCount,IBDsegmentC,posAll)
 resDA[[allCount]] <- resD1
 
 if (!dups[allCount]) {
 
 allCount1 <- allCount1 + 1
 
-resD1 <- c(allCount1,allCount,haploClusterC,posAll)
+resD1 <- c(allCount1,allCount,IBDsegmentC,posAll)
 resD[[allCount1]] <- resD1
 
 
@@ -696,14 +696,14 @@ l <-4
 
 countsA1 <- matrix(rr,nrow=allCount1,ncol=l,byrow=TRUE)
 
-colnames(countsA1) <- c("allCount1","allCount","haploClusterC","posAll")
+colnames(countsA1) <- c("allCount1","allCount","IBDsegmentC","posAll")
 
 rr <- unlist(resDA)
 l <-3
 
 countsA2 <- matrix(rr,nrow=allCount,ncol=l,byrow=TRUE)
 
-colnames(countsA2) <- c("allCount","haploClusterC","posAll")
+colnames(countsA2) <- c("allCount","IBDsegmentC","posAll")
 
 } else {
 
@@ -711,10 +711,10 @@ dups <- FALSE
 un <- 0
 countsA1 <- c(0,0,0,0)
 dim(countsA1) <- c(1,4)
-colnames(countsA1) <- c("allCount1","allCount","haploClusterC","posAll")
+colnames(countsA1) <- c("allCount1","allCount","IBDsegmentC","posAll")
 countsA2 <- c(0,0,0)
 dim(countsA2) <- c(1,3)
-colnames(countsA2) <- c("allCount","haploClusterC","posAll")
+colnames(countsA2) <- c("allCount","IBDsegmentC","posAll")
 
 }
 
@@ -729,12 +729,12 @@ save(dups,un,countsA1,countsA2,file=paste("dups.Rda",sep=""))
 }
 
 
-analyzeHaploClusters <- function(fileName,runIndex="",annotPostfix="_annot.txt",startRun=1,endRun,shift=5000,segmentSize=10000) {
+analyzeIBDsegments <- function(fileName,runIndex="",annotPostfix="_annot.txt",startRun=1,endRun,shift=5000,intervalSize=10000) {
 
 resHapFabia <- list()
 countsA2 <- c()
 snvs <- 0
-mergedHaploClusterList <- list()
+mergedIBDsegmentList <- list()
 dups <- c()
 load(file=paste(fileName,"_All",".Rda",sep=""))
 load(file=paste("dups.Rda",sep=""))
@@ -747,9 +747,9 @@ if ((startRun>1)&&(length(countsA2[,3])>1)) {
 }
 
 
-avhaploClusterPos <- c()
-avhaploClusterLengthSNV <- c()
-avhaploClusterLength <- c()
+avIBDsegmentPos <- c()
+avIBDsegmentLengthSNV <- c()
+avIBDsegmentLength <- c()
 avnoIndivid <- c()
 avnoTagSNVs <- c()
 
@@ -767,7 +767,7 @@ allCount1 <- 0
 for (posAll in startRun:endRun)  {
 
 start <- (posAll-1)*shift
-end <- start + segmentSize
+end <- start + intervalSize
 
 if (end > snvs)  {
 
@@ -780,16 +780,16 @@ pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FAL
 
 load(file=paste(fileName,pRange,"_resAnno.Rda",sep=""))
 
-mergedHaploClusterList <- resHapFabia$mergedHaploClusterList
+mergedIBDsegmentList <- resHapFabia$mergedIBDsegmentList
 
-nohaploClusters <- lengthList(mergedHaploClusterList)
-
-
+noIBDsegments <- lengthList(mergedIBDsegmentList)
 
 
-if (nohaploClusters > 0) {
 
-for (haploClusterC in 1:nohaploClusters)  {
+
+if (noIBDsegments > 0) {
+
+for (IBDsegmentC in 1:noIBDsegments)  {
 
 allCount <- allCount + 1
 
@@ -797,11 +797,11 @@ if (!dups[allCount+offC]) {
 
 allCount1 <- allCount1 + 1
 
-vt <- mergedHaploClusterList[[haploClusterC]]
+vt <- mergedIBDsegmentList[[IBDsegmentC]]
 
-avhaploClusterPos <- c(avhaploClusterPos,haploClusterPos(vt))
-avhaploClusterLengthSNV <- c(avhaploClusterLengthSNV,haploClusterLength(vt))
-avhaploClusterLength <- c(avhaploClusterLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
+avIBDsegmentPos <- c(avIBDsegmentPos,IBDsegmentPos(vt))
+avIBDsegmentLengthSNV <- c(avIBDsegmentLengthSNV,IBDsegmentLength(vt))
+avIBDsegmentLength <- c(avIBDsegmentLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
 avnoIndivid <- c(avnoIndivid,numberIndividuals(vt))
 avnoTagSNVs <- c(avnoTagSNVs,numbertagSNVs(vt))
 
@@ -820,12 +820,12 @@ avnoindividualPerTagSNV <- c(avnoindividualPerTagSNV,individualPerTagSNV(vt))
 
 }
 
-nohaploClusters <- allCount1
+noIBDsegments <- allCount1
 
 
-avhaploClusterPosS <- summary(avhaploClusterPos)
-avhaploClusterLengthSNVS <- summary(avhaploClusterLengthSNV)
-avhaploClusterLengthS <- summary(avhaploClusterLength)
+avIBDsegmentPosS <- summary(avIBDsegmentPos)
+avIBDsegmentLengthSNVS <- summary(avIBDsegmentLengthSNV)
+avIBDsegmentLengthS <- summary(avIBDsegmentLength)
 avnoIndividS <- summary(avnoIndivid)
 avnoTagSNVsS <- summary(avnoTagSNVs)
 
@@ -837,23 +837,23 @@ avnoindividualPerTagSNVS <- summary(avnoindividualPerTagSNV)
 
 
 
-save(startRun,endRun,nohaploClusters,avhaploClusterPos,avhaploClusterLengthSNV,avhaploClusterLength,avnoIndivid,avnoTagSNVs,avnoFreq,avnoGroupFreq,avnotagSNVChange,avnotagSNVsPerIndividual,avnoindividualPerTagSNV,avhaploClusterPosS,avhaploClusterLengthSNVS,avhaploClusterLengthS,avnoIndividS,avnoTagSNVsS,avnoFreqS,avnoGroupFreqS,avnotagSNVChangeS,avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS,file=paste("analyzeResult",runIndex,".Rda",sep=""))
+save(startRun,endRun,noIBDsegments,avIBDsegmentPos,avIBDsegmentLengthSNV,avIBDsegmentLength,avnoIndivid,avnoTagSNVs,avnoFreq,avnoGroupFreq,avnotagSNVChange,avnotagSNVsPerIndividual,avnoindividualPerTagSNV,avIBDsegmentPosS,avIBDsegmentLengthSNVS,avIBDsegmentLengthS,avnoIndividS,avnoTagSNVsS,avnoFreqS,avnoGroupFreqS,avnotagSNVChangeS,avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS,file=paste("analyzeResult",runIndex,".Rda",sep=""))
 
-return(list(startRun=startRun,endRun=endRun,nohaploClusters=nohaploClusters,avhaploClusterPos=avhaploClusterPos,avhaploClusterLengthSNV=avhaploClusterLengthSNV,avhaploClusterLength=avhaploClusterLength,avnoIndivid=avnoIndivid,avnoTagSNVs=avnoTagSNVs,avnoFreq=avnoFreq,avnoGroupFreq=avnoGroupFreq,avnotagSNVChange=avnotagSNVChange,avnotagSNVsPerIndividual=avnotagSNVsPerIndividual,avnoindividualPerTagSNV=avnoindividualPerTagSNV,avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthSNVS=avhaploClusterLengthSNVS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS))
+return(list(startRun=startRun,endRun=endRun,noIBDsegments=noIBDsegments,avIBDsegmentPos=avIBDsegmentPos,avIBDsegmentLengthSNV=avIBDsegmentLengthSNV,avIBDsegmentLength=avIBDsegmentLength,avnoIndivid=avnoIndivid,avnoTagSNVs=avnoTagSNVs,avnoFreq=avnoFreq,avnoGroupFreq=avnoGroupFreq,avnotagSNVChange=avnotagSNVChange,avnotagSNVsPerIndividual=avnotagSNVsPerIndividual,avnoindividualPerTagSNV=avnoindividualPerTagSNV,avIBDsegmentPosS=avIBDsegmentPosS,avIBDsegmentLengthSNVS=avIBDsegmentLengthSNVS,avIBDsegmentLengthS=avIBDsegmentLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS))
 
 
 
 }
 
 
-hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,haploClusterLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100) {
+hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.05,p=10,iter=40,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,write_file=0,norm=0,lap=100.0,IBDsegmentLength=50,Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.03,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100) {
 
 # fileName:            the file name of the sparse matrix in sparse format.
 # prefixPath:          path of the data file
 # sparseMatrixPostfix: postfix string for the sparse matrix
 # annotPostfix:        postfix string for the annotation file
 # labelsA:             individual names as matrix individuals x 4
-# prange:              for segments indicates the segment
+# prange:              for intervals indicates its range
 # individuals:             vector of individuals which should be included into the analysis; default = 0 (all individuals)
 # lowerBP:             lower bound for filtering the inputs columns, minimal MAF (however more than one occurence to remove private SNVs)
 # upperBP:             Upper bound for filtering the inputs columns, minimal MAF
@@ -867,11 +867,11 @@ hapFabia <- function(fileName,prefixPath="",sparseMatrixPostfix="_mat",annotPost
 # write_file:          results are written to files (L in sparse format), default = 0 (not written).
 # norm:                data normalization; default = 1 (no normalization).
 # lap:                 minimal value of the variational parameter; default = 100.0.
-# haploClusterLength:           haplotype cluster length in kbp
-# Lt:                  percentage of largest Ls to consider for haplotype cluster extraction
-# Zt:                  percentage of largest Zs to consider for haplotype cluster extraction
+# IBDsegmentLength:           IBD segment length in kbp
+# Lt:                  percentage of largest Ls to consider for IBD segment extraction
+# Zt:                  percentage of largest Zs to consider for IBD segment extraction
 # thresCount:          p-value of random histogram hit, default 1e-5
-# mintagSNVsFactor:       percentage of segments overlap in haplotype clusters; 1/2 for large to 3/4 for for small intervals
+# mintagSNVsFactor:       percentage of segments overlap in IBD segments; 1/2 for large to 3/4 for for small intervals
 # pMAF:                averaged and corrected minor allele frequency
 # haplotypes:          haplotypes = phased genotypes -> two chromosomes per individual
 
@@ -892,7 +892,7 @@ message("   Individuals annotation is not supplied -------------")
 } else {
 message("   Individuals annotation is supplied -----------------")
 }
-message("   String indicating the segment that is analyzed -----: ",pRange)
+message("   String indicating the interval that is analyzed ----: ",pRange)
 if (length(individuals)>1) {
 message("   Number of individuals included into the analysis ---: ",length(individuals))
 } else {
@@ -910,8 +910,8 @@ message("   Non-negative factors and loadings ------------------: ",non_negative
 message("   Results written to files ---------------------------: ",write_file)
 message("   Data normalized ------------------------------------: ",norm)
 message("   Minimal value of the variational parameter ---------: ",lap)
-if (haploClusterLength>0) {
-message("   Haplotype cluster length in kbp --------------------: ",haploClusterLength)
+if (IBDsegmentLength>0) {
+message("   IBD segment length in kbp --------------------------: ",IBDsegmentLength)
 message("   Average distance between SNVs in bases -------------: ",avSNVsDist)
 } else {
 if (SNVclusterLength>0)
@@ -921,12 +921,12 @@ message("   Number of SNVs in histogram bin --------------------: ",SNVclusterLe
 message("   Number of SNVs in histogram bin --------------------: 100")
 }
 }
-message("   % largest Ls for haplotype cluster extraction ------: ",Lt)
-message("   % largest Zs for haplotype cluster extraction ------: ",Zt)
+message("   % largest Ls for IBD segment extraction ------------: ",Lt)
+message("   % largest Zs for IBD segment extraction ------------: ",Zt)
 message("   p-value threshold for random histogram counts ------: ",thresCount)
-message("   Min. % of segments overlap in haplotype clusters ---: ",mintagSNVsFactor)
+message("   Min. % of segments overlap in IBD segments ---------: ",mintagSNVsFactor)
 message("   Averaged and corrected minor allele frequency ------: ",pMAF)
-message("   Cutoff for merging haplotype clusters --------------: ",cut)
+message("   Cutoff for merging IBD segments --------------------: ",cut)
 message("   % of cluster individuals a tagSNV must tag ---------: ",procMinIndivids)
 message("   Threshold for pruning border tagSNVs ---------------: ",thresPrune)
 message("   Similarity measure for merging clusters ------------: ",simv)
@@ -949,11 +949,11 @@ psZ <- 1 - Zt
 
 
 # compute histogram length
-if (haploClusterLength>0) {
+if (IBDsegmentLength>0) {
     if (avSNVsDist>0) {
-        inteA <- haploClusterLength*(1000/avSNVsDist)
+        inteA <- IBDsegmentLength*(1000/avSNVsDist)
     } else {
-        inteA <- haploClusterLength*10
+        inteA <- IBDsegmentLength*10
     }
 } else {
     if (SNVclusterLength>0)
@@ -1063,87 +1063,87 @@ if (is.null(labelsA)) {
 off1 <- 0
 
 
-haploClusterList1 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off1,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
+IBDsegmentList1 <- extractIBDsegments(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off1,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
 
-# merge haplotypes
+# merge IBD segment lists
 
 
-if ( lengthList(haploClusterList1) > 1) {
-  comp <- compareHaploClusterLists(haploClusterList1=haploClusterList1,haploClusterList2=NULL,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
+if ( lengthList(IBDsegmentList1) > 1) {
+  comp <- compareIBDsegmentLists(IBDsegmentList1=IBDsegmentList1,IBDsegmentList2=NULL,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
 
   if (!is.null(comp)) {
-      clustHaploClustList <- cutree(comp,h=cut)
-      mergedHaploClusterList1 <- mergeHaploClusterLists(haploClusterList1=haploClusterList1,haploClusterList2=NULL,clustHaploClustList=clustHaploClustList)
+      clustIBDsegmentList <- cutree(comp,h=cut)
+      mergedIBDsegmentList1 <- mergeIBDsegmentLists(IBDsegmentList1=IBDsegmentList1,IBDsegmentList2=NULL,clustIBDsegmentList=clustIBDsegmentList)
   } else {
-      mergedHaploClusterList1 <- haploClusterList1
+      mergedIBDsegmentList1 <- IBDsegmentList1
   }
 } else {
 
- mergedHaploClusterList1 <- haploClusterList1
+ mergedIBDsegmentList1 <- IBDsegmentList1
 }
 
 
-# second haplotype extraction with offset half of the interval length
+# second IBD extraction with offset half of the interval length
 
 
 off2=inteA%/%2
 
-haploClusterList2 <- extractHaploClusters(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off2,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
+IBDsegmentList2 <- extractIBDsegments(res=res,sPF=sPF,annot=annot,chrom="",labelsA=indiA,ps=ps,psZ=psZ,inteA=inteA,thresA=thresA,mintagSNVs=mintagSNVs,off=off2,procMinIndivids=procMinIndivids,thresPrune=thresPrune)
 
-# merge haplotypes
+# merge IBD segments
 
-if ( lengthList(haploClusterList2) > 1) {
-  comp <- compareHaploClusterLists(haploClusterList1=haploClusterList2,haploClusterList2=NULL,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
+if ( lengthList(IBDsegmentList2) > 1) {
+  comp <- compareIBDsegmentLists(IBDsegmentList1=IBDsegmentList2,IBDsegmentList2=NULL,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
 
   if (!is.null(comp)) {
-      clustHaploClustList <- cutree(comp,h=cut)
-      mergedHaploClusterList2 <- mergeHaploClusterLists(haploClusterList1=haploClusterList2,haploClusterList2=NULL,clustHaploClustList=clustHaploClustList)
+      clustIBDsegmentList <- cutree(comp,h=cut)
+      mergedIBDsegmentList2 <- mergeIBDsegmentLists(IBDsegmentList1=IBDsegmentList2,IBDsegmentList2=NULL,clustIBDsegmentList=clustIBDsegmentList)
   } else {
-      mergedHaploClusterList2 <- haploClusterList2
+      mergedIBDsegmentList2 <- IBDsegmentList2
   }
 } else {
-  mergedHaploClusterList2 <- haploClusterList2
+  mergedIBDsegmentList2 <- IBDsegmentList2
 }
 
-# merge haplotypes of both extractions
+# merge IBD segments of both extractions
 
 
-if ( lengthList(mergedHaploClusterList1) > 0) {
+if ( lengthList(mergedIBDsegmentList1) > 0) {
 
-  if ( lengthList(mergedHaploClusterList2) > 0) {
+  if ( lengthList(mergedIBDsegmentList2) > 0) {
 
-    comp12 <- compareHaploClusterLists(haploClusterList1=mergedHaploClusterList1,haploClusterList2=mergedHaploClusterList2,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
+    comp12 <- compareIBDsegmentLists(IBDsegmentList1=mergedIBDsegmentList1,IBDsegmentList2=mergedIBDsegmentList2,simv=simv,pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=minTagSNVs,minIndivid=minIndivid)
 
     if (!is.null(comp12)) {
-        clustHaploClustList <- cutree(comp12,h=cut)
-        mergedHaploClusterList <- mergeHaploClusterLists(haploClusterList1=mergedHaploClusterList1,haploClusterList2=mergedHaploClusterList2,clustHaploClustList=clustHaploClustList)
+        clustIBDsegmentList <- cutree(comp12,h=cut)
+        mergedIBDsegmentList <- mergeIBDsegmentLists(IBDsegmentList1=mergedIBDsegmentList1,IBDsegmentList2=mergedIBDsegmentList2,clustIBDsegmentList=clustIBDsegmentList)
    } else {
-        mergedHaploClusterList <- mergedHaploClusterList1
+        mergedIBDsegmentList <- mergedIBDsegmentList1
     }
 
 } else {
 
-mergedHaploClusterList <- mergedHaploClusterList1
+mergedIBDsegmentList <- mergedIBDsegmentList1
 }
 
 } else {
 
-  if ( lengthList(mergedHaploClusterList2) > 0) {
-    mergedHaploClusterList <- mergedHaploClusterList2
+  if ( lengthList(mergedIBDsegmentList2) > 0) {
+    mergedIBDsegmentList <- mergedIBDsegmentList2
   } else {
-    mergedHaploClusterList <- mergedHaploClusterList1
+    mergedIBDsegmentList <- mergedIBDsegmentList1
   }
 
 
 }
 
-mergedHaploClusterList1 <- setStatistics(mergedHaploClusterList1)
-mergedHaploClusterList2 <- setStatistics(mergedHaploClusterList2)
-mergedHaploClusterList <- setStatistics(mergedHaploClusterList)
+mergedIBDsegmentList1 <- setStatistics(mergedIBDsegmentList1)
+mergedIBDsegmentList2 <- setStatistics(mergedIBDsegmentList2)
+mergedIBDsegmentList <- setStatistics(mergedIBDsegmentList)
 
-# save(mergedHaploClusterList,res,sPF,annot,haploClusterList1,haploClusterList2,mergedHaploClusterList1,mergedHaploClusterList2,file=paste(fileName,pRange,"_haploClusterList.Rda",sep=""))
+# save(mergedIBDsegmentList,res,sPF,annot,IBDsegmentList1,IBDsegmentList2,mergedIBDsegmentList1,mergedIBDsegmentList2,file=paste(fileName,pRange,"_IBDsegmentList.Rda",sep=""))
 
-return(list(mergedHaploClusterList=mergedHaploClusterList,res=res,sPF=sPF,annot=annot,haploClusterList1=haploClusterList1,haploClusterList2=haploClusterList2,mergedHaploClusterList1=mergedHaploClusterList1,mergedHaploClusterList2=mergedHaploClusterList2))
+return(list(mergedIBDsegmentList=mergedIBDsegmentList,res=res,sPF=sPF,annot=annot,IBDsegmentList1=IBDsegmentList1,IBDsegmentList2=IBDsegmentList2,mergedIBDsegmentList1=mergedIBDsegmentList1,mergedIBDsegmentList2=mergedIBDsegmentList2))
 
 }
 
@@ -1151,7 +1151,7 @@ return(list(mergedHaploClusterList=mergedHaploClusterList,res=res,sPF=sPF,annot=
 
 
 
-simulateHaplotypeClusters <- function(fileprefix="dataSim",minruns=1,maxruns=100,snvs=10000,individualsN=100,avDistSnvs=100,avDistMinor=25,noImplanted=1,implanted=10,length=100,minors=20,mismatches=0,mismatchImplanted=0.5,overlap=50,noOverwrite=FALSE) {
+simulateIBDsegments <- function(fileprefix="dataSim",minruns=1,maxruns=100,snvs=10000,individualsN=100,avDistSnvs=100,avDistMinor=25,noImplanted=1,implanted=10,length=100,minors=20,mismatches=0,mismatchImplanted=0.5,overlap=50,noOverwrite=FALSE) {
 
 ## minruns: min number or runs
 ## maxruns: max number or runs
@@ -1159,14 +1159,14 @@ simulateHaplotypeClusters <- function(fileprefix="dataSim",minruns=1,maxruns=100
 ## individualsN: number of individuals
 ## avDistSnvs: average distance in bases between tagSNVs
 ## avDistMinor: average distance between minor alleles, thus 1/avDistMinor is the average MAF
-## noImplanted: how many haplotypes
-## implanted: in how many individuals is one haplotype implanted
-## length: length of haplotypes
+## noImplanted: how many IBD segments
+## implanted: in how many individuals is one IBD segment implanted
+## length: length of IBD segments
 ## minors: number of tagSNVs
 ## mismatches: number of mismatches in hapltopye
-## mismatchImplanted: mismatches in how many percent of haplotypes
-## overlap: minimal haplotype overlap between chromosomes
-## noOverwrite: noOverwrite=TRUE ensures that a haplotype is not superimposed by another haplotype
+## mismatchImplanted: mismatches in how many percent of IBD segments
+## overlap: minimal IBD segment overlap between chromosomes
+## noOverwrite: noOverwrite=TRUE ensures that an IBD segment is not superimposed by another IBD segment
 
 write(paste("maxruns: ",maxruns,sep=""),file=paste(fileprefix,"Parameters.txt",sep=""),ncolumns=100)
 write(paste("snvs: ",snvs,sep=""),file=paste(fileprefix,"Parameters.txt",sep=""),append=TRUE,ncolumns=100)
@@ -1304,8 +1304,8 @@ for (run in minruns:maxruns) {
 
   for (noIm in 1:noImplanted) {
 
-  notfoundhaploClusters <- TRUE
-  while (notfoundhaploClusters) {
+  notfoundIBDsegments <- TRUE
+  while (notfoundIBDsegments) {
 
 
   start <- sample((snvs-length-1),1)
@@ -1339,11 +1339,11 @@ for (run in minruns:maxruns) {
 
   allimpl[[noIm]] <- impl
 
-  notfoundhaploClusters <- FALSE
+  notfoundIBDsegments <- FALSE
   if ((noIm>1)&&(noOverwrite)) {
     for (no2Im in 1:(noIm-1)) {
       if ((length(intersect(impl,allimpl[[no2Im]]))>0)&&(length(intersect(inter,allinter[[no2Im]]))>0)) {
-        notfoundhaploClusters <- TRUE
+        notfoundIBDsegments <- TRUE
       }
     }
   }
@@ -1555,12 +1555,12 @@ annot <- as.data.frame(annot)
 
 }
 
-split_sparse_matrix <- function(fileName,sparseMatrixPostfix="_mat.txt",segmentSize=10000,shiftSize=5000,annotation=TRUE) {
+split_sparse_matrix <- function(fileName,sparseMatrixPostfix="_mat.txt",intervalSize=10000,shiftSize=5000,annotation=TRUE) {
 
     narg <- as.integer(6)
     arg1 <- as.character(fileName)
     arg2 <- as.character(sparseMatrixPostfix)
-    arg3 <- as.character(segmentSize)
+    arg3 <- as.character(intervalSize)
     arg4 <- as.character(shiftSize)
     if (annotation) {
         arg5 <- as.character(1)
@@ -1570,7 +1570,7 @@ split_sparse_matrix <- function(fileName,sparseMatrixPostfix="_mat.txt",segmentS
 
     message("Running 'split_sparse_matrix' on ",fileName)
     message("   Postfix of sparse matrix format ---- : ",sparseMatrixPostfix)
-    message("   Segment size ----------------------- : ",segmentSize)
+    message("   Interval size ---------------------- : ",intervalSize)
     message("   Shift size ------------------------- : ",shiftSize)
     if (annotation) {
     message("   Annotation is available ------------ : ")
@@ -1617,7 +1617,7 @@ vcftoFABIA <- function(fileName,prefixPath="",noSnvs=NULL) {
 
 }
 
-simulateHaploClustersFabia <- function(fileprefix="dataSim",minruns=1,maxruns=1,snvs=1000,individualsN=100,avDistSnvs=100,avDistMinor=10,noImplanted=1,implanted=10,length=50,minors=30,mismatches=0,mismatchImplanted=0.5,overlap=50) {
+simulateIBDsegmentsFabia <- function(fileprefix="dataSim",minruns=1,maxruns=1,snvs=1000,individualsN=100,avDistSnvs=100,avDistMinor=10,noImplanted=1,implanted=10,length=50,minors=30,mismatches=0,mismatchImplanted=0.5,overlap=50) {
 
 
 rateSnvs <- 1/avDistSnvs

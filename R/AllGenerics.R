@@ -24,14 +24,14 @@ setGeneric("histL",
            standardGeneric("histL"))
 
 
-setGeneric("extractHaploClusters",
+setGeneric("extractIBDsegments",
            signature = c("res","sPF","annot","chrom","labelsA","ps","psZ","inteA","thresA","mintagSNVs","off","procMinIndivids","thresPrune"),
            function(res,sPF,annot,chrom,labelsA,ps,psZ,inteA,thresA,mintagSNVs,off,procMinIndivids,thresPrune)
-           standardGeneric("extractHaploClusters"))
+           standardGeneric("extractIBDsegments"))
 
 
 
-## class HaploCluster
+## class IBDsegment
 
 
 
@@ -59,20 +59,20 @@ setGeneric("chromosome<-", signature = c("x", "value"),
     function(x, value) standardGeneric("chromosome<-")
 )
 
-setGeneric("haploClusterPos", signature = "x",
-    function(x) standardGeneric("haploClusterPos")
+setGeneric("IBDsegmentPos", signature = "x",
+    function(x) standardGeneric("IBDsegmentPos")
 )
 
-setGeneric("haploClusterPos<-", signature = c("x", "value"),
-    function(x, value) standardGeneric("haploClusterPos<-")
+setGeneric("IBDsegmentPos<-", signature = c("x", "value"),
+    function(x, value) standardGeneric("IBDsegmentPos<-")
 )
 
-setGeneric("haploClusterLength", signature = "x",
-    function(x) standardGeneric("haploClusterLength")
+setGeneric("IBDsegmentLength", signature = "x",
+    function(x) standardGeneric("IBDsegmentLength")
 )
 
-setGeneric("haploClusterLength<-", signature = c("x", "value"),
-    function(x, value) standardGeneric("haploClusterLength<-")
+setGeneric("IBDsegmentLength<-", signature = c("x", "value"),
+    function(x, value) standardGeneric("IBDsegmentLength<-")
 )
 
 setGeneric("numberIndividuals", signature = "x",
@@ -230,15 +230,15 @@ setGeneric("tagSNVAnno<-", signature = c("x", "value"),
 
 
 
-## class HaploClusterList
+## class IBDsegmentList
 
 
-setGeneric("haploClusters", signature = "x",
-    function(x) standardGeneric("haploClusters")
+setGeneric("IBDsegments", signature = "x",
+    function(x) standardGeneric("IBDsegments")
 )
 
-setGeneric("haploClusters<-", signature = c("x", "value"),
-    function(x, value) standardGeneric("haploClusters<-")
+setGeneric("IBDsegments<-", signature = c("x", "value"),
+    function(x, value) standardGeneric("IBDsegments<-")
 )
 
 setGeneric("lengthList", signature = "x",
@@ -257,25 +257,25 @@ setGeneric("statistics<-", signature = c("x", "value"),
 )
 
 
-setGeneric("setAnnotation", signature = c("haploClusterList","filename"),
-    function(haploClusterList,filename) standardGeneric("setAnnotation")
+setGeneric("setAnnotation", signature = c("IBDsegmentList","filename"),
+    function(IBDsegmentList,filename) standardGeneric("setAnnotation")
 )
 
-setGeneric("setStatistics", signature = c("haploClusterList"),
-    function(haploClusterList) standardGeneric("setStatistics")
+setGeneric("setStatistics", signature = c("IBDsegmentList"),
+    function(IBDsegmentList) standardGeneric("setStatistics")
 )
 
-setGeneric("compareHaploClusterLists", signature = c("haploClusterList1","haploClusterList2","simv","pTagSNVs","pIndivid","minTagSNVs","minIndivid"),
-    function(haploClusterList1,haploClusterList2,simv,pTagSNVs,pIndivid,minTagSNVs,minIndivid) standardGeneric("compareHaploClusterLists")
-)
-
-
-setGeneric("mergeHaploClusterLists", signature = c("haploClusterList1","haploClusterList2","clustHaploClustList"),
-    function(haploClusterList1,haploClusterList2,clustHaploClustList) standardGeneric("mergeHaploClusterLists")
+setGeneric("compareIBDsegmentLists", signature = c("IBDsegmentList1","IBDsegmentList2","simv","pTagSNVs","pIndivid","minTagSNVs","minIndivid"),
+    function(IBDsegmentList1,IBDsegmentList2,simv,pTagSNVs,pIndivid,minTagSNVs,minIndivid) standardGeneric("compareIBDsegmentLists")
 )
 
 
-setGeneric("haploClusterList2excel", signature = c("haploClusterList","filename"),
-    function(haploClusterList,filename) standardGeneric("haploClusterList2excel")
+setGeneric("mergeIBDsegmentLists", signature = c("IBDsegmentList1","IBDsegmentList2","clustIBDsegmentList"),
+    function(IBDsegmentList1,IBDsegmentList2,clustIBDsegmentList) standardGeneric("mergeIBDsegmentLists")
+)
+
+
+setGeneric("IBDsegmentList2excel", signature = c("IBDsegmentList","filename"),
+    function(IBDsegmentList,filename) standardGeneric("IBDsegmentList2excel")
 )
 

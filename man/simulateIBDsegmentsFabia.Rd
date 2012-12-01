@@ -1,22 +1,22 @@
-\name{simulateHaploClustersFabia}
+\name{simulateIBDsegmentsFabia}
 
-\alias{simulateHaploClustersFabia}
+\alias{simulateIBDsegmentsFabia}
 
-\title{Generates simulated genotyping data with haplotype clusters for \pkg{fabia}}
+\title{Generates simulated genotyping data with IBD segments for \pkg{fabia}}
 
 \description{
 
-  \code{simulateHaploClustersFabia}: \R implementation of \code{simulateHaploClustersFabia}.
+  \code{simulateIBDsegmentsFabia}: \R implementation of \code{simulateIBDsegmentsFabia}.
 
    Genotype data is simulated which contains rare variants and
-   implanted haplotype clusters.
+   implanted IBD segments.
    Output is written for the bicluster algorithm \pkg{fabia}.
 
 
 }
 \usage{
 
-simulateHaploClustersFabia(fileprefix="dataSim",
+simulateIBDsegmentsFabia(fileprefix="dataSim",
    minruns=1,maxruns=1,snvs=1000,individualsN=100,
    avDistSnvs=100,avDistMinor=10,noImplanted=1,
    implanted=10,length=50,minors=30,mismatches=0,
@@ -32,19 +32,19 @@ simulateHaploClustersFabia(fileprefix="dataSim",
   \item{avDistSnvs}{average genomic distance in bases between SNVs.}
   \item{avDistMinor}{average distance between minor alleles, thus \code{1/avDistMinor}
       is the average minor allele frequency (MAF).}
-  \item{noImplanted}{number of haplotype clusters that are implanted.}
-  \item{implanted}{number of individuals into which a specific haplotype cluster is implanted.}
-  \item{length}{length of the haplotype clusters in number of SNVs.}
-  \item{minors}{number of tagSNVs for each haplotype cluster.}
-  \item{mismatches}{number of base mismatches of an implanted haplotype cluster to the original haplotype cluster.}
-  \item{mismatchImplanted}{percentage of haplotype cluster occurrence that have mismatches.}
-  \item{overlap}{minimal haplotype cluster overlap between implanted haplotype clusters (they are broken at the ends).}
+  \item{noImplanted}{number of IBD segments that are implanted.}
+  \item{implanted}{number of individuals into which a specific IBD segment is implanted.}
+  \item{length}{length of the IBD segments in number of SNVs.}
+  \item{minors}{number of tagSNVs for each IBD segment.}
+  \item{mismatches}{number of base mismatches of an implanted IBD segment to the original IBD segment.}
+  \item{mismatchImplanted}{percentage of IBD segment occurrence that have mismatches.}
+  \item{overlap}{minimal IBD segment overlap between implanted IBD segments (they are broken at the ends).}
 
 }
 \details{
 
   Data simulations for \pkg{fabia} focuses on rare variants but common variants are possible.
-  Linkage disequilibrium and haplotype blocks are not simulated except by implanting haplotype clusters.
+  Linkage disequilibrium and haplotype blocks are not simulated except by implanting IBD segments.
 
   Simulated data is written
   to "...fabia_individuals.txt", "...fabia_annot.txt" "...fabia_mat.txt".
@@ -54,31 +54,31 @@ simulateHaploClustersFabia(fileprefix="dataSim",
 
 }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -89,7 +89,7 @@ simulateHaploClustersFabia(fileprefix="dataSim",
 old_dir <- getwd()
 setwd(tempdir())
 
-simulateHaploClustersFabia()
+simulateIBDsegmentsFabia()
 
 setwd(old_dir)
 
@@ -103,4 +103,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{datagen}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}
