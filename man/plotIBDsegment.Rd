@@ -1,14 +1,14 @@
-\name{plotHaplotypeCluster}
+\name{plotIBDsegment}
 
-\alias{plotHaplotypeCluster}
+\alias{plotIBDsegment}
 
-\title{Plots a haplotype cluster given genotype data and tagSNVs}
+\title{Plots an IBD segment given genotype data and tagSNVs}
 
 \description{
 
-  \code{plotHaplotypeCluster}: \R implementation of \code{plotHaplotypeCluster}.
+  \code{plotIBDsegment}: \R implementation of \code{plotIBDsegment}.
 
-  A haplotype cluster is plotted where individuals that
+  A IBD segment is plotted where individuals that
   are plotted must be provided together with tagSNVs and their
   physical positions. The individuals are provided as genotyping matrix.
   The model, i.e. the tagSNVs, is shown, too.
@@ -20,7 +20,7 @@
 }
 \usage{
 
-plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
+plotIBDsegment(Lout,tagSNV,physPos=NULL,
    colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,
    labelsNA=NULL,prange=NULL,labelsNA1 = c("model L") )
 
@@ -36,10 +36,10 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
     of reference allele, minor allele that is not tagSNV,
    minor allele that is tagSNV, respectively.}
   \item{chrom}{chromosome as string.}
-  \item{count}{counter which is shown in the title if larger than 0 (for viewing a series of haplotype clusters).}
+  \item{count}{counter which is shown in the title if larger than 0 (for viewing a series of IBD segments).}
   \item{labelsNA}{labels for the individuals.}
   \item{prange}{vector of two integer values giving the begin and end of
-   a subsegment of the segment for zooming in.}
+   a subinterval of the interval for zooming in.}
  \item{labelsNA1}{labels for tagSNVs by the model obtained by \pkg{fabia}; other
    tagSNV annotations like match with another genome (Neandertal, Denisova) can
   be visualized.}
@@ -48,7 +48,7 @@ plotHaplotypeCluster(Lout,tagSNV,physPos=NULL,
 }
 \details{
 
-  A haplotype cluster is plotted showing tagSNVs and
+  A IBD segment is plotted showing tagSNVs and
   minor alleles of other SNVs.
   Provided are individuals to plot together with tagSNVs and their
   physical positions.
@@ -67,31 +67,31 @@ identified by hapFabia in violet.
 
 }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -153,20 +153,20 @@ for (i in 1:haploN) {
 
 
 
-mergedHaploClusterList <- hapRes$mergedHaploClusterList
-individuals <- individuals(mergedHaploClusterList[[1]])
-tagSNVs <- tagSNVs(mergedHaploClusterList[[1]])
+mergedIBDsegmentList <- hapRes$mergedIBDsegmentList
+individuals <- individuals(mergedIBDsegmentList[[1]])
+tagSNVs <- tagSNVs(mergedIBDsegmentList[[1]])
 tagSNVs <-
    as.integer(sort.int(as.integer(unique(tagSNVs))))
 tagSNVPositions <-
-   tagSNVPositions(mergedHaploClusterList[[1]])
+   tagSNVPositions(mergedIBDsegmentList[[1]])
 labelIndividuals <-
-   labelIndividuals(mergedHaploClusterList[[1]])
+   labelIndividuals(mergedIBDsegmentList[[1]])
 Lout <- readSamplesSpfabia(X="dataSim1fabia_mat",
    samples=individuals,lowerB=0,upperB=1000.0)
 tagSNVsL <- list(tagSNVs)
 labelsK <- c("model L")
-plotHaplotypeCluster(Lout=Lout,tagSNV=tagSNVsL,
+plotIBDsegment(Lout=Lout,tagSNV=tagSNVsL,
    physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),
    chrom="1",count=0,labelsNA=labelIndividuals,
    labelsNA1=labelsK)
@@ -185,4 +185,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{hplot}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}

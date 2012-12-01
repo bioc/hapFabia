@@ -1,24 +1,24 @@
-\name{analyzeHaploClusters}
+\name{analyzeIBDsegments}
 
-\alias{analyzeHaploClusters}
+\alias{analyzeIBDsegments}
 
-\title{Loop over extracted haplotype
-  clusters to supply a descriptive statistics}
+\title{Loop over extracted IBD segments
+  to supply a descriptive statistics}
 
 \description{
 
-  \code{analyzeHaploClusters}: \R implementation of \code{analyzeHaploClusters}.
+  \code{analyzeIBDsegments}: \R implementation of \code{analyzeIBDsegments}.
 
   The functions provides a loop over all detected
-  haplotype clusters 
+  IBD segments 
   in order to compute descriptive statistics.
 
 }
 \usage{
 
-analyzeHaploClusters(fileName,runIndex="",
+analyzeIBDsegments(fileName,runIndex="",
   annotPostfix="_annot.txt",startRun=1,endRun,shift=5000,
-  segmentSize=10000)
+  intervalSize=10000)
 
 
 }
@@ -26,20 +26,20 @@ analyzeHaploClusters(fileName,runIndex="",
   \item{fileName}{file name prefix without type of the result of \code{hapFabia}; Attention no type!}
   \item{runIndex}{a string that marks the output of
     this run if splitting the analysis
-    into subsets of segments defined by \code{startRun} and \code{endRun}.}
+    into subsets of intervals defined by \code{startRun} and \code{endRun}.}
   \item{annotPostfix}{postfix string for the SNV annotation file.}
- \item{startRun}{first segment.}
- \item{endRun}{last segment.}
- \item{shift}{distance between start of adjacent segments.}
- \item{segmentSize}{number of SNVs in a segment.}
+ \item{startRun}{first interval.}
+ \item{endRun}{last interval.}
+ \item{shift}{distance between start of adjacent intervals.}
+ \item{intervalSize}{number of SNVs in an interval.}
 
 }
 \details{
 
   The functions provides a loop over all detected
-  haplotype clusters 
-  in order to compute descriptive statistics. The loop goes over the segments
-  that have been analyzed by \code{iterateSegments}.
+  IBD segments 
+  in order to compute descriptive statistics. The loop goes over the intervals
+  that have been analyzed for IBD segments by \code{iterateIntervals}.
   Duplicates are ignored at this analysis and must be identified in a
   preceding step via \code{identifyDuplicates}.
   Other statistics and annotations can be computed if the
@@ -50,18 +50,18 @@ analyzeHaploClusters(fileName,runIndex="",
 }
 \value{
 list containing:
- \item{startRun}{first segment.}
- \item{endRun}{last segment.}
-  \item{nohaploClusters}{number of haplotype clusters.}
-  \item{avhaploClusterPos}{vector of physical locations of haplotype clusters.}
-  \item{avhaploClusterLengthSNV}{vector of lengths of haplotype clusters
+ \item{startRun}{first interval.}
+ \item{endRun}{last interval.}
+  \item{noIBDsegments}{number of IBD segments.}
+  \item{avIBDsegmentPos}{vector of physical locations of IBD segments.}
+  \item{avIBDsegmentLengthSNV}{vector of lengths of IBD segments
     given in number of SNVs.}
-  \item{avhaploClusterLength}{vector of lengths of haplotype clusters in
+  \item{avIBDsegmentLength}{vector of lengths of IBD segments in
     bp.}
   \item{avnoIndividp}{vector of number of individuals that belong to the
-    haplotype cluster.}
-  \item{avnoTagSNVs}{vector of number of tagSNVs that mark the haplotype
-    cluster.}
+    IBD segment.}
+  \item{avnoTagSNVs}{vector of number of tagSNVs that mark
+    the IBD segment.}
   \item{avnoFreq}{vector of minor allele frequencies of tagSNVs.}
   \item{avnoGroupFreq}{vector of minor allele frequencies within the considered subpopulation.}
   \item{avnotagSNVChange}{vector indicating a switch between minor and
@@ -69,12 +69,12 @@ list containing:
   \item{avnotagSNVsPerIndividual}{vector of number of tagSNVs per individual.}
   \item{avnoindividualPerTagSNV}{vector of number of individuals that
     possess the minor allele per tagSNV .}
-  \item{avhaploClusterPosS}{summary statistics of physical locations of haplotype clusters.}
-  \item{avhaploClusterLengthS}{summary statistics of lengths of haplotype clusters.}
+  \item{avIBDsegmentPosS}{summary statistics of physical locations of IBD segments.}
+  \item{avIBDsegmentLengthS}{summary statistics of lengths of IBD segments.}
   \item{avnoIndividS}{summary statistics of number of individuals that
-    belong to the haplotype cluster.}
+    belong to the IBD segment.}
   \item{avnoTagSNVsS}{summary statistics of number of tagSNVs that mark
-    the haplotype cluster.}
+    the IBD segment.}
   \item{avnoFreqS}{summary statistics of minor allele frequencies of tagSNVs.}
   \item{avnoGroupFreqs}{summary statistics of minor allele frequencies
     within the considered subpopulation.}
@@ -88,31 +88,31 @@ list containing:
 
     }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -123,7 +123,7 @@ list containing:
 
 \dontrun{
 #########################################
-## Already run in "iterateSegments.Rd" ##
+## Already run in "iterateIntervals.Rd" ##
 #########################################
 
 #Work in a temporary directory.
@@ -136,8 +136,8 @@ setwd(tempdir())
 data(chr1ASW1000G)
 write(chr1ASW1000G,file="chr1ASW1000G.vcf")
 
-#Create the analysis pipeline for haplotype data (1000Genomes)
-makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000,haplotypes=TRUE)
+#Create the analysis pipeline for IBD segment detection
+makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,intervalSize=1000,haplotypes=TRUE)
 
 source("pipeline.R")
 
@@ -146,28 +146,28 @@ list.files(pattern="chr1")
 
 
 
-# Next we load segment 5 and there the first and second haplotype cluster
+# Next we load interval 5 and there the first and second IBD segment
 posAll <- 5
 start <- (posAll-1)*shiftSize
-end <- start + segmentSize
+end <- start + intervalSize
 pRange <- paste("_",format(start,scientific=FALSE),"_",format(end,scientific=FALSE),sep="")
 load(file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
-haploClusterList <- resHapFabia$mergedhaploClusterList
-summary(haploClusterList)
-haploCluster1 <- haploClusterList[[1]]
-summary(haploCluster1)
-haploCluster2 <- haploClusterList[[2]]
-summary(haploCluster2)
+IBDsegmentList <- resHapFabia$mergedIBDsegmentList
+summary(IBDsegmentList)
+IBDsegment1 <- IBDsegmentList[[1]]
+summary(IBDsegment1)
+IBDsegment2 <- IBDsegmentList[[2]]
+summary(IBDsegment2)
 
 
 
 
-#Plot the first haplotype cluster in segment 5
-plot(haploCluster1,filename=paste(fileName,pRange,"_mat",sep=""))
+#Plot the first IBD segment in interval 5
+plot(IBDsegment1,filename=paste(fileName,pRange,"_mat",sep=""))
 
 
-#Plot the second haplotype cluster in segment 5
-plot(haploCluster2,filename=paste(fileName,pRange,"_mat",sep=""))
+#Plot the second IBD segment in interval 5
+plot(IBDsegment2,filename=paste(fileName,pRange,"_mat",sep=""))
 
 setwd(old_dir)
 
@@ -175,11 +175,11 @@ setwd(old_dir)
 
 \dontrun{
 ###here an example of the the automatically generated pipeline
-### with: shiftSize=5000,segmentSize=10000,fileName="filename"
+### with: shiftSize=5000,intervalSize=10000,fileName="filename"
 
-#####define segments, overlap, filename #######
+#####define intervals, overlap, filename #######
 shiftSize <- 5000
-segmentSize <- 10000
+intervalSize <- 10000
 fileName="filename" # without type
 haplotypes <- TRUE
 dosage <- FALSE
@@ -201,73 +201,73 @@ if (haplotypes) {
     }
 }
 
-#####split/ generate segments#######
-split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,
+#####split/ generate intervals#######
+split_sparse_matrix(fileName=fileName,intervalSize=intervalSize,
 shiftSize=shiftSize,annotation=TRUE)
 
-#####compute how many segments we have#######
+#####compute how many intervals we have#######
 ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
 noSNVs <- ina[2]
-over <- segmentSize\%/\%shiftSize
+over <- intervalSize\%/\%shiftSize
 N1 <- noSNVs\%/\%shiftSize
 endRunA <- (N1-over+2)
 
 
-#####analyze each segment#######
+#####analyze each interval#######
 #####may be done by parallel runs#######
-iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,
-segmentSize=segmentSize,fileName=fileName,individuals=0,
-upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,
+iterateIntervals(startRun=1,endRun=endRunA,shift=shiftSize,
+intervalSize=intervalSize,fileName=fileName,individuals=0,
+upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,IBDsegmentLength=50,
 Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,
 pMAF=0.03,haplotypes=haplotypes,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
 simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 
 #####identify duplicates#######
 identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,
-shift=shiftSize,segmentSize=segmentSize)
+shift=shiftSize,intervalSize=intervalSize)
 
 #####analyze results; parallel#######
-anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
-shift=shiftSize,segmentSize=segmentSize)
-print("Number haplotype clusters:")
-print(anaRes$nohaploClusters)
-print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
-print(anaRes$avhaploClusterLengthSNVS)
-print("Statistics on haplotye cluster length in bps:")
-print(anaRes$avhaploClusterLengthS)
-print("Statistics on number of individuals belonging to haplotye clusters:")
+anaRes <- analyzeIBDsegments(fileName=fileName,startRun=1,endRun=endRunA,
+shift=shiftSize,intervalSize=intervalSize)
+print("Number IBD segments:")
+print(anaRes$noIBDsegments)
+print("Statistics on IBD segment length in SNVs (all SNVs in the IBD segment):")
+print(anaRes$avIBDsegmentLengthSNVS)
+print("Statistics on IBD segment length in bps:")
+print(anaRes$avIBDsegmentLengthS)
+print("Statistics on number of individuals belonging to IBD segments:")
 print(anaRes$avnoIndividS)
-print("Statistics on number of tagSNVs of haplotye clusters:")
+print("Statistics on number of tagSNVs of IBD segments:")
 print(anaRes$avnoTagSNVsS)
-print("Statistics on MAF of tagSNVs of haplotye clusters:")
+print("Statistics on MAF of tagSNVs of IBD segments:")
 print(anaRes$avnoFreqS)
-print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
+print("Statistics on MAF within the group of tagSNVs of IBD segments:")
 print(anaRes$avnoGroupFreqS)
 print("Statistics on number of changes between major and minor allele frequency:")
 print(anaRes$avnotagSNVChangeS)
-print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
+print("Statistics on number of tagSNVs per individual of an IBD segment:")
 print(anaRes$avnotagSNVsPerIndividualS)
 print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 print(anaRes$avnoindividualPerTagSNVS)
 
-#####load result for segment 50#######
-posAll <- 50 # (50-1)*5000 = 245000: segment 245000 to 255000
+#####load result for interval 50#######
+posAll <- 50 # (50-1)*5000 = 245000: interval 245000 to 255000
 start <- (posAll-1)*shiftSize
-end <- start + segmentSize
+end <- start + intervalSize
 pRange <- paste("_",format(start,scientific=FALSE),"_",
 format(end,scientific=FALSE),sep="")
 load(file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
-haploClusterList <- resHapFabia$mergedHaploClusterList # $
+IBDsegmentList <- resHapFabia$mergedIBDsegmentList # $
 
-summary(haploClusterList)
-#####plot haplotype clusters in segment 50#######
-plot(haploClusterList,filename=paste(fileName,pRange,"_mat",sep=""))
+summary(IBDsegmentList)
+#####plot IBD segments in interval 50#######
+plot(IBDsegmentList,filename=paste(fileName,pRange,"_mat",sep=""))
    ##attention: filename without type ".txt"
 
-#####plot the first haplotype cluster in segment 50#######
+#####plot the first IBD segment in interval 50#######
 
-haploCluster <- haploClusterList[[1]]
-plot(haploCluster,filename=paste(fileName,pRange,"_mat",sep=""))
+IBDsegment <- IBDsegmentList[[1]]
+plot(IBDsegment,filename=paste(fileName,pRange,"_mat",sep=""))
    ##attention: filename without type ".txt"
 
 }
@@ -282,5 +282,5 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}
 

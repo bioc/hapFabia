@@ -7,21 +7,21 @@
   Results of a \code{hapFabia} call.
   List containing
  \enumerate{
- \item \code{mergedhaploClusterList}: an object of the class
-   \code{HaploClusterList} that contains the extracted haplotype clusters
+ \item \code{mergedIBDsegmentList}: an object of the class
+   \code{IBDsegmentList} that contains the extracted IBD segments
    that were extracted from two histograms with different offset.
  \item \code{res}: the result of FABIA.
  \item \code{sPF}: samples per loading of this FABIA result.
  \item \code{annot}: annotation for the genotype data.
- \item \code{haploClusterList1}: an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the first histogram.
- \item \code{haploClusterList2}: an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the second histogram.
- \item \code{mergedhaploClusterList1}: an object of the class
-   \code{HaploClusterList} that contains the merged result of the first haplotype cluster
+ \item \code{IBDsegmentList1}: an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the first histogram.
+ \item \code{IBDsegmentList2}: an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the second histogram.
+ \item \code{mergedIBDsegmentList1}: an object of the class
+   \code{IBDsegmentList} that contains the merged result of the first IBD segment
    extraction (redundancies removed).
- \item \code{mergedhaploClusterList2}: an object of the class
-   \code{HaploClusterList} that contains the merged result of the second haplotype cluster
+ \item \code{mergedIBDsegmentList2}: an object of the class
+   \code{IBDsegmentList} that contains the merged result of the second IBD segment
    extraction (redundancies removed).
 
 }
@@ -30,51 +30,51 @@
 \usage{hapRes}
 \format{  List containing
  \enumerate{
- \item \code{mergedhaploClusterList}: an object of the class
-   \code{HaploClusterList} that contains the extracted haplotype clusters
+ \item \code{mergedIBDsegmentList}: an object of the class
+   \code{IBDsegmentList} that contains the extracted IBD segments
    that were extracted from two histograms with different offset.
  \item \code{res}: the result of FABIA.
  \item \code{sPF}: samples per loading of this FABIA result.
  \item \code{annot}: annotation for the genotype data.
- \item \code{haploClusterList1}: an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the first histogram.
- \item \code{haploClusterList2}: an object of the class
-   \code{HaploClusterList} that contains the result of haplotype cluster extraction from the second histogram.
- \item \code{mergedhaploClusterList1}: an object of the class
-   \code{HaploClusterList} that contains the merged result of the first haplotype cluster
+ \item \code{IBDsegmentList1}: an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the first histogram.
+ \item \code{IBDsegmentList2}: an object of the class
+   \code{IBDsegmentList} that contains the result of IBD segment extraction from the second histogram.
+ \item \code{mergedIBDsegmentList1}: an object of the class
+   \code{IBDsegmentList} that contains the merged result of the first IBD segment
    extraction (redundancies removed).
- \item \code{mergedhaploClusterList2}: an object of the class
-   \code{HaploClusterList} that contains the merged result of the second haplotype cluster
+ \item \code{mergedIBDsegmentList2}: an object of the class
+   \code{IBDsegmentList} that contains the merged result of the second IBD segment
    extraction (redundancies removed).
 }
 }
 \source{result of a call of \code{hapFabia} }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}

@@ -22,7 +22,9 @@
 
 \hypersetup{colorlinks=false,
    pdfborder=0 0 0,
-   pdftitle={Identification of rare and short haplotype clusters in large sequencing data},
+   pdftitle={hapFabia: Identification of very short segments of identity by
+  descent (IBD)
+  characterized by rare variants in large sequencing data},
    pdfauthor={Sepp Hochreiter}}
 
 \renewcommand{\dblfloatpagefraction}{0.99}
@@ -60,7 +62,9 @@
 
 
 
-\title{hapFabia: Identification of rare and short haplotype clusters in large sequencing data\\ \textit{---
+\title{hapFabia: Identification of very short segments of identity by
+  descent (IBD)
+  characterized by rare variants in large sequencing data\\ \textit{---
     Manual for the R package ---}}
 
 \author{Sepp Hochreiter}
@@ -97,84 +101,122 @@ hapFabiaVer<-packageDescription("hapFabia")$Version
 \section{Introduction}
 
 This package \Rpackage{hapFabia} provides software
-for the method HapFABIA which identifies rare and short haplotype
-clusters in
-large sequencing data with a focus on rare variants.
+for the method HapFABIA which identifies
+short identity by descent (IBD) segments
+that are tagged by rare variants in
+large sequencing data.
 
-Individuals that inherited a particular DNA segment
-from the same founder constitute a haplotype cluster
-by sharing minor alleles of variants that tag this segment.
-Knowledge of haplotype clusters are relevant for
-genetic and genomic studies and for population genetics where they
-shed light on the evolutionary history of humans.
+Two haplotypes are identical by descent (IBD)
+if they share a segment that
+both inherited from a common ancestor.
+Current IBD methods reliably detect long IBD segments
+because many minor alleles in the segment are concordant
+between the two haplotypes.
+However, many cohort studies contain unrelated individuals
+which share only short IBD segments.
+Short IBD segments contain too few minor alleles
+to distinguish IBD from random allele sharing by recurrent mutations.
+New sequencing techniques improve the
+situation by providing rare variants which
+convey more information on IBD than common variants,
+because random minor allele sharing
+of rare variants is less likely than for common variants.
+
+Short IBD segments are of interest because
+(i) they resolve the genetic structure on a fine scale
+and (ii) they can be assumed to be old.
+In order to detect short IBD segments, both the information supplied by rare
+variants and information from more than two individuals should be
+utilized.
+The probability of a segment being IBD is typically computed via
+the probabilities of randomly sharing single alleles within the
+segment.
+The probability of randomly sharing a single allele depends
+(1) on the allele frequency,
+where lower frequency means lower probability of random sharing, and
+(2) on the number of individuals that share the allele, where more
+individuals means lower probability of random sharing.
+Therefore a segment that contains rare variants and is
+shared by more individuals has higher significance of being IBD.
+These two characteristics
+are the basis for detecting short IBD segments by HapFABIA.
+
 
 \begin{figure*}[htb!]
 \includegraphics[width=\textwidth]{./figures/pedi}
-\caption{The DNA segment marked in yellow descended from a founder to
-  different individuals which constitute a haplotype
-  cluster by possessing the DNA segment.\label{fig:pedi}}
+\caption{The IBD segment marked in yellow descended from a founder to
+  different individuals. \label{fig:pedi}}
 \end{figure*}
 %\end{figure}
 
-Rare haplotype clusters are identified by biclustering that is
-clustering individuals only on a subset of single
-nucleotide variants (SNVs), the tagSNVs (these SNVs tag the haplotype cluster).
-Biclustering combines linkage disequilibrium (LD) information across individuals via
-correlations of SNVs and identity by descent (IBD) information along the chromosome
-via contiguous identical alleles.
-The LD information enters HapFABIA through
-FABIA implemented in the package \Rpackage{Fabio}
-which detects correlations of multiple SNVs by a factor
-analysis model. The IBD information enters HapFABIA through
-identification of haplotype clusters as local agglomerations of correlated SNVs.
+We propose biclustering \cite{Hochreiter:10}
+to detect very short IBD segments that are shared
+among multiple individuals.
+Biclustering simultaneously clusters rows and columns of a matrix.
+In particular it clusters row elements that
+are similar to each other on a subset of column elements.
+A genotype matrix has individuals (unphased) or chromosomes (phased)
+as row elements and SNVs as column elements.
+Entries in the genotype matrix usually count how often
+the minor allele of a particular SNV is present in
+a particular individual.
+Alternatively, minor allele likelihoods or dosages may be used.
+Individuals that share an IBD segment are similar to
+each other at minor alleles of SNVs (tagSNVs) which tag
+the IBD segment (see Fig.~\ref{fig:bicluster}).
+Therefore an IBD segment that is shared among individuals
+corresponds to a bicluster because these individuals are similar to
+one another at this segment.
+Identifying a bicluster means identifying tagSNVs
+(column bicluster elements) that tag an
+IBD segment and, simultaneously, identifying
+individuals (row bicluster elements) that possess the IBD segment.
 
 
 
-%\begin{figure}[htb!]
-%\includegraphics[width=\columnwidth]{./figures/plotACv}
 \begin{figure*}[htb!]
-\includegraphics[width=\textwidth]{./figures/plotAC}
-\caption{Different approaches to detect haplotype clusters. The $y$-axis
-enumerates individuals and the $x$-axis SNVs. Yellow and violet bars
-indicate major and minor alleles, respectively. Haplotype cluster
-segments are marked in gold.
-Panel {\bf A}: Linkage disequilibrium (LD) is computed for two SNVs
-across all samples. Identity by descent (IBD) is detected for two
-individuals for a long haplotype region.
-Panel {\bf B}: A haplotype block is depicted as a region of
-increased LD comprising different haplotypes.
-Biclustering clusters individuals together that have the same founder DNA segment
-indicated by identical minor alleles of tagSNVs. \label{fig:bicluster}}
+\includegraphics[width=\textwidth]{./figures/plotB1}
+\caption{Biclustering of a genotyping matrix.
+Left: original genotyping data matrix with individuals as
+  row elements and SNVs as column elements. Minor alleles
+  are indicated by violet bars and major alleles by yellow bars for each
+  individual-SNV pair.
+Right: after sorting the rows, the detected bicluster
+can be seen in the top three individuals.
+They contain the same IBD segment which is marked in gold.
+Biclustering simultaneously clusters rows and columns of a matrix so
+that row elements (here individuals) are similar to each other
+on a subset of column elements (here the tagSNVs). \label{fig:bicluster}}
 \end{figure*}
-%\end{figure}
 
-Fig.~\ref{fig:bicluster} shows in panel A
-linkage disequilibrium (LD) and identity by descent (IBD)
-and in panel B a haplotype block and a bicluster.
-Individuals that belong to a haplotype cluster are similar to
-each other because they share the same minor alleles in an inherited
-founder DNA segment.
-This similarity define a bicluster according to
-the FABIA model \cite{Hochreiter:10}.
-Consequently, a haplotype cluster constitutes a bicluster to which SNVs
-belong if they tag the haplotype cluster and to which individuals belong if
-they possess the founder DNA segment (see the bicluster in panel B of
-Fig.~\ref{fig:bicluster}).
+In contrast to standard IBD detection methods,
+biclustering considers multiple individuals.
+In contrast to standard clustering,
+biclustering allows for
+SNVs or individuals that do not belong to any cluster or
+to more than one bicluster.
+Multiple cluster membership suits IBD detection because
+diploid individuals can have
+two IBD segments at one locus and
+an SNV may tag more than one IBD segment.
 
-The multiplicative biclusters of FABIA are able to represent
-homozygous regions that is two occurrences of a
-haplotype in one diploid individual via their factors.
-Overlapping haplotype clusters in one diploid individual
-are represented through the additivity of biclusters in the FABIA model.
-Examples of haplotype clusters found by hapFabia in chromosome~1 data from the
-1000Genomes project are given in
+
+
+FABIA is able to represent
+homozygous regions (the same IBD segment in both chromosomes)
+by means of its factors.
+At a locus, overlapping IBD segments in one diploid individual
+(a different IBD segment in each of the two chromosomes)
+are represented through additivity of biclusters in the FABIA model.
+Examples of short IBD segments found by hapFabia in chromosome~1 data from the
+1000 Genomes Project are given in
 Fig.~\ref{fig:example1} and Fig.~\ref{fig:example2}.
 
 \begin{figure*}[p]
 \includegraphics[width=0.9\textwidth]{./figures/example1}
-\caption{Example of a haplotype cluster in chromosome~1 found in the
-  1000Genomes project data. The $y$-axis
-gives the chromosomes and the $x$-axis consecutive SNVs/Indels/SVs. Yellow
+\caption{Example of an IBD segment in chromosome~1 found in the
+  1000 Genomes Project data. The $y$-axis
+gives chromosomes and the $x$-axis consecutive SNVs. Yellow
 indicates major alleles, violet minor alleles of tagSNVs, and blue
 minor alleles of other SNVs.
 ``model L'' indicates tagSNVs
@@ -186,8 +228,8 @@ line at individual NA19435. \label{fig:example1}}
 
 \begin{figure*}[p]
 \includegraphics[width=0.9\textwidth]{./figures/example8}
-\caption{Another example of a haplotype cluster from chromosome~1 of
-  the 1000Genomes project. See Fig.~\ref{fig:example1}
+\caption{Another example of an IBD segment from chromosome~1 of
+  the 1000 Genomes Project. See Fig.~\ref{fig:example1}
  for a description.
  Again probable phasing errors at individuals NA18516, NA19310, and
  NA19384.  \label{fig:example2}}
@@ -207,7 +249,7 @@ preprocessing steps.
 First \texttt{filename.vcf.gz}
 must be 1.\ uncompressed, then 2.\ converted to the sparse matrix
 format, 3. copy genotype matrix to the matrix that is processed,
-and then 4.\ split into segments. The following command line
+and then 4.\ split into intervals. The following command line
 commands perform these steps:
 \begin{enumerate}
 \item \texttt{gunzip filename.vcf.gz}
@@ -215,132 +257,134 @@ commands perform these steps:
 \item \texttt{cp filename\_matG.txt filename\_mat.txt}
 \item \texttt{./split\_sparse\_matrix filename \_mat.txt 10000 5000 1}
 \end{enumerate}
-The command line tools for steps 2.\ to 4.\ are provided by the package
-\Rpackage{hapFabia} in \texttt{inst/commandline/arch/}.
+In \texttt{inst/commandline/arch/} command line tools for
+steps 2.\ to 4.\ are provided by the package \Rpackage{hapFabia}.
 However step 2.\ to 4.\ can be performed in \R as well (see below).
 The commandline parameters for \texttt{vcftoFABIA} are
 1) filename without \texttt{.vcf} and 2) path to the file.
 The commandline parameters for \texttt{split\_sparse\_matrix} are
 1) filename without \texttt{.vcf} 2) extension (default\texttt{\_mat.txt})
-3) segment length 4) shift size 5) indicator whether annotation is
+3) interval length 4) shift size 5) indicator whether annotation is
 present (is generated by  \texttt{vcftoFABIA} as default).
-The data is split into segments of 10,000 SNVs where the distance
-between adjacent segments is 5,000 thus they overlap by 5,000 SNVs.
+The data is split into intervals of 10,000 SNVs where the distance
+between adjacent intervals is 5,000 thus they overlap by 5,000 SNVs.
 
 After providing the file \texttt{filename.vcf} the following steps
 constitute a typical analysis pipeline in \R:
 \begin{Sinput}
-R> #####define segments, overlap, filename #######
+R> ##### define intervals, overlap, filename #######
 R> shiftSize <- 5000
-R> segmentSize <- 10000
+R> intervalSize <- 10000
 R> fileName="filename" # without type
 R>
-R> #####load library#######
+R> ##### load library #######
 R> library(hapFabia)
 R>
-R> #####convert from .vcf to _mat.txt: step 2. above#######
+R> ##### convert from .vcf to _mat.txt: step 2. above #######
 R> vcftoFABIA(fileName=fileName)
 R>
-#####copy genotype matrix to matrix: step 3. above#######
+##### copy genotype matrix to matrix: step 3. above #######
 R> file.copy(paste(fileName,"_matG.txt",sep=""),
 +  paste(fileName,"_mat.txt",sep=""))
 R>
-R> #####split/ generate segments: step 4. above#######
-R> split_sparse_matrix(fileName=fileName,segmentSize=segmentSize,
+R> ##### split/ generate intervals: step 4. above #######
+R> split_sparse_matrix(fileName=fileName,intervalSize=intervalSize,
 +  shiftSize=shiftSize,annotation=TRUE)
 R>
-R> #####compute how many segments we have#######
+R> ##### compute how many intervals we have #######
 R> ina <- as.numeric(readLines(paste(fileName,"_mat.txt",sep=""),n=2))
 R> noSNVs <- ina[2]
-R> over <- segmentSize%/%shiftSize
+R> over <- intervalSize%/%shiftSize
 R> N1 <- noSNVs%/%shiftSize
 R> endRunA <- (N1-over+2)
 R>
-R> #####analyze each segment#######
-R> #####may be done by parallel runs#######
-R> iterateSegments(startRun=1,endRun=endRunA,shift=shiftSize,
-+  segmentSize=segmentSize,fileName=fileName,individuals=0,
-+  upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,haploClusterLength=50,
+R> ##### analyze each interval #######
+R> ##### may be done by parallel runs #######
+R> iterateIntervals(startRun=1,endRun=endRunA,shift=shiftSize,
++  intervalSize=intervalSize,fileName=fileName,individuals=0,
++  upperBP=0.05,p=10,iter=40,alpha=0.03,cyc=50,IBDsegmentLength=50,
 +  Lt = 0.1,Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,
 +  pMAF=0.035,haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
 +  simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 R>
-R> #####identify duplicates#######
+R> ##### identify duplicates #######
 R> identifyDuplicates(fileName=fileName,startRun=1,endRun=endRunA,
-+  shift=shiftSize,segmentSize=segmentSize)
++  shift=shiftSize,intervalSize=intervalSize)
 R>
-R> #####analyze results; parallel#######
-R> anaRes <- analyzeHaploClusters(fileName=fileName,startRun=1,endRun=endRunA,
-+  shift=shiftSize,segmentSize=segmentSize)
-R> print("Number haplotype clusters:")
-R> print(anaRes$nohaploClusters)
-R> print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
-R> print(anaRes$avhaploClusterLengthSNVS)
-R> print("Statistics on haplotye cluster length in bp:")
-R> print(anaRes$avhaploClusterLengthS)
-R> print("Statistics on number of individuals belonging to haplotye clusters:")
+R> ##### analyze results; parallel #######
+R> anaRes <- analyzeIBDsegments(fileName=fileName,startRun=1,endRun=endRunA,
++  shift=shiftSize,intervalSize=intervalSize)
+R> print("Number IBD segments:")
+R> print(anaRes$noIBDsegments)
+R> print("Statistics on IBD segment lengths in SNVs (all SNVs in the
+IBD segment):")
+R> print(anaRes$avIBDsegmentLengthSNVS)
+R> print("Statistics on IBD segment lengths in bp:")
+R> print(anaRes$avIBDsegmentLengthS)
+R> print("Statistics on number of individuals that share an IBD segment:")
 R> print(anaRes$avnoIndividS)
-R> print("Statistics on number of tagSNVs of haplotye clusters:")
+R> print("Statistics on number of IBD segment tagSNVs:")
 R> print(anaRes$avnoTagSNVsS)
-R> print("Statistics on MAF of tagSNVs of haplotye clusters:")
+R> print("Statistics on MAF of IBD segment tagSNVs:")
 R> print(anaRes$avnoFreqS)
-R> print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
+R> print("Statistics on MAF within the group of IBD segment tagSNVs:")
 R> print(anaRes$avnoGroupFreqS)
 R> print("Statistics on number of changes between major and minor allele frequency:")
 R> print(anaRes$avnotagSNVChangeS)
-R> print("Statistics on tagSNVs per individual of a haplotype cluster:")
+R> print("Statistics on tagSNVs per individual that shares an IBD segment:")
 R> print(anaRes$avnotagSNVsPerIndividualS)
 R> print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 R> print(anaRes$avnoindividualPerTagSNVS)
 R>
-R> #####load result for segment 50#######
+R> ##### load result for interval 50 #######
 R> posAll <- 50 # (50-1)*5000 = 245000: segment 245000 to 255000
 R> start <- (posAll-1)*shiftSize
-R> end <- start + segmentSize
+R> end <- start + intervalSize
 R> pRange <- paste("_",format(start,scientific=FALSE),"_",
 +  format(end,scientific=FALSE),sep="")
 R> load(file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
-R> haploClusterList <- resHapFabia$mergedHaploClusterList # $
+R> IBDsegmentList <- resHapFabia$mergedIBDsegmentList # $
 R>
-R> summary(haploClusterList)
-R> #####plot haplotype clusters in segment 50#######
-R> plot(haploClusterList,filename=paste(fileName,pRange,"_mat",sep=""))
+R> summary(IBDsegmentList)
+R> ##### plot IBD segments in interval 50 #######
+R> plot(IBDsegmentList,filename=paste(fileName,pRange,"_mat",sep=""))
 R>    ##attention: filename without type ".txt"
 R>
-R> #####plot the first haplotype cluster in segment 50#######
+R> ##### plot the first IBD segment in interval 50 #######
 R>
-R> haploCluster <- haploClusterList[[1]]
-R> plot(haploCluster,filename=paste(fileName,pRange,"_mat",sep=""))
+R> IBDsegment <- IBDsegmentList[[1]]
+R> plot(IBDsegment,filename=paste(fileName,pRange,"_mat",sep=""))
 R>    ##attention: filename without type ".txt"
 \end{Sinput}
 First the packages \Rpackage{hapFabia} and \Rpackage{fabia} are loaded.
-Then \texttt{filename.vcf}
-is converted by \Rfunction{vcftoFABIA} to sparse matrix format
-\texttt{filename\_matH.txt} (haplotype data),
-\texttt{filename\_matG.txt} (genotype data),
-\texttt{filename\_matD.txt} (dosage data),
-where the SNV annotation file
-\texttt{filename\_annot.txt} and the label for the individuals
-\texttt{filename\_individuals.txt}
-are generated, too.
+Then \Rfunction{vcftoFABIA} converts \texttt{filename.vcf}
+to sparse matrix format giving:
+\begin{itemize}
+\item \texttt{filename\_matH.txt} (haplotype data),
+\item \texttt{filename\_matG.txt} (genotype data),
+\item \texttt{filename\_matD.txt} (dosage data),
+\end{itemize}
+together with the SNV annotation file and individual's label file:
+\begin{itemize}
+\item \texttt{filename\_annot.txt} and
+\item \texttt{filename\_individuals.txt}.
+\end{itemize}
 The function \Rfunction{split\_sparse\_matrix} splits
-chromosome 1 into segments of length 10,000 SNVs with a distance of
-5,000 SNVs between the segments.
-This results in 640 segments because we had more than 3,200,000 and
-less than 3,210,000 SNVs in the genotype data.
-Using the function \Rfunction{iterateSegments} haplotype clusters are
-identified in these segments and the results stored in a EXCEL like
-\texttt{.csv} format and as \R data object.
+the data into intervals.
+The function \Rfunction{iterateIntervals} identifies IBD segments
+in these intervals and stores the results in an EXCEL like
+\texttt{.csv} format and as an \R data object.
 The function \Rfunction{identifyDuplicates} marks and memorizes
-duplicates of haplotype clusters which occur because the segments overlap.
-Next the function \Rfunction{analyzeHaploClusters} analyzes the results where
+duplicates of IBD segments which occur because the intervals overlap.
+Next the function \Rfunction{analyzeIBDsegments} analyzes the results where
 duplicates as marked in previous step are not considered.
 Results are listed by \texttt{anaRes}.
 
-The next example shows how to view all haplotype clusters of a segment, for
-which we chose segment 50 which corresponds to chromosome 1 interval
+The next example shows how to view all IBD segments of a segment, for
+which we chose interval 50 which corresponds to chromosome 1 range
 from 245,000 to 255,000 ($(50-1)*5000 = 245000$).
-Then we plot a specific haplotype cluster, in this case the first (\texttt{haploClusterList[[1]]}),
+Then we plot a specific IBD segment,
+in this case the first (\texttt{IBDsegmentList[[1]]}),
 which can also be used to store a \texttt{.pdf} or a \texttt{.fig} for
 editing with Xfig.
 Examples of this plot function are given in
@@ -350,7 +394,8 @@ Fig.~\ref{fig:example1} and Fig.~\ref{fig:example2}.
 An \R source file  \Rfunction{pipeline.R} of above pipeline
 can be created and executed as follows:
 \begin{Sinput}
-R> makePipelineFile("filename",shiftSize=5000,segmentSize=10000,haplotypes=FALSE)
+R> makePipelineFile("filename",shiftSize=5000,
++  intervalSize=10000,haplotypes=FALSE)
 R>
 R> source("pipeline.R")
 \end{Sinput}
@@ -366,12 +411,13 @@ This example shows how to run the whole pipeline if the genotype data
 is given as \texttt{.vcf} file.
 The data is first converted to a
 sparse matrix format by \texttt{vcftoFABIA} and then
-divided into overlapping segments by
+divided into overlapping intervals by
 \texttt{split\_sparse\_matrix}.
-Then the haplotype clusters are extracted by \texttt{iterateSegments} and
-duplicates due to overlapping segment marked by \texttt{identifyDuplicates}.
-Subsequently the haplotype clusters are analyzed by
-\texttt{analyzeHaploClusters}, where only simple statistics are computed.
+Then the IBD segments are extracted by \texttt{iterateIntervals} and
+duplicates due to overlapping intervals marked by \texttt{identifyDuplicates}.
+Subsequently the IBD segments are analyzed by
+\texttt{analyzeIBDsegments},
+where only simple statistics are computed.
 
 
 Work in a temporary directory.
@@ -393,11 +439,13 @@ data(chr1ASW1000G)
 write(chr1ASW1000G,file="chr1ASW1000G.vcf")
 @
 
-Create the analysis pipeline were segments are only 1,000 SNVs
-(that is about 100 kbps), while default is 10,000 SNVs (that is about
-1Mbp).
+Create the analysis pipeline, where intervals contain only 1,000 SNVs
+(that is a length of about 100 kbps),
+while default is 10,000 SNVs (that is about a length of 1 Mbp).
+
 <<createPipeline>>=
-makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,segmentSize=1000,haplotypes=TRUE)
+makePipelineFile(fileName="chr1ASW1000G",shiftSize=500,
+                 intervalSize=1000,haplotypes=TRUE)
 @
 
 Now the pipeline can be executed by sourcing it.
@@ -405,9 +453,9 @@ Now the pipeline can be executed by sourcing it.
 source("pipeline.R")
 @
 
-Next we list the produced files, where
+Next we list the files that were generated, where
 \texttt{\_N1\_N2\_} indicates that the file contains information
-concerning the segment that starts at N1 and ends at N2,
+concerning the interval that starts at N1 and ends at N2,
 \texttt{\_ALL.Rda} stores just the number of individuals and the number of SNVs,
 \texttt{\_individuals.txt} contains annotation for the individuals (in
 particular their names),
@@ -428,26 +476,26 @@ Following files have been generated:
 list.files(pattern="chr1")
 @
 
-Following shows the results of calling the function
-\texttt{analyzeHaploClusters} in the pipeline:
+In the following we show the results of calling the function
+\texttt{analyzeIBDsegments} in above pipeline:
 <<showResultSummary>>=
-print("Number haplotype clusters:")
-print(anaRes$nohaploClusters)
-print("Statistics on haplotye cluster length in SNVs (all SNVs in the haplotype cluster):")
-print(anaRes$avhaploClusterLengthSNVS)
-print("Statistics on haplotye cluster length in bp:")
-print(anaRes$avhaploClusterLengthS)
-print("Statistics on number of individuals belonging to haplotye clusters:")
+print("Number IBD segments:")
+print(anaRes$noIBDsegments)
+print("Statistics on IBD segment length in SNVs (all SNVs in the IBD segment):")
+print(anaRes$avIBDsegmentLengthSNVS)
+print("Statistics on IBD segment length in bp:")
+print(anaRes$avIBDsegmentLengthS)
+print("Statistics on number of individuals belonging to IBD segments:")
 print(anaRes$avnoIndividS)
-print("Statistics on number of tagSNVs of haplotye clusters:")
+print("Statistics on number of tagSNVs of IBD segments:")
 print(anaRes$avnoTagSNVsS)
-print("Statistics on MAF of tagSNVs of haplotye clusters:")
+print("Statistics on MAF of tagSNVs of IBD segments:")
 print(anaRes$avnoFreqS)
-print("Statistics on MAF within the group of tagSNVs of haplotye clusters:")
+print("Statistics on MAF within the group of tagSNVs of IBD segments:")
 print(anaRes$avnoGroupFreqS)
 print("Statistics on number of changes between major and minor allele frequency:")
 print(anaRes$avnotagSNVChangeS)
-print("Statistics on number of tagSNVs per individual of a haplotype cluster:")
+print("Statistics on number of tagSNVs per individual of an IBD segment:")
 print(anaRes$avnotagSNVsPerIndividualS)
 print("Statistics on number of individuals that have the minor allele of tagSNVs:")
 print(anaRes$avnoindividualPerTagSNVS)
@@ -456,20 +504,20 @@ print(anaRes$avnoindividualPerTagSNVS)
 
 
 
-Next we load segment 5 and there the first  and second haplotype cluster
+Next we load interval 5 and there the first  and second IBD segment
 <<loadSegment5>>=
 posAll <- 5
 start <- (posAll-1)*shiftSize
-end <- start + segmentSize
+end <- start + intervalSize
 pRange <- paste("_",format(start,scientific=FALSE),"_",
                 format(end,scientific=FALSE),sep="")
 load(file=paste(fileName,pRange,"_resAnno",".Rda",sep=""))
-haploClusterList <- resHapFabia$mergedHaploClusterList
-summary(haploClusterList)
-haploCluster1 <- haploClusterList[[1]]
-summary(haploCluster1)
-haploCluster2 <- haploClusterList[[2]]
-summary(haploCluster2)
+IBDsegmentList <- resHapFabia$mergedIBDsegmentList
+summary(IBDsegmentList)
+IBDsegment1 <- IBDsegmentList[[1]]
+summary(IBDsegment1)
+IBDsegment2 <- IBDsegmentList[[2]]
+summary(IBDsegment2)
 @
 
 Finally go back to old directory.
@@ -480,7 +528,7 @@ setwd(old_dir)
 
 
 
-Plot the first haplotype cluster in segment 5.
+Plot the first IBD segment in interval 5.
 In the plot the $y$-axis
 gives the individuals or the chromosomes
 and the $x$-axis consecutive SNVs. The default color coding uses yellow
@@ -488,13 +536,13 @@ for major alleles, violet for minor alleles of tagSNVs, and blue
 for minor alleles of other SNVs.
 ``model L'' indicates tagSNVs
 identified by hapFabia in violet.
-<<plotHaplotype1,fig=TRUE>>=
-plot(haploCluster1,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
+<<plotIBDsegment1,fig=TRUE>>=
+plot(IBDsegment1,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
 @
 
-Plot the second haplotype cluster in segment 5.
-<<plotHaplotype2,fig=TRUE>>=
-plot(haploCluster2,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
+Plot the second IBD segment in interval 5.
+<<plotIBDsegment2,fig=TRUE>>=
+plot(IBDsegment2,filename=paste(new_dir,"/",fileName,pRange,"_mat",sep=""))
 @
 
 
@@ -509,10 +557,12 @@ setwd(tempdir())
 
 The data \texttt{simu} is loaded and
 written into three files:
-\texttt{dataSim1fabia\_individuals.txt} (sample names),
-\texttt{dataSim1fabia\_annot.txt} (SNV annotation information), and
-\texttt{dataSim1fabia\_mat.txt} (the data in sparse matrix format).
-These are files which are in the standard pipeline produced by
+\begin{itemize}
+\item \texttt{dataSim1fabia\_individuals.txt} (sample names),
+\item \texttt{dataSim1fabia\_annot.txt} (SNV annotation information), and
+\item \texttt{dataSim1fabia\_mat.txt} (the data in sparse matrix format).
+\end{itemize}
+These  files are generated by the standard pipeline by
 \texttt{vcftoFABIA} and by \texttt{split\_sparse\_matrix}.
 
 
@@ -558,27 +608,27 @@ for (i in 1:haploN) {
 }
 @
 
-Now the haplotype clusters can be extracted from the data:
+Now the IBD segments can be extracted from the data:
 <<callHapFabia,results=hide>>=
 hapRes <- hapFabia(fileName="dataSim1fabia",prefixPath="",
    sparseMatrixPostfix="_mat",
    annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
    labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
    p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
-   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   write_file=0,norm=0,lap=100.0,IBDsegmentLength=10,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
    haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 @
 
 <<SummaryHapFabia>>=
-summary(hapRes$mergedHaploClusterList)
+summary(hapRes$mergedIBDsegmentList)
 @
 
-To view the results the first haplotype cluster is plotted:
-<<assignHaplotypeList>>=
-mergedHaploClusterList <- hapRes$mergedHaploClusterList # $
-haploCluster <- mergedHaploClusterList[[1]]
+To view the results the first IBD segment is plotted:
+<<assignIBDsegmentList>>=
+mergedIBDsegmentList <- hapRes$mergedIBDsegmentList # $
+IBDsegment <- mergedIBDsegmentList[[1]]
 @
 <<goBackToOldDir>>=
 new_dir <- getwd()
@@ -592,8 +642,8 @@ for major alleles, violet for minor alleles of tagSNVs, and blue
 for minor alleles of other SNVs.
 ``model L'' indicates tagSNVs
 identified by hapFabia in violet.
-<<plotHaplotype3,fig=TRUE>>=
-plot(haploCluster,filename=paste(new_dir,"/dataSim1fabia_mat",sep=""))
+<<plotIBDsegment3,fig=TRUE>>=
+plot(IBDsegment,filename=paste(new_dir,"/dataSim1fabia_mat",sep=""))
 @
 
 
@@ -604,7 +654,7 @@ old_dir <- getwd()
 setwd(tempdir())
 @
 <<secondExampleData>>=
-simulateHaploClustersFabia(minruns=2,maxruns=2)
+simulateIBDsegmentsFabia(minruns=2,maxruns=2)
 @
 <<secondExampleCallHapFabia,results=hide>>=
 hapRes <- hapFabia(fileName="dataSim2fabia",prefixPath="",
@@ -612,25 +662,25 @@ hapRes <- hapFabia(fileName="dataSim2fabia",prefixPath="",
    annotPostfix="_annot.txt",individualsPostfix="_individuals.txt",
    labelsA=NULL,pRange="",individuals=0,lowerBP=0,upperBP=0.15,
    p=10,iter=1,quant=0.01,eps=1e-5,alpha=0.03,cyc=50,non_negative=1,
-   write_file=0,norm=0,lap=100.0,haploClusterLength=10,Lt = 0.1,
+   write_file=0,norm=0,lap=100.0,IBDsegmentLength=10,Lt = 0.1,
    Zt = 0.2,thresCount=1e-5,mintagSNVsFactor=3/4,pMAF=0.1,
    haplotypes=FALSE,cut=0.8,procMinIndivids=0.1,thresPrune=1e-3,
    simv="minD",minTagSNVs=6,minIndivid=2,avSNVsDist=100,SNVclusterLength=100)
 @
 <<secondExampleSummaryHapFabia>>=
-summary(hapRes$mergedHaploClusterList)
+summary(hapRes$mergedIBDsegmentList)
 @
 
-<<secondExampleAssignHaplotype>>=
-mergedHaploClusterList <- hapRes$mergedHaploClusterList # $
-haploCluster <- mergedHaploClusterList[[1]]
+<<secondExampleAssignIBDsegment>>=
+mergedIBDsegmentList <- hapRes$mergedIBDsegmentList # $
+IBDsegment <- mergedIBDsegmentList[[1]]
 @
 <<goBackToOldDirSecond>>=
 new_dir <- getwd()
 setwd(old_dir)
 @
 <<secondExamplePlot,fig=TRUE>>=
-plot(haploCluster,filename=paste(new_dir,"/dataSim2fabia_mat",sep=""))
+plot(IBDsegment,filename=paste(new_dir,"/dataSim2fabia_mat",sep=""))
 @
 
 
@@ -638,67 +688,81 @@ plot(haploCluster,filename=paste(new_dir,"/dataSim2fabia_mat",sep=""))
 \section{hapFabia Method}
 \label{sec:methods}
 
-We introduce our novel method HapFABIA for extracting rare and short
-haplotype clusters from large sequencing data.
-HapFABIA first applies FABIA biclustering to phased or unphased
-genotype data. The first step, biclustering, extracts similarities between
-individuals based on a subset of SNVs but does not
-consider that haplotype clusters consist of contiguous
+Our novel method HapFABIA extracts short IBD
+segments that are tagged by rare variants from large sequencing data.
+In the first stage, HapFABIA applies FABIA biclustering to phased or unphased
+genotype data. Biclustering extracts similarities between
+individuals based on a subset of SNVs, but does not
+consider that IBD segments consist of contiguous
 nucleotides.
-In the second step, HapFABIA therefore extracts haplotype clusters
-from FABIA models by considering local tagSNV accumulations and pruning
-spurious correlations of SNVs with a haplotype cluster.
-These two HapFABIA steps are described in the next two subsections.
+In the second stage, HapFABIA extracts IBD segments
+from FABIA models by considering local tagSNV accumulations.
+SNVs that tag an IBD segment are within this segment
+and, therefore, accumulate locally.
+It is important for the second stage that the SNVs which are
+extracted in the first step are independent of their DNA location.
+This justifies to use statistical methods for identifying local SNV accumulations
+in FABIA models which would not be expected randomly.
+Finally, HapFABIA prunes
+spurious correlated SNVs from the extracted IBD segments and joins segments.
+The two HapFABIA steps (biclustering and IBD segment extraction)
+are described in the next two subsections.
 
 
-\subsection*{FABIA for genotype data}
+\subsection{FABIA for genotype data}
 \label{sec:fabia}
 
-We propose identifying similarities between individuals by biclustering.
-A bicluster corresponds to a haplotype cluster where
-individuals are similar to each other by virtue of being identical at minor
-alleles of tagSNVs.
-Panel B in
-Fig.~\ref{fig:bicluster} shows such a bicluster.
+In the following, we describe the first step of HapFABIA.
+We propose identifying similarities between individuals by
+biclustering.
+Biclustering simultaneously clusters rows and columns of a matrix.
+More specifically, it clusters row elements that
+are similar to each other on a subset of column elements.
+An IBD segment corresponds to a bicluster because
+individuals that possess the IBD segment are similar to each other at
+this segment.
+The similarity is given by identical minor alleles of tagSNVs.
+Fig.~\ref{fig:bicluster} depicts a bicluster identified in
+genotype data.
 
 
-For biclustering we use the
+We employ the
 ``Factor Analysis for Bicluster Acquisition'' (FABIA)
 biclustering model \cite{Hochreiter:10}.
 In contrast to other biclustering methods such as BIMAX
 \cite{Prelic:06} and QUBIC \cite{Li:09qubic}, FABIA can represent
-homozygous regions and overlapping haplotype clusters because of its
-multiplicative bicluster model and a data model that is additive in
-its biclusters (see below).
-FABIA can be applied to discrete genotype data but also to real values
-that give the minor allele
-likelihood or the minor allele dosage.
+homozygous regions (two times the same IBD segment in one diploid individual)
+by its multiplicative bicluster model.
+Furthermore, FABIA can represent overlapping IBD segments (a different IBD
+segment on each chromosome)
+by its additive biclusters.
+FABIA can be applied to discrete phased or unphased genotype data but also to real values
+that correspond to minor allele likelihoods or the minor allele dosages.
 We use FABIA not only because it is well suited for genotyping data, but also
 because it outperformed other biclustering methods
 in extensive comparisons on different data sets \cite{Hochreiter:10}.
 
-\subsubsection*{FABIA models genotype data by haplotype clusters}
+
+\subsubsection{FABIA describes genotype data by IBD segments}
 
 
-FABIA describes genotype data $\X$
-by an outer product $\z \ \la^T$ of two vectors $\la$ and $\z$.
-The vector $\la$ corresponds to a haplotype cluster that
-contains ones for haplotype cluster tagSNVs and zeros otherwise.
-Vector $\z$ indicates the number of segments of an
-individual that belong to the haplotype cluster (multiploidy).
+FABIA describes an IBD segment in genotype data $\X$
+by an outer product $\z \ \la^T$ of two vectors $\la$ and $\z$,
+where the vector $\la$ indicates tagSNVs by non-zero values and the
+vector $\z$ indicates individuals that possess the IBD segment.
 FABIA can represent a
-homozygous region, that is, two occurrences of a
-haplotype in one diploid individual, by $z_i=2$.
-Fig.\ \ref{fig:vectors} visualizes this representation of a genotype
-matrix by an outer product for one haplotype cluster.
+homozygous region of an IBD segment by $z=2$, that is, two occurrences
+of an IBD segment in one diploid individual.
+Fig.\ \ref{fig:vectors} visualizes this description of a genotype
+matrix by one IBD segment as an outer product.
 
 
-A diploid
-individual may participate at two
-haplotype clusters at a particular locus.
-In this case genotyping sums the occurrences
-of minor alleles, which is reflected by the additive FABIA model.
-If we assume genotyping errors,
+A diploid individual may possess two
+IBD segments at a particular locus where genotyping
+sums up the occurrences of minor alleles.
+This fact is reflected by the additive FABIA model
+which sums up bicluster contributions.
+If we assume genotyping errors which are accounted for by $\Up$,
 the FABIA model for genotype data $\X$ is
 \begin{align}
 \label{eq:expgen}
@@ -706,103 +770,118 @@ the FABIA model for genotype data $\X$ is
 \ \Up \ ,
 \end{align}
 where $\X \in \Rb^{l \times n}$ is the genotyping data; $\Z \in \Rb^{l
-  \times p}$ is the matrix that gives for each individual the number of segments that
-belong to a haplotype cluster; $\La \in \Rb^{p
-  \times n}$ is the haplotype cluster tagSNV matrix;
-$\Up \in \Rb^{l \times n}$ is additive noise; $n$ is the number
+  \times p}$ is the matrix that indicates which individuals possess an
+IBD segment; $\La \in \Rb^{p \times n}$ indicates IBD segment tagSNVs;
+$\Up \in \Rb^{l \times n}$ is an additive noise term; $n$ is the number
 of SNVs; $l$ is the number of individuals (or chromosomes for phased
-genotypes); $p$ is the number of haplotype clusters;
-$\la_i  \in \Rb^n$ is the $i$th haplotype cluster tagSNV vector (the $i$th
+genotypes); $p$ is the number of IBD segments;
+$\la_i  \in \Rb^n$ is tagSNV indicator vector for the $i$-th IBD segment (the $i$-th
 row of $\La$);
-and $\z_i  \in \Rb^l$  gives for each individual the number of segments that
-belong to the $i$-th haplotype cluster (the $i$th column of $\Z$).
-The additive noise not only covers genotyping errors but also
-genotypes which cannot be explained by haplotype clusters.
-Such unexplained genotypes may arise from recently acquired SNVs or
-haplotype cluster segments that were fragmented by recombination events.
+and $\z_i  \in \Rb^l$ corresponds to the number of times each of the $l$ individuals
+contains the $i$-th IBD segment (the $i$-th column of $\Z$).
+The additive noise $\Up$ not only covers genotyping errors but also
+genotypes which cannot be explained by IBD segments.
+Such unexplained genotypes may arise from recently acquired SNVs,
+segments contained in only one individual, and
+IBD segments that are too short, or segments that are shared by too few individuals
+to be called.
 
-The FABIA model in Eq.~\eqref{eq:expgen} allows a generative
+According to Eq.~\eqref{eq:expgen}, the $j$-th genotype $\x_j$, i.e.,
+the $j$-th column of $\X$, is
+\begin{align}
+\label{eq:expgen2}
+\x_j\ = \ \sum_{i=1}^{p} \la_i \ z_{ij} \ + \ \epp_j \ = \ \La \
+\tilde\z_j\ + \ \epp_j \ ,
+\end{align}
+where $\epp_j$ is the $j$-th column of the noise matrix $\Up$ and
+$\tilde\z_j=(z_{1j},\dots,z_{pj})^T$ indicates which
+IBD segments are present in genotype $\x_j$ ($j$-th column of
+the matrix $\Z$ with length equal to the number of IBD segments $p$).
+Recall that $\z_i=(z_{i1},\dots,z_{il})^T$ in Eq.~\eqref{eq:expgen}
+corresponds to the number of times each of the $l$ individuals
+contains the $i$-th IBD segment.
+
+
+If we drop the index $j$ which indicates the individual,
+the formulation in Eq.~\eqref{eq:expgen2} facilitates a generative
 interpretation by a factor analysis model with $p$ factors:
 \begin{align}
 \label{eq:factormodel}
-\x \ = \ \sum_{i=1}^{p} \la_i \  z_i  \ + \ \epp \ = \  \La^{T} \ \z \
-+ \ \epp \ ,
+\x \ = \ \sum_{i=1}^{p} \la_i \ \tilde z_i  \ + \
+    \epp \ = \ \La \ \tilde\z \ + \
+    \epp \ ,
 \end{align}
-where $\x \in \Rb^n$
-is an observed genotype (a row of $\X$ written as
-column vector), the vector of factors $\z \in \Rb^p$ gives the number of
-segments belonging to each haplotype cluster for genotype $\x$,
-$z_i$ is the number of segments that
-belong to the $i$-th haplotype cluster (a
-component of both $\z_i$ and $\z$),
-and $\epp \in \Rb^{n}$ is the additive noise
-(a row of $\Up$ written as
-column vector).
+where $\x \in \Rb^n$ is the observed genotype.
+The vector of
+factors $\tilde\z=(\tilde z_1,\ldots,\tilde z_p)^T$
+indicates which
+IBD segments are present in genotype $\x$, where
+component $\tilde z_i$ indicates how often the individual with
+genotype $x$ possesses the $i$-th IBD segment.
+$\epp \in \Rb^{n}$ is the additive noise.
 
 
 
 As illustrated in Fig.\ \ref{fig:vectors},
 both the vector $\z_i$
-and the vector $\la_i$ of haplotype cluster tagSNVs should be sparse.
-Sparse $\z_i$ means that only few individuals belong to
-the haplotype cluster, that is,
-the haplotype cluster is rare.
+and the vector $\la_i$ should be sparse
+to describe an IBD segment.
+Sparse $\z_i$ means that only few individuals
+possess the IBD segment, which implies rare tagSNVs.
 Sparse $\la_i$ means that only few SNVs are tagSNVs, which implies
-short haplotype clusters.
-Sparse $\z_i$ can be achieved if all components $z_i$ are sparse,
-that is, if  the vector of factors $\z$ is sparse.
-Note, that $\z_i \in \Rb^l$ in Eq.~\eqref{eq:expgen} gives for each
-of the $l$ individuals the number of segments that
-belong to the $i$-th haplotype cluster, while
-$\z \in \Rb^p$ gives the number of
-segments belonging to each of the $p$ haplotype clusters for one genotype $\x$.
+short IBD segments.
+Sparse $\z_i$ can be achieved if components $z_{ij}$ are sparse,
+that is, if  the vector of factors $\tilde \z_j$ in
+Eq.~\eqref{eq:expgen2} is sparse or, equivalently,
+the vector $\tilde\z$ in Eq.~\eqref{eq:factormodel}
+is sparse.
 In contrast to standard factor analysis, FABIA's model selection is
 tailored to sparse factors and sparse
-loadings, which are essential for haplotype cluster detection.
+loadings, which are essential for IBD detection.
 Sparseness in the FABIA model is obtained by a
 component-wise independent Laplace
 distribution both for the prior on the
-parameters $\la_i$ and the
-distribution of the factors $\z$ \cite{Hyvarinen:99a}:
+parameters $\la_i$ and for the
+distribution of the factors $\tilde\z$ \cite{Hyvarinen:99a}:
 \begin{align} \label{eq:laplaceprior1}
-p(\z) \ = \ \left( {\textstyle\frac{1}{\sqrt{2}}} \right)^p
+p(\tilde \z) \ = \ \left( {\textstyle\frac{1}{\sqrt{2}}} \right)^p
 \prod_{i=1}^{p}
-    e^{-\ \sqrt{2} \ |z_i|} \\ \label{eq:laplaceprior2}
+    e^{-\ \sqrt{2} \ |\tilde z_i|} \\ \label{eq:laplaceprior2}
 p(\la_i) \ = \ \left( {\textstyle\frac{1}{\sqrt{2}}} \right)^n
 \prod_{k=1}^{n} e^{-\ \sqrt{2} \
-|\lambda_{ki}|}
+|\lambda_{ki}|} \ .
 \end{align}
 
 
-The Laplace distribution of the factors leads to the analytically
+The Laplace distribution of the factors leads to an analytically
 intractable likelihood:
 \begin{align}  \label{eq:likelihood}
-p( \x \mid \La, \pp ) \ = \ \int p( \x \mid \z, \La, \pp) \ p(
-\z) \ d\z \ .
+p( \x \mid \La, \pp ) \ = \ \int p( \x \mid \tilde\z, \La, \pp) \ p(
+\tilde\z) \ d\tilde\z \ .
 \end{align}
-Therefore, FABIA model selection is performed by means of
+Therefore, the model selection of FABIA is performed by means of
 variational expectation maximization, which is
 a variational optimization in
 the expectation maximization (EM) framework
 to maximize the posterior of the
 parameters \cite{Girolami:01,Palmer:06,Hochreiter:10,Clevert:11,Klambauer:12}.
-The idea of the variational approach is to express the prior $p(\z)$ by
+The idea of the variational approach is to express the prior $p(\tilde\z)$ by
 the maximum
 \begin{align}
- p(\z) \ = \ \underset{\xii}{\max} \ p(\z \mid \xii)
+ p(\tilde\z) \ = \ \underset{\xii}{\max} \ p(\tilde\z \mid \xii)
 \end{align}
-over a model family $p(\z \mid \xii)$
+over a model family $p(\tilde\z \mid \xii)$
 that is parametrized
 by the variational parameter $\xii$
 or by scale mixtures
 \begin{align}
- p(\z) \ = \ \int p(\z \mid \xii) \ d\mu(\xii) \ .
+ p(\tilde\z) \ = \ \int p(\tilde\z \mid \xii) \ d\mu(\xii) \ .
 \end{align}
 A Laplace distribution can be expressed exactly by the maximum of a
-Gaussian family or by Gaussian scale mixtures
-\cite{Girolami:01,Palmer:06}.
-Therefore for each $\x$, the maximum $\hat \xii$ of the variational parameter
-$\xii$ allows to represent the Laplacian prior by a Gaussian:
+Gaussian family or by Gaussian scale
+mixtures \cite{Girolami:01,Palmer:06}.
+Therefore, for each $\x$, the maximum $\hat \xii$ of the variational parameter
+$\xii$ allows for representing the Laplacian prior by a Gaussian:
 \begin{align}
  \hat \xii \ = \ \underset{\xii}{\arg\max} \ p(\xii \mid \x) \ .
 \end{align}
@@ -813,17 +892,17 @@ the likelihood Eq.~\eqref{eq:likelihood} can be computed analytically.
 
 
 
-If we denote the $j$th genotype by $\x_j \in \Rb^n$
+If we denote the $j$-th genotype by $\x_j \in \Rb^n$
 with corresponding factors $\z_j \in \Rb^p$, then
 we obtain the following variational E-step \cite{Hochreiter:10}:
 \begin{align} \label{eq:updateE1}
-\E \big(\z_j   \mid \x_j \big) \ = \  \big( \La^T \
+\E \big(\z_j   \mid \x_j \big) \ &= \  \big( \La^T \
   \pp^{-1} \ \La \
   + \  \Xii_j^{-1} \big)^{-1} \ \La^T \  \pp^{-1} \ \x_j \ , \\ \label{eq:updateE2}
-\E \big(\z_j \ \z_j^T  \mid  \x_j \big) \ = \  \big(
+\E \big(\z_j \ \z_j^T  \mid  \x_j \big) \ &= \  \big(
 \La^T \
   \pp^{-1} \ \La \
-  + \  \Xii_j^{-1} \big)^{-1} \ + \\ \nonumber
+  + \  \Xii_j^{-1} \big)^{-1} \ + \
  \E \big(\z_j   \mid  \x_j \big)  \ \E (\z_j  \mid
 \x_j)^T \ ,
 \end{align}
@@ -831,160 +910,174 @@ where $\Xii_j$ means $\mathrm{diag} \left(\xii_j \right)$. The
 update for the variational parameter $\xii_j$ is
 \begin{align}
 \label{eq:updateVar}
-\xii_{j} \ = \  \mathrm{diag}\left( \sqrt{\E (\z_j \
+\xii_{j} \ &= \  \mathrm{diag}\left( \sqrt{\E (\z_j \
 \z_j^T \mid \x_j)} \right)\ .
 \end{align}
 The variational M-step is \cite{Hochreiter:10}
 \begin{align} \label{eq:updateM1}
-\La^{\nn} \ = \  \frac{\frac{1}{l} \ \sum_{j=1}^{l} \x_j \ \E
+\La^{\nn} \ &= \  \frac{\frac{1}{l} \ \sum_{j=1}^{l} \x_j \ \E
 (\z_j \mid  \x_j)^T  \ - \ \frac{\alpha}{l} \  \pp \ \sign
 (\La
   )}{\frac{1}{l} \sum_{j=1}^{l} \E (\z_j \ \z_j^T \mid \x_j
   )} \\ \label{eq:updateM2}
-\mathrm{diag} \left(\pp^{\nn}  \right) \ = \ \pp^{\mathrm{EM}} \ +
+\mathrm{diag} \left(\pp^{\nn}  \right) \ &= \ \pp^{\mathrm{EM}} \ +
 \ \mathrm{diag} \Big(\frac{\alpha}{l} \  \pp \ \sign (\La
   ) ( \La^{\nn} )^T \Big)\ , \\ \label{eq:updateM3}
-\pp^{\mathrm{EM}} \  = \ \mathrm{diag} \bigg( \frac{1}{l}
+\pp^{\mathrm{EM}} \ &= \ \mathrm{diag} \bigg( \frac{1}{l}
 \sum_{j=1}^l \x_j  \ \x_j^T \ - \ \La^{\nn}  \frac{1}{l} \sum_{j=1}^l
  \E \left(  \z_j   \mid  \x_j \right) \ \x_{j}^{T} \bigg) .
 \end{align}
 The parameter $\alpha$ controls the degree of sparseness (an
-expectation of how rare the haplotype clusters are) and can be
+expectation of how rare the SNVs that tag the IBD segment are)
+and can be
 introduced as a parameter of
 the Laplacian prior of the factors \cite{Hochreiter:10}.
 
-Note, that the number of bicluster must not be determined a priori if
+Note that the number of bicluster need not be determined a priori if
 $p$ is chosen large enough. The sparseness constraint will remove
-spurious biclusters by setting $\la$ to a zero vector. In this way
+spurious biclusters by setting $\la$ to the zero vector. In this way,
 FABIA automatically determines the number of biclusters.
 
 
-\subsubsection*{Adaptation of FABIA for haplotype cluster detection}
+\subsubsection{Adaptation of FABIA for IBD detection}
 
 Since an entry in the genotype matrix $\X$
 reports how often the minor
 allele is present, FABIA must
-explain occurrences of minor alleles through haplotype clusters.
-Because both the counts of minor alleles and the  the occurrences of
-segments in haplotype clusters are non-negative,
+explain occurrences of minor alleles by IBD segments.
+The genotype matrix $\X$ is non-negative as
+are both the indicator matrix of tagSNVs $\La$
+and indicator matrix of IBD segments in individuals $\Z$.
+Regarding these constraints,
 we modified FABIA to enforce non-negative
-loadings $\la_i$ by projecting negative components of $\la_i$ to zero.
-If both $\x_j$ and $\La$ are non-negative, the posterior mean
+loadings $\La$.
+If, for individual $j$,
+both genotype data $\x_j$ and $\La$ are non-negative, the posterior mean
 $\E \big(\z_j   \mid \x_j \big)$ of $\z_j$ is non-negative, too.
-Therefore also $\La^{\nn}$ is non-negative, because the prior term in the
-update rule is not allowed to change the sign of the loadings.
-Therefore it is sufficient to initialize $\La$ by positive values
+Consequently, the new loading matrix
+$\La^{\nn}$ is non-negative according to Eq.~\eqref{eq:updateM1}.
+Note that the prior term $\frac{\alpha}{l} \  \pp \ \sign (\La)$ in the
+update rule Eq.~\eqref{eq:updateM1} is not allowed to change
+the signs of the loadings $\La$ in one update step.
+Therefore, it is sufficient to initialize $\La$ by positive values
 to enforce non-negative factors and loadings.
-$\Z$ is estimated by the prior mean $\E \big(\z_j   \mid \x_j \big)$
-and used to identify individuals belonging to a haplotype cluster.
+$\Z$ is estimated by the posterior mean $\E \big(\z_j   \mid \x_j \big)$
+and is used to identify individuals that possess an IBD segment.
 
-Further we developed a sparse matrix algebra which represents only
-non-zero values and indices for
-FABIA biclustering in order to efficiently analyze large genotyping data.
-In  Eq.~\eqref{eq:updateE1} to Eq.~\eqref{eq:updateM3} the values of
-the genotype vectors $\x_j$ and the values of the loading vector
-$\la_i$ and the loading matrix $\La$ are sparse. Therefore we
-introduced a sparse matrix algebra for multiplying both two sparse
-vectors and a sparse vector by a dense vector.
+To allow IBD segment detection in large sequencing data,
+we developed a specialized sparse matrix algebra.  This sparse matrix algebra
+only considers non-zero values with their indices for vector and
+matrix computations.
+In  Eqs.~\eqref{eq:updateE1}-\eqref{eq:updateM3} the values of
+the genotype vectors $\x_j$ and the values of the
+loading matrix $\La$ are sparse. Our sparse matrix algebra
+not only allows for multiplying a sparse vector by a dense vector (as
+usual in sparse matrix computations), but also for multiplying two sparse
+vectors.
 
-To further speed up the computation, we developed an iterative version
-of FABIA. Each FABIA iteration detects $p$ biclusters.
+To further speed up the computation, we extended FABIA to an iterative
+version, where, in each iteration, $p$ biclusters are detected.
 These $p$ biclusters are removed from the genotype matrix $\X$ before
 starting the next iteration.
 
 
 The vectors $\la_i$ and $\z_i$ acquire a new
-interpretation when detecting rare haplotype clusters.
-Components of $\la_i$ correspond to
-tagSNVs and indicate to what degree they belong to the $i$-th
-haplotype cluster. These components in particular indicate how many bicluster
-individuals possess the minor allele of the corresponding tagSNV.
-Components of $\z_i$ correspond to individuals and
-indicate both the number of segments that belong to the
-haplotype cluster and to what degree the individual's genotype
-matches the haplotype cluster.
+interpretation when detecting short IBD segments.
+Components of $\la_i$ indicate to which degree tagSNVs tag the $i$-th
+IBD segment. In particular, these components measure how many
+individuals possess the IBD segment (more precisely the corresponding tagSNV).
+Components of $\z_i$ indicate how often a specific IBD segment is
+present in one multiploid individual.
+Additionally components of $\z_i$ also indicate how well an individual
+segment matches an IBD segment as individual segments may contain
+genotyping errors or may be broken up during meiosis.
 
 
 
-
-\subsection*{Haplotype cluster extraction from FABIA models}
+\subsection{Extraction of IBD segments from FABIA models}
 \label{sec:extract}
 
-FABIA biclustering extracts correlated SNVs but
-does not consider that a haplotype cluster consists of contiguous
-nucleotides which lead to local accumulations of a haplotype cluster's tagSNVs.
-This information can be used to separate
-unwanted spurious correlations between SNVs from desired correlations between tagSNVs.
-Further, haplotype clusters may overlap at ancient, preexisting SNVs
-and therefore may be joined in a FABIA model.
-Note that not all ancient SNVs are common and can be filtered out in a
-preprocessing step.
-FABIA may also join haplotype clusters if they contain the same
-individuals.
+FABIA biclustering does not consider that an IBD segment
+consists of contiguous nucleotides.
+This essential information is incorporated into HapFABIA in the second
+stage.
+SNVs that tag an IBD segment are locally accumulated.
+FABIA may have accidentally merged separated IBD segments that are shared by the same
+individuals or IBD segments that are located on different
+chromosomes.
+The second stage, therefore disentangles falsely merged
+IBD segments, prunes IBD
+segments from spurious SNVs, and finally joins parts of single long IBD
+segments.
 
 
+
+As mentioned above,
 FABIA biclustering does not regard the order of SNVs or individuals,
 thus random shuffling of SNVs does not change its result.
-Therefore randomly correlated SNVs that are found by FABIA would be
+Therefore, randomly correlated SNVs that are found by FABIA would be
 uniformly distributed along the chromosome.
-However SNVs that are correlated because they are tagSNVs of a
-haplotype cluster agglomerate locally as they originate from an
-ancient segment.
+However, SNVs that are correlated because they tag an IBD segment
+agglomerate locally in this segment.
 Deviations from the null hypothesis of uniformly distributed SNVs can
 be detected by a binomial test for the number of expected SNVs within an
-interval if the SNV frequency is given.
+interval if the minor allele frequency of SNVs is known.
 A low $p$-value hints at local agglomerations of bicluster SNVs
-stemming from a haplotype cluster.
+stemming from an IBD segment.
 
 
-We propose a four-step procedure to extract haplotype clusters from FABIA
+We propose a four-step procedure to extract IBD segments from FABIA
 models:
 \begin{enumerate}
 \item
-identifying local agglomerations of correlated SNVs based on a
-binomial test,
+Identify local agglomerations of correlated SNVs based on a
+binomial test;
 \item
-disentangling haplotype clusters and re-assigning individuals or chromosomes
-to haplotype clusters,
+Disentangle IBD segments and re-assigning individuals or chromosomes
+to IBD segments;
 \item
-pruning haplotype clusters from SNVs with spurious correlations based
-on an exponential test,
+Prune IBD segments off SNVs with spuriously correlations based
+on an exponential test for a long genomic distance;
 \item
-merging similar haplotype clusters, and joining the parts of large haplotype clusters
-that were divided by the bins from the first step.
+Join similar IBD segments stemming from long IBD segments
+that were divided by the bins at the first step.
 \end{enumerate}
 
 {\bf Step 1:}
 FABIA model selection is independent of the
-order of both the individuals/chromosomes and the SNVs.
-Therefore, spurious correlated SNVs are unlikely to
-agglomerate at a DNA locus, whereas local SNV agglomerations
-hint at a haplotype cluster.
-To detect agglomerations, we compute histogram counts of the largest
-values of the FABIA model parameters $\la_i$.
-The threshold ``Lt''  (fixed to 0.1)
-gives the percentage of largest $\la_i$ values that are
-used for the histogram.
-The HapFABIA parameter ``haploClusterLength''
-gives the largest haplotype cluster (in kbp or centiMorgans) to be considered.
-The histogram bin size in number of SNVs is computed from ``haploClusterLength''
+order of the SNVs.
+Therefore, spuriously correlated SNVs are unlikely to
+agglomerate at a DNA locus, whereas tagSNVs do, as they are within
+an IBD segment.
+To detect agglomerations, we compute histogram counts of FABIA model SNVs
+within bins where bins with
+large counts are assumed to contain IBD segments.
+For computing the histogram of counts of FABIA model SNVs, we consider
+those SNVs for which the FABIA model parameter $\la_i$ is largest
+(threshold ``Lt'' with 10\% being the default value).
+Large $\la$ values ensure IBD segments that are shared by multiple
+individuals. These segments are therefore more reliable.
+The HapFABIA parameter ``IBDlength''
+determines the maximal length of IBD segments.
+The histogram bin size in number of SNVs (all SNVs and not only model
+SNVs) is computed from ``IBDlength''
 using the average genomic distance between adjacent SNVs.
-To account for haplotype clusters that exceed bin borders, the histogram is
+To account for IBD segments that exceed the borders of the bins,
+the histogram is
 computed a second time with bins shifted by half the bin size.
 
-The histogram bins with more counts than expected
-are assumed to contain haplotype clusters.
-We rank bin counts that exceed the expected value by a binomial test in
-order to select bins.
-We need to compute how many SNVs are expected in a bin, that
-is, the probability of observing $k$ or more bin counts.
-Without errors in the factor analysis model,
-the minor allele of each tagSNV is present in
-each of the $t$ individuals belonging to the haplotype cluster.
+The histogram bins with more model SNVs than expected by chance
+are assumed to contain IBD segments.
+We select bins for which the model SNV count
+exceeds the expected value by a binomial test for random counts.
+We need to compute how many model SNVs are expected in a bin if they
+are random and not in an IBD segment. Thus, we have to compute the
+probability of observing $k$ or more bin counts by chance.
 Let $p$ be the probability of a random
 minor allele match between $t$ individuals.
-The probability of observing $k$ or more matches for $n$ SNVs in
-a bin is given by one minus the binomial distribution $F(k;n,p)$:
+If $n$ SNVs are in a bin,
+the probability of observing $k$ model SNVs by chance
+is given by one minus the binomial distribution $F(k;n,p)$:
 \begin{align}
 \label{eq:binomial}
 1 \ - \ F(k-1;n,p) \ &= \ \Pr(K \geq k) \ = \ \sum_{i=k}^n \ {n\choose i} \
@@ -993,10 +1086,10 @@ p^i \ (1-p)^{n-i}  \ .
 If $q$ is the minor allele frequency (MAF) for one SNV,
 the probability $p$ of observing the minor allele of this SNV in
 all $t$ individuals is $p=q^t$.
-We assume that all SNVs have the same MAF $q$ --- in the
+We assumed that all SNVs have the same MAF $q$ --- in the
 experiments we used the average MAF.
-For $b$ bins, the probability of observing $k$ or more counts in at
-least one bin is
+For $b$ bins, the probability of observing $k$ or more counts of model
+SNVs by chance in at least one bin is
 \begin{align}
 \label{eq:counts}
 b \ {l\choose t} \ \sum_{i=k}^n \ {n\choose i} \
@@ -1004,26 +1097,27 @@ q^{it} \ \left(1-q^t \right)^{n-i} \ ,
 \end{align}
 where $l$ is the number of individuals and  ${l\choose t}$ is the
 number of possibilities to chose $t$ individuals from the $l$ individuals.
-If the probability Eq.~\eqref{eq:counts} is below the threshold ``thresCount'',
-the according bin is selected for haplotype cluster extraction.
+If the probability in Eq.~\eqref{eq:counts} is below the threshold ``thresCount'',
+the according bin is selected for IBD segment extraction because more
+FABIA model SNVs are in this bin than expected by chance.
 If $k_{\textrm{min}}$ is the minimum $k$ for which
 Eq.~\eqref{eq:counts} is below the threshold ``thresCount'', then all
-bins with counts $k \geq k_{\textrm{min}}$ are selected.
-In our experiments, we allow haplotype clusters of only two individuals
-(like for IBD), and therefore set $t=2$.
+bins with model SNV counts $k \geq k_{\textrm{min}}$ are selected.
+In our experiments, we allow IBD segments of only two individuals
+(standard IBD), and therefore set $t=2$.
 
 
 
 If a bin is selected, SNVs and individuals must be assigned to it.
-Note that bicluster memberships of FABIA biclusters cannot be used directly,
-because they include all bins.
-First, those SNVs that contributed to its count are assigned to the selected bin.
+Note that bicluster memberships of FABIA biclusters cannot be used directly
+because they include all bins and therefore different IBD segments.
+First, those model SNVs that contributed to the count of the selected bin are assigned to it.
 Then, individuals or chromosomes are assigned to the selected bin
 if they possess a minor allele at one or more SNVs that have been assigned
 to the bin.
 Individuals are only chosen from the top $z$-values of the FABIA model
-to ensure that individuals are indeed similar to each other.
-The parameter ``Zt'' (fixed to 0.2)
+to ensure that assigned individuals are indeed similar to each other.
+The parameter ``Zt'' (default 0.2)
 gives the percentage of top $z$-scores that are considered.
 
 
@@ -1031,36 +1125,32 @@ gives the percentage of top $z$-scores that are considered.
 
 
 {\bf Step 2:}
-In this step, haplotype clusters in a selected bin are disentangled, considering only
-SNVs and individuals that have been assigned to the bin.
-A haplotype cluster is initialized by
+In this step, IBD segments in a selected bin are disentangled, where only
+SNVs and individuals are considered that have been assigned to the bin.
+An IBD segment is initialized by
 two core individuals that are identical at $m$ or more minor alleles.
 The number $m$ is computed as $m = \textrm{mintagSNVsFactor} \times
 k_{\textrm{min}}$.
-All individuals that are identical in least $m$ minor alleles
-to one of the two core haplotype cluster individuals are
-classified as belonging to the haplotype cluster.
+All individuals that are identical in at least $m$ minor alleles
+to one of the two IBD core individuals are
+classified as possessing the IBD segment.
+The tagSNVs of this IBD segment are
+model SNVs that have their minor allele in at least 2
+individuals that possess the IBD segment.
 
-The tagSNVs of a haplotype cluster are
-SNVs that have their minor allele in at least 2
-individuals of the haplotype cluster.
-Alternatively, tagSNVs must have their minor
-allele in at least a specific percentage of haplotype cluster individuals (but
-in at least 2).
-
-Step 2 is repeated after removing the current haplotype cluster by
-deleting the cluster's tagSNVs
+Step 2 is repeated after removing the current IBD segment by
+deleting the segment's tagSNVs
 until no more core individuals are found.
 
 
-{\bf Step3 :} This step prunes haplotype cluster borders of SNVs that have
-spurious correlations to the haplotype cluster.
+{\bf Step 3:} This step prunes IBD segment borders of SNVs that have
+spurious correlations to the IBD segment.
 Spurious correlations may still be present in a bin leading to an
-overestimation of the cluster length.
+overestimation of the segment length.
 Such SNVs can be identified by deviations of their MAFs
 from those of other tagSNVs.
 However, this criterion is not reliable for rare SNVs.
-Therefore, we identify SNVs with spurious correlations to the haplotype cluster
+Therefore, we identify SNVs with spurious correlations to an IBD segment
 on the basis of unusually large distances to other tagSNVs.
 The deviation from an expected distance
 is quantified by means of an exponential distribution with the median distance
@@ -1073,14 +1163,13 @@ up- or downstream tagSNV is removed, then
 the furthest up- or downstream tagSNV is removed, too.
 
 {\bf Step 4:}
-Haplotype clusters which are very similar to each other are merged.
-Further, large haplotype cluster that were divided by the bins into smaller
-parts are reconstructed in this step.
-Thus, Haplotype clusters larger than given by
-the bin sizes can be detected.
+IBD segments which are very similar to each other are merged.
+In this way, long IBD segments that were divided by the bins into smaller
+parts are reconstructed.
+Note that IBD segments longer than given by ``IBDlength'' can be detected.
 In order to compute similarities, we
-assess how many tagSNVs or individuals of the smaller haplotype cluster are
-explained by the larger haplotype cluster. This criterion is expressed by the
+assess how many tagSNVs and individuals of the smaller IBD segment are
+explained by the larger IBD segment. This criterion is expressed by the
 ``overlap coefficient''
 \begin{align}
 \label{eq:dmin}
@@ -1088,19 +1177,58 @@ O(A,B) \ &= \ {{|A \cap B|}\over{\min\{|A|,|B|\}}} \ .
 \end{align}
 Using the overlap coefficient for both tagSNVs and individuals,
 we define a distance-like measure between
-haplotype clusters $H_1$ and $H_2$ by
+IBD segments $\mathrm{IBD}_1$ and $\mathrm{IBD}_2$ by
 \begin{align}
 \label{eq:dist}
-D(H_1,H_2) \ &= \ 1 \ - \ O(S_{H_1},S_{H_2}) \ O(I_{H_1},I_{H_2}) \ ,
+D(\mathrm{IBD}_1,\mathrm{IBD}_2) \ &= \ 1 \ - \ O(S_{\mathrm{IBD}_1},S_{\mathrm{IBD}_2}) \ O(I_{\mathrm{IBD}_1},I_{\mathrm{IBD}_2}) \ ,
 \end{align}
-where $S_{H_i}$ and $I_{H_i}$ are the tagSNVs and individuals belonging
-to haplotype cluster $H_i$, respectively.
-Using measure $D$,
-haplotype clusters within overlapping (shifted) or neighboring bins
+where $S_{\mathrm{IBD}_i}$ and $I_{\mathrm{IBD}_i}$ are the tagSNVs
+that tag IBD segment
+$\mathrm{IBD}_i$ and individuals possessing IBD segment $\mathrm{IBD}_i$, respectively.
+Using the measure $D$, IBD segments
 are clustered by hierarchical clustering using complete linkage.
-Haplotype clusters are merged if their segments
+IBD segments are merged if their segments
 are clustered together below a cutting height of 0.8.
 
+
+
+\subsection{Further Advantages of HapFABIA}
+\label{sec:advant}
+
+HapFABIA further has the following two advantages
+over existing IBD detection methods:
+\begin{enumerate}
+\item
+If an IBD segment is known, but its tagSNVs are unknown,
+existing IBD detections methods have still difficulties to
+identify IBD sharing among individuals.
+Most tagSNVs are separated by common, private, or random SNVs,
+but also by tagSNVs of other IBD segments. Moreover, the distances
+between tagSNVs of an IBD segment vary much, both in terms of
+genomic distance and the number of tagSNVs between them. These complex
+data characteristics impair the detecting abilities of existing IBD
+detection methods. HapFABIA's biclustering approach, however, does not
+consider the order of SNVs in first place, therefore, it is well
+suited for detecting non-consecutive tagSNVs with varying distances
+between them.
+\item
+HapFABIA is well suited both for phased and unphased genotype
+data. It represents homozygous regions (i.e.\ two occurrences of an IBD
+segment in one diploid individual) by means of its factor. Overlapping
+IBD segments in a diploid individual (i.e.\ different IBD segments on
+each chromosome) can be represented by the additive FABIA model. The
+results of HapFABIA for phased and unphased genotypes hardly differ
+for short IBD segments because homozygous regions are rarely
+observed. Another important aspect is that HapFABIA can also be
+applied to minor allele likelihoods or minor allele dosages. We
+applied HapFABIA to data from the Korean Personal Genome Project
+(KPGP, \url{http://opengenome.net}), which was merged with the 1000
+Genomes Project data. In this analysis we only used unphased genotype data
+and re-discovered the IBD segments which were already found
+in the 1000 Genomes Project data. Additionally, we discovered more Asian specific
+IBD segments. Results can be found at
+\url{http://www.bioinf.jku.at/research/short-IBD}.
+\end{enumerate}
 
 
 \section{Tools to Analyze \Rpackage{fabia} Results}

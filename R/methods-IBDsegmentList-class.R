@@ -1,5 +1,5 @@
 ### ------------------------------
-### HaploClusterList class methods
+### IBDsegmentList class methods
 ### ------------------------------
 
 
@@ -7,8 +7,8 @@
 ## Constructor
 ##
 
-HaploClusterList <- function(haploClusters=list(),lengthList=0,statistics=list()) {
-    new("HaploClusterList", haploClusters=haploClusters,lengthList=lengthList,statistics=statistics)
+IBDsegmentList <- function(IBDsegments=list(),lengthList=0,statistics=list()) {
+    new("IBDsegmentList", IBDsegments=IBDsegments,lengthList=lengthList,statistics=statistics)
 
 }
 
@@ -17,24 +17,24 @@ HaploClusterList <- function(haploClusters=list(),lengthList=0,statistics=list()
 ##
 
 
-setMethod("haploClusters", "HaploClusterList",
+setMethod("IBDsegments", "IBDsegmentList",
     function(x)
     {
-      slot(x, "haploClusters")
+      slot(x, "IBDsegments")
     }
 )
 
 
-setReplaceMethod("haploClusters", c("HaploClusterList", "list"),
+setReplaceMethod("IBDsegments", c("IBDsegmentList", "list"),
     function(x, value)
     {
-       slot(x, "haploClusters") <- value
+       slot(x, "IBDsegments") <- value
        x
     }
 )
 
 
-setMethod("lengthList", "HaploClusterList",
+setMethod("lengthList", "IBDsegmentList",
     function(x)
     {
       slot(x, "lengthList")
@@ -42,7 +42,7 @@ setMethod("lengthList", "HaploClusterList",
 )
 
 
-setReplaceMethod("lengthList", c("HaploClusterList", "numeric"),
+setReplaceMethod("lengthList", c("IBDsegmentList", "numeric"),
     function(x, value)
     {
        slot(x, "lengthList") <- value
@@ -51,7 +51,7 @@ setReplaceMethod("lengthList", c("HaploClusterList", "numeric"),
 )
 
 
-setMethod("statistics", "HaploClusterList",
+setMethod("statistics", "IBDsegmentList",
     function(x)
     {
       slot(x, "statistics")
@@ -59,7 +59,7 @@ setMethod("statistics", "HaploClusterList",
 )
 
 
-setReplaceMethod("statistics", c("HaploClusterList", "list"),
+setReplaceMethod("statistics", c("IBDsegmentList", "list"),
     function(x, value)
     {
        slot(x, "statistics") <- value
@@ -75,18 +75,18 @@ setReplaceMethod("statistics", c("HaploClusterList", "list"),
 ##
 
 
-setMethod("[[", c(x="HaploClusterList", i="numeric",j="missing"),
+setMethod("[[", c(x="IBDsegmentList", i="numeric",j="missing"),
     function(x, i, ...)
       {
-        haploClusters(x)[[i]]
+        IBDsegments(x)[[i]]
       }
 )
 
 
-setReplaceMethod("[[", c(x="HaploClusterList",i="numeric",j="missing",value="HaploCluster"),
+setReplaceMethod("[[", c(x="IBDsegmentList",i="numeric",j="missing",value="IBDsegment"),
     function(x, i, ..., value)
     {
-        haploClusters(x)[[i]] <- value
+        IBDsegments(x)[[i]] <- value
         if(i>lengthList(x)) {
             lengthList(x) <- i
         }
@@ -95,18 +95,18 @@ setReplaceMethod("[[", c(x="HaploClusterList",i="numeric",j="missing",value="Hap
     }
 )
 
-setMethod("[", c(x="HaploClusterList", i="numeric",j="missing"),
+setMethod("[", c(x="IBDsegmentList", i="numeric",j="missing"),
     function(x, i, ...)
       {
-        new("HaploClusterList", haploClusters=haploClusters(x)[i],lengthList=length(i),statistics=list())
+        new("IBDsegmentList", IBDsegments=IBDsegments(x)[i],lengthList=length(i),statistics=list())
       }
 )
 
 
-setReplaceMethod("[", c(x="HaploClusterList",i="numeric",j="missing",value="HaploClusterList"),
+setReplaceMethod("[", c(x="IBDsegmentList",i="numeric",j="missing",value="IBDsegmentList"),
     function(x, i, ..., value)
     {
-        haploClusters(x)[i] <- value
+        IBDsegments(x)[i] <- value
         if(i>lengthList(x)) {
             lengthList(x) <- i
         }
@@ -124,12 +124,12 @@ setReplaceMethod("[", c(x="HaploClusterList",i="numeric",j="missing",value="Hapl
 
 
 
-setMethod("summary", "HaploClusterList",
+setMethod("summary", "IBDsegmentList",
 function(object, ...)
 {
     cat("\nAn object of class",class(object))
 
-    cat("\nNumber of haplotype clusters: ",lengthList(object))
+    cat("\nNumber of IBD segments: ",lengthList(object))
     cat("\nStatistics:\n")
     print(statistics(object))
 
@@ -141,13 +141,13 @@ function(object, ...)
 ## Plot
 ##
 
-setMethod("plot",signature(x="HaploClusterList", y="missing"),
+setMethod("plot",signature(x="IBDsegmentList", y="missing"),
 function(x,filename, ...) {
 
     require(fabia)
 
     if (missing(x)) {
-        stop("List of haplotype clusters 'x' is missing. Stopped.")
+        stop("List of IBD segments 'x' is missing. Stopped.")
     }
 
     if (missing(filename)) {
@@ -171,7 +171,7 @@ labels_ALL <- labelIndividuals(x[[i]])
 Lout <- readSamplesSpfabia(X=filename,samples=individ,lowerB=0,upperB=1000.0)
 
 
-plotHaplotypeCluster(Lout=Lout,tagSNV=list(tagSNV),physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=i,labelsNA=labels_ALL)
+plotIBDsegment(Lout=Lout,tagSNV=list(tagSNV),physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=i,labelsNA=labels_ALL)
 
 }
 
@@ -182,13 +182,13 @@ devAskNewPage(ask = FALSE)
 )
 
 
-setMethod("setAnnotation",signature(haploClusterList="HaploClusterList",filename="character"),
-function(haploClusterList,filename) {
+setMethod("setAnnotation",signature(IBDsegmentList="IBDsegmentList",filename="character"),
+function(IBDsegmentList,filename) {
 
-nohaploClusters <- lengthList(haploClusterList)
+noIBDsegments <- lengthList(IBDsegmentList)
 
 
-if (nohaploClusters > 0) {
+if (noIBDsegments > 0) {
 
 annotatedtagSNVs <- read.table(file=filename,header = FALSE, sep = " ", quote = "",as.is = TRUE)
 # tagSNV position at first column !!!
@@ -197,10 +197,10 @@ anno_pos <- paste(annotatedtagSNVs[,2],"_",annotatedtagSNVs[,1],sep="")
 
 
 
-for (haploClusterC in 1:nohaploClusters)  {
+for (IBDsegmentC in 1:noIBDsegments)  {
 
 
-vt <- haploClusterList[[haploClusterC]]
+vt <- IBDsegmentList[[IBDsegmentC]]
 
 chromosome <- chromosome(vt)
 tagSNVPositions <- tagSNVPositions(vt)
@@ -208,7 +208,7 @@ vt_pos <- paste(chromosome(vt),"_",tagSNVPositions(vt),sep="")
 annotMatchT <- match(vt_pos,anno_pos,nomatch=0)
 tagSNVMatch <- which(annotMatchT>0)
 annotMatch <- annotMatchT[which(annotMatchT>0)]
-matchPositionhaploClusters <- tagSNVPositions[tagSNVMatch]
+matchPositionIBDsegments <- tagSNVPositions[tagSNVMatch]
 for (ianno in 1:numbertagSNVs(vt)) {
     tagSNVAnno(vt)[ianno] <- list("-")
 }
@@ -219,20 +219,20 @@ for (ianno in 1:length(annotMatch)) {
 }
 }
 
-haploClusterList
+IBDsegmentList
 
 }
 )
 
 
-setMethod("setStatistics",signature(haploClusterList="HaploClusterList"),
-function(haploClusterList) {
+setMethod("setStatistics",signature(IBDsegmentList="IBDsegmentList"),
+function(IBDsegmentList) {
 
 
 
-avhaploClusterPos <- c()
-avhaploClusterLengthSNV <- c()
-avhaploClusterLength <- c()
+avIBDsegmentPos <- c()
+avIBDsegmentLengthSNV <- c()
+avIBDsegmentLength <- c()
 avnoIndivid <- c()
 avnoTagSNVs <- c()
 
@@ -243,21 +243,21 @@ avnotagSNVsPerIndividual <- c()
 avnoindividualPerTagSNV <- c()
 
 
-nohaploClusters <- lengthList(haploClusterList)
+noIBDsegments <- lengthList(IBDsegmentList)
 
 
 
 
-if (nohaploClusters > 0) {
+if (noIBDsegments > 0) {
 
-for (haploClusterC in 1:nohaploClusters)  {
+for (IBDsegmentC in 1:noIBDsegments)  {
 
 
-vt <- haploClusterList[[haploClusterC]]
+vt <- IBDsegmentList[[IBDsegmentC]]
 
-avhaploClusterPos <- c(avhaploClusterPos,haploClusterPos(vt))
-avhaploClusterLengthSNV <- c(avhaploClusterLengthSNV,haploClusterLength(vt))
-avhaploClusterLength <- c(avhaploClusterLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
+avIBDsegmentPos <- c(avIBDsegmentPos,IBDsegmentPos(vt))
+avIBDsegmentLengthSNV <- c(avIBDsegmentLengthSNV,IBDsegmentLength(vt))
+avIBDsegmentLength <- c(avIBDsegmentLength,(max(tagSNVPositions(vt))- min(tagSNVPositions(vt))))
 avnoIndivid <- c(avnoIndivid,numberIndividuals(vt))
 avnoTagSNVs <- c(avnoTagSNVs,numbertagSNVs(vt))
 
@@ -271,9 +271,9 @@ avnoindividualPerTagSNV <- c(avnoindividualPerTagSNV,individualPerTagSNV(vt))
 }
 
 
-avhaploClusterPosS <- summary(avhaploClusterPos)
-avhaploClusterLengthSNVS <- summary(avhaploClusterLengthSNV)
-avhaploClusterLengthS <- summary(avhaploClusterLength)
+avIBDsegmentPosS <- summary(avIBDsegmentPos)
+avIBDsegmentLengthSNVS <- summary(avIBDsegmentLengthSNV)
+avIBDsegmentLengthS <- summary(avIBDsegmentLength)
 avnoIndividS <- summary(avnoIndivid)
 avnoTagSNVsS <- summary(avnoTagSNVs)
 
@@ -285,35 +285,35 @@ avnoindividualPerTagSNVS <- summary(avnoindividualPerTagSNV)
 
 
 
-statistics(haploClusterList) <- list(avhaploClusterPosS=avhaploClusterPosS,avhaploClusterLengthSNVS=avhaploClusterLengthSNVS,avhaploClusterLengthS=avhaploClusterLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS)
+statistics(IBDsegmentList) <- list(avIBDsegmentPosS=avIBDsegmentPosS,avIBDsegmentLengthSNVS=avIBDsegmentLengthSNVS,avIBDsegmentLengthS=avIBDsegmentLengthS,avnoIndividS=avnoIndividS,avnoTagSNVsS=avnoTagSNVsS,avnoFreqS=avnoFreqS,avnoGroupFreqS=avnoGroupFreqS,avnotagSNVChangeS=avnotagSNVChangeS,avnotagSNVsPerIndividualS=avnotagSNVsPerIndividualS,avnoindividualPerTagSNVS=avnoindividualPerTagSNVS)
 
-haploClusterList
+IBDsegmentList
 
 }
 )
 
 
 
-setMethod("compareHaploClusterLists",signature(haploClusterList1="HaploClusterList",haploClusterList2="ANY",simv="character",pTagSNVs="ANY",pIndivid="ANY",minTagSNVs="numeric",minIndivid="numeric"),
-function(haploClusterList1,haploClusterList2=NULL,simv="minD",pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=6,minIndivid=2) {
+setMethod("compareIBDsegmentLists",signature(IBDsegmentList1="IBDsegmentList",IBDsegmentList2="ANY",simv="character",pTagSNVs="ANY",pIndivid="ANY",minTagSNVs="numeric",minIndivid="numeric"),
+function(IBDsegmentList1,IBDsegmentList2=NULL,simv="minD",pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=6,minIndivid=2) {
 
-    if (missing(haploClusterList1)) {
-        stop("List of haplotype clusters 'haploClusterList1' is missing. Stopped.")
+    if (missing(IBDsegmentList1)) {
+        stop("List of IBD segments 'IBDsegmentList1' is missing. Stopped.")
     }
 
-    if (!is.null(haploClusterList2)) {
-     tagSNVs1 <- sapply(haploClusters(haploClusterList1),function(x) {tagSNVs(x)} , simplify=FALSE)
-     tagSNVs2 <- sapply(haploClusters(haploClusterList2),function(x) {tagSNVs(x)}  , simplify=FALSE)
-     individ1 <- sapply(haploClusters(haploClusterList1),function(x) {individuals(x)}  , simplify=FALSE)
-     individ2 <- sapply(haploClusters(haploClusterList2),function(x) {individuals(x)}  , simplify=FALSE)
+    if (!is.null(IBDsegmentList2)) {
+     tagSNVs1 <- sapply(IBDsegments(IBDsegmentList1),function(x) {tagSNVs(x)} , simplify=FALSE)
+     tagSNVs2 <- sapply(IBDsegments(IBDsegmentList2),function(x) {tagSNVs(x)}  , simplify=FALSE)
+     individ1 <- sapply(IBDsegments(IBDsegmentList1),function(x) {individuals(x)}  , simplify=FALSE)
+     individ2 <- sapply(IBDsegments(IBDsegmentList2),function(x) {individuals(x)}  , simplify=FALSE)
 
      tagSNVs <- c(tagSNVs1,tagSNVs2)
      individ <- c(individ1,individ2)
 
   } else {
 
-     tagSNVs <- sapply(haploClusters(haploClusterList1),function(x) {tagSNVs(x)} , simplify=FALSE )
-     individ <- sapply(haploClusters(haploClusterList1),function(x) {individuals(x)}  , simplify=FALSE)
+     tagSNVs <- sapply(IBDsegments(IBDsegmentList1),function(x) {tagSNVs(x)} , simplify=FALSE )
+     individ <- sapply(IBDsegments(IBDsegmentList1),function(x) {individuals(x)}  , simplify=FALSE)
   }
 
   l <- length(tagSNVs)
@@ -349,34 +349,34 @@ function(haploClusterList1,haploClusterList2=NULL,simv="minD",pTagSNVs=NULL,pInd
 )
 
 
-setMethod("mergeHaploClusterLists",signature(haploClusterList1="HaploClusterList",haploClusterList2="ANY",clustHaploClustList="vector"),
-function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
+setMethod("mergeIBDsegmentLists",signature(IBDsegmentList1="IBDsegmentList",IBDsegmentList2="ANY",clustIBDsegmentList="vector"),
+function(IBDsegmentList1,IBDsegmentList2=NULL,clustIBDsegmentList) {
 
-    if (missing(haploClusterList1)) {
-        stop("List of haplotype clusters 'haploClusterList1' is missing. Stopped.")
+    if (missing(IBDsegmentList1)) {
+        stop("List of IBD segments 'IBDsegmentList1' is missing. Stopped.")
     }
 
-    if (missing(clustHaploClustList)) {
-        stop("Vector 'clustHaploClustList' of new cluster membership for each old cluster is missing. Stopped.")
+    if (missing(clustIBDsegmentList)) {
+        stop("Vector 'clustIBDsegmentList' of new cluster membership for each old cluster is missing. Stopped.")
     }
 
 
-  l <- lengthList(haploClusterList1)
-  if (!is.null(haploClusterList2)) {
-      l2 <- lengthList(haploClusterList2)
+  l <- lengthList(IBDsegmentList1)
+  if (!is.null(IBDsegmentList2)) {
+      l2 <- lengthList(IBDsegmentList2)
   } else {
       l2 <- 0
   }
 
-  tabClust <- table(clustHaploClustList)
+  tabClust <- table(clustIBDsegmentList)
   cl <- length(tabClust)
 
-  haploClusterListmerge <-  new("HaploClusterList", haploClusters=list(),lengthList=0,statistics=list())
+  IBDsegmentListmerge <-  new("IBDsegmentList", IBDsegments=list(),lengthList=0,statistics=list())
 
   for (i in 1:cl) {
 
 
-    tr1 <- which(clustHaploClustList==i)
+    tr1 <- which(clustIBDsegmentList==i)
     ltr1 <- length(tr1)
 
     vv <- list()
@@ -385,11 +385,11 @@ function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
 
 
     if (p2<=l) {
-        vv <- haploClusterList1[[p2]]
+        vv <- IBDsegmentList1[[p2]]
     } else  {
        if ((l2>0)&&(p2<=l+l2)) {
           p2 <- p2-l
-          vv <- haploClusterList2[[p2]]
+          vv <- IBDsegmentList2[[p2]]
         }
     }
 
@@ -399,12 +399,12 @@ function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
         doit <- FALSE
         p2 <- tr1[j]
         if (p2<=l) {
-            vt <- haploClusterList1[[p2]]
+            vt <- IBDsegmentList1[[p2]]
             doit <- TRUE
         } else {
             if ((l2>0)&&(p2<=(l+l2))) {
                 p2 <- p2-l
-                vt <- haploClusterList2[[p2]]
+                vt <- IBDsegmentList2[[p2]]
                 doit <- TRUE
             }
         }
@@ -492,8 +492,8 @@ function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
     tagSNVAnno(vv) <- tagSNVAnno(vv)[so9$ix]
 
 
-    haploClusterPos(vv) <- round(median(tagSNVPositions(vv)))
-    haploClusterLength(vv) <- max(tagSNVs(vv))-min(tagSNVs(vv))
+    IBDsegmentPos(vv) <- round(median(tagSNVPositions(vv)))
+    IBDsegmentLength(vv) <- max(tagSNVs(vv))-min(tagSNVs(vv))
     numberIndividuals(vv) <- length(individuals(vv))
     numbertagSNVs(vv) <- length(tagSNVs(vv))
     coreClusterIndividuals(vv) <- unique(coreClusterIndividuals(vv))
@@ -508,13 +508,13 @@ function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
 
 
 
-   haploClusterListmerge[[i]] <- vv
+   IBDsegmentListmerge[[i]] <- vv
 
 
 
 }
 
- return(haploClusterListmerge)
+ return(IBDsegmentListmerge)
 
 }
 )
@@ -522,53 +522,53 @@ function(haploClusterList1,haploClusterList2=NULL,clustHaploClustList) {
 
 
 
-setMethod("haploClusterList2excel",signature(haploClusterList="HaploClusterList",filename="character"),
-function(haploClusterList,filename) {
+setMethod("IBDsegmentList2excel",signature(IBDsegmentList="IBDsegmentList",filename="character"),
+function(IBDsegmentList,filename) {
 
-    if (missing(haploClusterList)) {
-        stop("Object 'haploClusterList' of class HaploClusterList is missing. Stopped.")
+    if (missing(IBDsegmentList)) {
+        stop("Object 'IBDsegmentList' of class IBDsegmentList is missing. Stopped.")
     }
     if (missing(filename)) {
         stop("File name 'filename' of the EXCEL output file is missing. Stopped.")
     }
 
-out <- c("ID , ","bicluster ID , ","chromosome , ","haploClusterPos , ","haploClusterLength , ","numberIndividuals , ","numbertagSNVs , ","IndividualNumber , ","TagSNVNumber , ","populationIndividuals , ","idIndividuals , ","labelIndividuals , ","platformIndividuals , ","coreClusterIndividuals , ","tagSNVPositions , ","tagSNVAlleles , ","tagSNVNames , ","tagSNVFreq , ","tagSNVGroupFreq , ","tagSNVChange , ","tagSNVsPerIndividual , ","individualPerTagSNV , ","tagSNVAnno")
+out <- c("ID , ","bicluster ID , ","chromosome , ","IBDsegmentPos , ","IBDsegmentLength , ","numberIndividuals , ","numbertagSNVs , ","IndividualNumber , ","TagSNVNumber , ","populationIndividuals , ","idIndividuals , ","labelIndividuals , ","platformIndividuals , ","coreClusterIndividuals , ","tagSNVPositions , ","tagSNVAlleles , ","tagSNVNames , ","tagSNVFreq , ","tagSNVGroupFreq , ","tagSNVChange , ","tagSNVsPerIndividual , ","individualPerTagSNV , ","tagSNVAnno")
 
 
 write.table(t(out),file=filename,sep=" ",quote = FALSE,row.names = FALSE,col.names = FALSE)
 
 
-lhaploCluster <- lengthList(haploClusterList)
-if (lhaploCluster>0)  {
-for (i in 1:lhaploCluster) {
+lIBDsegment <- lengthList(IBDsegmentList)
+if (lIBDsegment>0)  {
+for (i in 1:lIBDsegment) {
 
-    haplotClusti <- haploClusterList[[i]]
-    numbertagSNVs <- numbertagSNVs(haplotClusti)
+    IBDtsegmenti <- IBDsegmentList[[i]]
+    numbertagSNVs <- numbertagSNVs(IBDtsegmenti)
 
-    out <- c(ID(haplotClusti))
-    out <- c(out,",",bicluster_id(haplotClusti))
-    out <- c(out,",",chromosome(haplotClusti))
-    out <- c(out,",",haploClusterPos(haplotClusti))
-    out <- c(out,",",haploClusterLength(haplotClusti))
-    out <- c(out,",",numberIndividuals(haplotClusti))
+    out <- c(ID(IBDtsegmenti))
+    out <- c(out,",",bicluster_id(IBDtsegmenti))
+    out <- c(out,",",chromosome(IBDtsegmenti))
+    out <- c(out,",",IBDsegmentPos(IBDtsegmenti))
+    out <- c(out,",",IBDsegmentLength(IBDtsegmenti))
+    out <- c(out,",",numberIndividuals(IBDtsegmenti))
     out <- c(out,",",numbertagSNVs)
-    out <- c(out,",",individuals(haplotClusti))
-    out <- c(out,",",tagSNVs(haplotClusti))
-    out <- c(out,",",populationIndividuals(haplotClusti))
-    out <- c(out,",",idIndividuals(haplotClusti))
-    out <- c(out,",",labelIndividuals(haplotClusti))
-    out <- c(out,",",platformIndividuals(haplotClusti))
-    out <- c(out,",",coreClusterIndividuals(haplotClusti))
-    out <- c(out,",",tagSNVPositions(haplotClusti))
-    out <- c(out,",",tagSNVAlleles(haplotClusti))
-    out <- c(out,",",tagSNVNames(haplotClusti))
-    out <- c(out,",",tagSNVFreq(haplotClusti))
-    out <- c(out,",",tagSNVGroupFreq(haplotClusti))
-    out <- c(out,",",tagSNVChange(haplotClusti))
-    out <- c(out,",",tagSNVsPerIndividual(haplotClusti))
-    out <- c(out,",",individualPerTagSNV(haplotClusti))
+    out <- c(out,",",individuals(IBDtsegmenti))
+    out <- c(out,",",tagSNVs(IBDtsegmenti))
+    out <- c(out,",",populationIndividuals(IBDtsegmenti))
+    out <- c(out,",",idIndividuals(IBDtsegmenti))
+    out <- c(out,",",labelIndividuals(IBDtsegmenti))
+    out <- c(out,",",platformIndividuals(IBDtsegmenti))
+    out <- c(out,",",coreClusterIndividuals(IBDtsegmenti))
+    out <- c(out,",",tagSNVPositions(IBDtsegmenti))
+    out <- c(out,",",tagSNVAlleles(IBDtsegmenti))
+    out <- c(out,",",tagSNVNames(IBDtsegmenti))
+    out <- c(out,",",tagSNVFreq(IBDtsegmenti))
+    out <- c(out,",",tagSNVGroupFreq(IBDtsegmenti))
+    out <- c(out,",",tagSNVChange(IBDtsegmenti))
+    out <- c(out,",",tagSNVsPerIndividual(IBDtsegmenti))
+    out <- c(out,",",individualPerTagSNV(IBDtsegmenti))
 
-    annoT <- unlist(tagSNVAnno(haplotClusti))
+    annoT <- unlist(tagSNVAnno(IBDtsegmenti))
     lele <- length(annoT)
     if (length(table(annoT))>1) {
         segs <- lele /numbertagSNVs

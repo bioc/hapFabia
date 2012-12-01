@@ -1,5 +1,5 @@
 ### ---------------------------
-### HaploCluster class methods
+### IBDsegment class methods
 ### ---------------------------
 
 
@@ -7,9 +7,9 @@
 ## Constructor
 ##
 
-HaploCluster <- function(ID=0,bicluster_id=0,chromosome="",haploClusterPos=0,haploClusterLength=0,numberIndividuals=0,numbertagSNVs=0,individuals=as.vector(0),tagSNVs=as.vector(0),populationIndividuals=as.vector(""),idIndividuals=as.vector(0),labelIndividuals=as.vector(""),platformIndividuals=as.vector(""),coreClusterIndividuals=as.vector(0),tagSNVPositions=as.vector(0),tagSNVAlleles=as.vector(""),tagSNVNames=as.vector(""),tagSNVFreq=as.vector(0),tagSNVGroupFreq=as.vector(0),tagSNVChange=as.vector(0),tagSNVsPerIndividual=as.vector(0),individualPerTagSNV=as.vector(0),tagSNVAnno=as.vector(c(list("")))) {
+IBDsegment <- function(ID=0,bicluster_id=0,chromosome="",IBDsegmentPos=0,IBDsegmentLength=0,numberIndividuals=0,numbertagSNVs=0,individuals=as.vector(0),tagSNVs=as.vector(0),populationIndividuals=as.vector(""),idIndividuals=as.vector(0),labelIndividuals=as.vector(""),platformIndividuals=as.vector(""),coreClusterIndividuals=as.vector(0),tagSNVPositions=as.vector(0),tagSNVAlleles=as.vector(""),tagSNVNames=as.vector(""),tagSNVFreq=as.vector(0),tagSNVGroupFreq=as.vector(0),tagSNVChange=as.vector(0),tagSNVsPerIndividual=as.vector(0),individualPerTagSNV=as.vector(0),tagSNVAnno=as.vector(c(list("")))) {
 
-   new("HaploCluster",ID=ID,bicluster_id=bicluster_id,chromosome=chromosome,haploClusterPos=haploClusterPos,haploClusterLength=haploClusterLength,numberIndividuals=numberIndividuals,numbertagSNVs=numbertagSNVs,individuals=individuals,tagSNVs=tagSNVs,populationIndividuals=populationIndividuals,idIndividuals=idIndividuals,labelIndividuals=labelIndividuals,platformIndividuals=platformIndividuals,coreClusterIndividuals=coreClusterIndividuals,tagSNVPositions=tagSNVPositions,tagSNVAlleles=tagSNVAlleles,tagSNVNames=tagSNVNames,tagSNVFreq=tagSNVFreq,tagSNVGroupFreq=tagSNVGroupFreq,tagSNVChange=tagSNVChange,tagSNVsPerIndividual=tagSNVsPerIndividual,individualPerTagSNV=individualPerTagSNV,tagSNVAnno=tagSNVAnno)
+   new("IBDsegment",ID=ID,bicluster_id=bicluster_id,chromosome=chromosome,IBDsegmentPos=IBDsegmentPos,IBDsegmentLength=IBDsegmentLength,numberIndividuals=numberIndividuals,numbertagSNVs=numbertagSNVs,individuals=individuals,tagSNVs=tagSNVs,populationIndividuals=populationIndividuals,idIndividuals=idIndividuals,labelIndividuals=labelIndividuals,platformIndividuals=platformIndividuals,coreClusterIndividuals=coreClusterIndividuals,tagSNVPositions=tagSNVPositions,tagSNVAlleles=tagSNVAlleles,tagSNVNames=tagSNVNames,tagSNVFreq=tagSNVFreq,tagSNVGroupFreq=tagSNVGroupFreq,tagSNVChange=tagSNVChange,tagSNVsPerIndividual=tagSNVsPerIndividual,individualPerTagSNV=individualPerTagSNV,tagSNVAnno=tagSNVAnno)
 }
 
 
@@ -18,7 +18,7 @@ HaploCluster <- function(ID=0,bicluster_id=0,chromosome="",haploClusterPos=0,hap
 ##
 
 
-setMethod("ID", "HaploCluster",
+setMethod("ID", "IBDsegment",
     function(x)
     {
       slot(x, "ID")
@@ -26,7 +26,7 @@ setMethod("ID", "HaploCluster",
 )
 
 
-setReplaceMethod("ID", c("HaploCluster", "numeric"),
+setReplaceMethod("ID", c("IBDsegment", "numeric"),
     function(x, value)
     {
        slot(x, "ID") <- value
@@ -35,7 +35,7 @@ setReplaceMethod("ID", c("HaploCluster", "numeric"),
 )
 
 
-setMethod("bicluster_id", "HaploCluster",
+setMethod("bicluster_id", "IBDsegment",
     function(x)
     {
       slot(x, "bicluster_id")
@@ -43,7 +43,7 @@ setMethod("bicluster_id", "HaploCluster",
 )
 
 
-setReplaceMethod("bicluster_id", c("HaploCluster", "numeric"),
+setReplaceMethod("bicluster_id", c("IBDsegment", "numeric"),
     function(x, value)
     {
        slot(x, "bicluster_id") <- value
@@ -52,7 +52,7 @@ setReplaceMethod("bicluster_id", c("HaploCluster", "numeric"),
 )
 
 
-setMethod("chromosome", "HaploCluster",
+setMethod("chromosome", "IBDsegment",
     function(x)
     {
       slot(x, "chromosome")
@@ -60,7 +60,7 @@ setMethod("chromosome", "HaploCluster",
 )
 
 
-setReplaceMethod("chromosome", c("HaploCluster", "character"),
+setReplaceMethod("chromosome", c("IBDsegment", "character"),
     function(x, value)
     {
        slot(x, "chromosome") <- value
@@ -69,41 +69,41 @@ setReplaceMethod("chromosome", c("HaploCluster", "character"),
 )
 
 
-setMethod("haploClusterPos", "HaploCluster",
+setMethod("IBDsegmentPos", "IBDsegment",
     function(x)
     {
-      slot(x, "haploClusterPos")
+      slot(x, "IBDsegmentPos")
     }
 )
 
 
-setReplaceMethod("haploClusterPos", c("HaploCluster", "numeric"),
+setReplaceMethod("IBDsegmentPos", c("IBDsegment", "numeric"),
     function(x, value)
     {
-       slot(x, "haploClusterPos") <- value
+       slot(x, "IBDsegmentPos") <- value
        x
     }
 )
 
 
-setMethod("haploClusterLength", "HaploCluster",
+setMethod("IBDsegmentLength", "IBDsegment",
     function(x)
     {
-      slot(x, "haploClusterLength")
+      slot(x, "IBDsegmentLength")
     }
 )
 
 
-setReplaceMethod("haploClusterLength", c("HaploCluster", "numeric"),
+setReplaceMethod("IBDsegmentLength", c("IBDsegment", "numeric"),
     function(x, value)
     {
-       slot(x, "haploClusterLength") <- value
+       slot(x, "IBDsegmentLength") <- value
        x
     }
 )
 
 
-setMethod("numberIndividuals", "HaploCluster",
+setMethod("numberIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "numberIndividuals")
@@ -111,7 +111,7 @@ setMethod("numberIndividuals", "HaploCluster",
 )
 
 
-setReplaceMethod("numberIndividuals", c("HaploCluster", "numeric"),
+setReplaceMethod("numberIndividuals", c("IBDsegment", "numeric"),
     function(x, value)
     {
        slot(x, "numberIndividuals") <- value
@@ -120,7 +120,7 @@ setReplaceMethod("numberIndividuals", c("HaploCluster", "numeric"),
 )
 
 
-setMethod("numbertagSNVs", "HaploCluster",
+setMethod("numbertagSNVs", "IBDsegment",
     function(x)
     {
       slot(x, "numbertagSNVs")
@@ -128,7 +128,7 @@ setMethod("numbertagSNVs", "HaploCluster",
 )
 
 
-setReplaceMethod("numbertagSNVs", c("HaploCluster", "numeric"),
+setReplaceMethod("numbertagSNVs", c("IBDsegment", "numeric"),
     function(x, value)
     {
        slot(x, "numbertagSNVs") <- value
@@ -137,7 +137,7 @@ setReplaceMethod("numbertagSNVs", c("HaploCluster", "numeric"),
 )
 
 
-setMethod("individuals", "HaploCluster",
+setMethod("individuals", "IBDsegment",
     function(x)
     {
       slot(x, "individuals")
@@ -145,7 +145,7 @@ setMethod("individuals", "HaploCluster",
 )
 
 
-setReplaceMethod("individuals", c("HaploCluster", "vector"),
+setReplaceMethod("individuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "individuals") <- value
@@ -154,7 +154,7 @@ setReplaceMethod("individuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVs", "HaploCluster",
+setMethod("tagSNVs", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVs")
@@ -162,7 +162,7 @@ setMethod("tagSNVs", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVs", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVs", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVs") <- value
@@ -171,7 +171,7 @@ setReplaceMethod("tagSNVs", c("HaploCluster", "vector"),
 )
 
 
-setMethod("populationIndividuals", "HaploCluster",
+setMethod("populationIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "populationIndividuals")
@@ -179,7 +179,7 @@ setMethod("populationIndividuals", "HaploCluster",
 )
 
 
-setReplaceMethod("populationIndividuals", c("HaploCluster", "vector"),
+setReplaceMethod("populationIndividuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "populationIndividuals") <- value
@@ -188,7 +188,7 @@ setReplaceMethod("populationIndividuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("idIndividuals", "HaploCluster",
+setMethod("idIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "idIndividuals")
@@ -196,7 +196,7 @@ setMethod("idIndividuals", "HaploCluster",
 )
 
 
-setReplaceMethod("idIndividuals", c("HaploCluster", "vector"),
+setReplaceMethod("idIndividuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "idIndividuals") <- value
@@ -205,7 +205,7 @@ setReplaceMethod("idIndividuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("labelIndividuals", "HaploCluster",
+setMethod("labelIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "labelIndividuals")
@@ -213,7 +213,7 @@ setMethod("labelIndividuals", "HaploCluster",
 )
 
 
-setReplaceMethod("labelIndividuals", c("HaploCluster", "vector"),
+setReplaceMethod("labelIndividuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "labelIndividuals") <- value
@@ -222,7 +222,7 @@ setReplaceMethod("labelIndividuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("platformIndividuals", "HaploCluster",
+setMethod("platformIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "platformIndividuals")
@@ -230,7 +230,7 @@ setMethod("platformIndividuals", "HaploCluster",
 )
 
 
-setReplaceMethod("platformIndividuals", c("HaploCluster", "vector"),
+setReplaceMethod("platformIndividuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "platformIndividuals") <- value
@@ -239,14 +239,14 @@ setReplaceMethod("platformIndividuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("coreClusterIndividuals", "HaploCluster",
+setMethod("coreClusterIndividuals", "IBDsegment",
     function(x)
     {
       slot(x, "coreClusterIndividuals")
     }
 )
 
-setReplaceMethod("coreClusterIndividuals", c("HaploCluster", "vector"),
+setReplaceMethod("coreClusterIndividuals", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "coreClusterIndividuals") <- value
@@ -255,7 +255,7 @@ setReplaceMethod("coreClusterIndividuals", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVPositions", "HaploCluster",
+setMethod("tagSNVPositions", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVPositions")
@@ -263,7 +263,7 @@ setMethod("tagSNVPositions", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVPositions", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVPositions", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVPositions") <- value
@@ -272,7 +272,7 @@ setReplaceMethod("tagSNVPositions", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVAlleles", "HaploCluster",
+setMethod("tagSNVAlleles", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVAlleles")
@@ -280,7 +280,7 @@ setMethod("tagSNVAlleles", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVAlleles", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVAlleles", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVAlleles") <- value
@@ -289,7 +289,7 @@ setReplaceMethod("tagSNVAlleles", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVNames", "HaploCluster",
+setMethod("tagSNVNames", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVNames")
@@ -297,7 +297,7 @@ setMethod("tagSNVNames", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVNames", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVNames", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVNames") <- value
@@ -306,7 +306,7 @@ setReplaceMethod("tagSNVNames", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVFreq", "HaploCluster",
+setMethod("tagSNVFreq", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVFreq")
@@ -314,7 +314,7 @@ setMethod("tagSNVFreq", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVFreq", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVFreq", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVFreq") <- value
@@ -323,7 +323,7 @@ setReplaceMethod("tagSNVFreq", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVGroupFreq", "HaploCluster",
+setMethod("tagSNVGroupFreq", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVGroupFreq")
@@ -331,7 +331,7 @@ setMethod("tagSNVGroupFreq", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVGroupFreq", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVGroupFreq", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVGroupFreq") <- value
@@ -341,7 +341,7 @@ setReplaceMethod("tagSNVGroupFreq", c("HaploCluster", "vector"),
 
 
 
-setMethod("tagSNVChange", "HaploCluster",
+setMethod("tagSNVChange", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVChange")
@@ -349,7 +349,7 @@ setMethod("tagSNVChange", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVChange", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVChange", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVChange") <- value
@@ -358,7 +358,7 @@ setReplaceMethod("tagSNVChange", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVsPerIndividual", "HaploCluster",
+setMethod("tagSNVsPerIndividual", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVsPerIndividual")
@@ -366,7 +366,7 @@ setMethod("tagSNVsPerIndividual", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVsPerIndividual", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVsPerIndividual", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVsPerIndividual") <- value
@@ -375,7 +375,7 @@ setReplaceMethod("tagSNVsPerIndividual", c("HaploCluster", "vector"),
 )
 
 
-setMethod("individualPerTagSNV", "HaploCluster",
+setMethod("individualPerTagSNV", "IBDsegment",
     function(x)
     {
       slot(x, "individualPerTagSNV")
@@ -383,7 +383,7 @@ setMethod("individualPerTagSNV", "HaploCluster",
 )
 
 
-setReplaceMethod("individualPerTagSNV", c("HaploCluster", "vector"),
+setReplaceMethod("individualPerTagSNV", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "individualPerTagSNV") <- value
@@ -392,7 +392,7 @@ setReplaceMethod("individualPerTagSNV", c("HaploCluster", "vector"),
 )
 
 
-setMethod("tagSNVAnno", "HaploCluster",
+setMethod("tagSNVAnno", "IBDsegment",
     function(x)
     {
       slot(x, "tagSNVAnno")
@@ -400,7 +400,7 @@ setMethod("tagSNVAnno", "HaploCluster",
 )
 
 
-setReplaceMethod("tagSNVAnno", c("HaploCluster", "vector"),
+setReplaceMethod("tagSNVAnno", c("IBDsegment", "vector"),
     function(x, value)
     {
        slot(x, "tagSNVAnno") <- value
@@ -418,16 +418,16 @@ setReplaceMethod("tagSNVAnno", c("HaploCluster", "vector"),
 
 
 
-setMethod("summary", "HaploCluster",
+setMethod("summary", "IBDsegment",
 function(object, ...)
 {
     cat("\nAn object of class",class(object))
 
-    cat("\nHaplotype cluster ID: ",ID(object))
+    cat("\nIBD segment ID: ",ID(object))
     cat("\nFrom bicluster: ",bicluster_id(object))
     cat("\nChromosome: ",chromosome(object))
-    cat("\nPosition: ",prettyNum(haploClusterPos(object), big.mark = ","))
-    cat("\nLength SNVs: ",round(haploClusterLength(object)))
+    cat("\nPosition: ",prettyNum(IBDsegmentPos(object), big.mark = ","))
+    cat("\nLength SNVs: ",round(IBDsegmentLength(object)))
     cat("\nLength: ",round((max(tagSNVPositions(object))-min(tagSNVPositions(object)))/1000) , "kbp")
     cat("\nNumber of individuals/chromosomes: ",numberIndividuals(object))
     cat("\nNumber of tagSNVs: ",numbertagSNVs(object), "\n")
@@ -441,13 +441,13 @@ function(object, ...)
 ## Plot
 ##
 
-setMethod("plot",signature(x="HaploCluster", y="missing"),
+setMethod("plot",signature(x="IBDsegment", y="missing"),
 function(x,filename, ...) {
 
     require(fabia)
 
     if (missing(x)) {
-        stop("Haplotype cluster 'x' is missing. Stopped.")
+        stop("IBD segment 'x' is missing. Stopped.")
     }
 
     if (missing(filename)) {
@@ -475,7 +475,7 @@ labelsK <- c("model L")
 # tagSNVL <- list(tagSNV,tagSNVAnnot1,tagSNVAnnot2)
 # labelsK <- c("model L","Annot1",Annot2")
 
-plotHaplotypeCluster(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=0,labelsNA=labels_ALL,labelsNA1=labelsK)
+plotIBDsegment(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=0,labelsNA=labels_ALL,labelsNA1=labelsK)
 
 
 }

@@ -2,13 +2,13 @@
 
 \alias{sim}
 
-\title{Similarity measures for haplotype clusters}
+\title{Similarity measures for IBD segments}
 
 \description{
 
   \code{sim}: \R implementation of \code{sim}.
 
-  Similarity measure for haplotype clusters, tagSNVs, and individuals.
+  Similarity measure for IBD segments, tagSNVs, and individuals.
 
 }
 \usage{
@@ -27,7 +27,7 @@ sim(x,y,simv="minD",minInter=2)
 }
 \details{
 
-  Similarity measure for haplotype clusters, tagSNVs, and individuals.
+  Similarity measure for IBD segments, tagSNVs, and individuals.
 
   Implementation in \R.
 
@@ -38,31 +38,31 @@ sim(x,y,simv="minD",minInter=2)
 
     }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -84,4 +84,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}

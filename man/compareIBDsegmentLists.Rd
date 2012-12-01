@@ -1,17 +1,17 @@
-\name{compareHaploClusterLists}
+\name{compareIBDsegmentLists}
 
-\alias{compareHaploClusterLists}
-\alias{compareHaploClusterLists,HaploClusterList-method}
-\alias{compareHaploClusterLists,HaploClusterList,ANY,character,ANY,ANY,numeric,numeric-method}
+\alias{compareIBDsegmentLists}
+\alias{compareIBDsegmentLists,IBDsegmentList-method}
+\alias{compareIBDsegmentLists,IBDsegmentList,ANY,character,ANY,ANY,numeric,numeric-method}
 
-\title{Hierarchical clustering of haplotype
-  clusters stored in haplotype cluster list(s)}
+\title{Hierarchical clustering of
+  IBD segments stored in IBD segment list(s)}
 
 \description{
 
-  \code{compareHaploClusterLists}: \R implementation of \code{compareHaploClusterLists}.
+  \code{compareIBDsegmentLists}: \R implementation of \code{compareIBDsegmentLists}.
 
-  The haplotype clusters in one or two list(s) are compared by hierarchical clustering.
+  The IBD segments in one or two list(s) are compared by hierarchical clustering.
   Different similarity measures are available.
   Called by \code{hapFabia}.
 
@@ -19,15 +19,15 @@
 }
 \usage{
 
-\S4method{compareHaploClusterLists}{HaploClusterList,ANY,character,ANY,ANY,numeric,numeric}(haploClusterList1,haploClusterList2=NULL,simv="minD",pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=6,minIndivid=2)
+\S4method{compareIBDsegmentLists}{IBDsegmentList,ANY,character,ANY,ANY,numeric,numeric}(IBDsegmentList1,IBDsegmentList2=NULL,simv="minD",pTagSNVs=NULL,pIndivid=NULL,minTagSNVs=6,minIndivid=2)
 
 }
 
 \arguments{
-  \item{haploClusterList1}{list of haplotype clusters  given as
-    \code{HaploClusterList} object.}
-  \item{haploClusterList2}{optional: second list of haplotype clusters
-    given as  \code{HaploClusterList} object.}
+  \item{IBDsegmentList1}{list of IBD segments  given as
+    \code{IBDsegmentList} object.}
+  \item{IBDsegmentList2}{optional: second list of IBD segments
+    given as  \code{IBDsegmentList} object.}
   \item{simv}{similarity measure:
     \code{minD} (percentage of the smaller set explained by the larger set),
     \code{jaccard} (Jaccard index),
@@ -56,7 +56,7 @@
   used for clustering.
 
   The final similarity measure is not a distance but is symmetric,
-  one for similarity of a haplotype cluster with itself,
+  one for similarity of an IBD segment with itself,
   zero if either CNVs or individuals have no overlap,
   and between zero and one.
   Called by \code{hapFabia}.
@@ -71,31 +71,31 @@
     }
 
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -106,11 +106,11 @@
 \examples{
 
 data(hapRes)
-haploClusterList1 <- hapRes$haploClusterList1
-haploClusterList2 <- hapRes$haploClusterList2
+IBDsegmentList1 <- hapRes$IBDsegmentList1
+IBDsegmentList2 <- hapRes$IBDsegmentList2
 comp <-
-compareHaploClusterLists(haploClusterList1,
-   haploClusterList2,simv="minD",pTagSNVs=NULL,
+compareIBDsegmentLists(IBDsegmentList1,
+   IBDsegmentList2,simv="minD",pTagSNVs=NULL,
    pIndivid=NULL,minTagSNVs=6,minIndivid=2)
 
 show(comp)
@@ -127,4 +127,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}

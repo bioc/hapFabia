@@ -3,13 +3,13 @@
 # Author: SEPP HOCHREITER
 ###############################################################################
 
-setClass("HaploCluster",
+setClass("IBDsegment",
          representation = representation(
          ID = "numeric",
          bicluster_id = "numeric",
          chromosome = "character",
-         haploClusterPos = "numeric",
-         haploClusterLength = "numeric",
+         IBDsegmentPos = "numeric",
+         IBDsegmentLength = "numeric",
          numberIndividuals = "numeric",
          numbertagSNVs = "numeric",
          individuals = "vector",
@@ -32,7 +32,7 @@ setClass("HaploCluster",
 )
 
 
-setValidity("HaploCluster",
+setValidity("IBDsegment",
     function(object)
     {
         if (!is.numeric(slot(object, "ID")) || (slot(object, "ID")<0))
@@ -47,13 +47,13 @@ setValidity("HaploCluster",
         {
             return("slot >chromosome< must be a string!")
         }
-        else if (!is.numeric(slot(object, "haploClusterPos")) || (slot(object, "haploClusterPos")<0))
+        else if (!is.numeric(slot(object, "IBDsegmentPos")) || (slot(object, "IBDsegmentPos")<0))
         {
-            return("slot >haploClusterPos< must be an integer number larger 0!")
+            return("slot >IBDsegmentPos< must be an integer number larger 0!")
         }
-        else if (!is.numeric(slot(object, "haploClusterLength")) || (slot(object, "haploClusterLength")<0))
+        else if (!is.numeric(slot(object, "IBDsegmentLength")) || (slot(object, "IBDsegmentLength")<0))
         {
-            return("slot >haploClusterLength< must be an integer number larger 0!")
+            return("slot >IBDsegmentLength< must be an integer number larger 0!")
         }
         else if (!is.numeric(slot(object, "numberIndividuals")) || (slot(object, "numberIndividuals")<0))
         {
@@ -131,21 +131,21 @@ setValidity("HaploCluster",
  )
 
 
-setClass("HaploClusterList",
+setClass("IBDsegmentList",
          representation = representation(
-         haploClusters="list",
+         IBDsegments="list",
          lengthList="numeric",
          statistics="list"
          )
 )
 
 
-setValidity("HaploClusterList",
+setValidity("IBDsegmentList",
     function(object)
     {
-        if (!is.list(slot(object, "haploClusters")))
+        if (!is.list(slot(object, "IBDsegments")))
         {
-            return("slot >haploClusters< must be a list!")
+            return("slot >IBDsegments< must be a list!")
         } else if (!is.numeric(slot(object, "lengthList")) || (slot(object, "lengthList")<0))
         {
             return("slot >lengthList< must be an integer number larger equal 0!")

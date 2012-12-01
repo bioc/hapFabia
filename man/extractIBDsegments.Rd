@@ -1,27 +1,27 @@
-\name{extractHaploClusters}
-\alias{extractHaploClusters}
-\alias{extractHaploClusters,Factorization-method}
-\alias{extractHaploClusters,Factorization,list,data.frame,character,matrix,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric-method}
+\name{extractIBDsegments}
+\alias{extractIBDsegments}
+\alias{extractIBDsegments,Factorization-method}
+\alias{extractIBDsegments,Factorization,list,data.frame,character,matrix,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric-method}
 
 
 
-\title{Extract haplotype clusters from a
+\title{Extract IBD segments from a
   \code{fabia} result}
 
 \description{
 
-  \code{extractHaploClusters}: \R implementation of \code{extractHaploClusters}.
+  \code{extractIBDsegments}: \R implementation of \code{extractIBDsegments}.
 
-  Haplotype clusters are identified in FABIA \code{Factorization} objects.
+  IBD segments are identified in FABIA \code{Factorization} objects.
   First accumulations of correlated SNVs are found.
-  Then haplotype clusters in these accumulations are disentangled.
-  Finally haplotype clusters are pruned off spurious correlated SNVs.
+  Then IBD segments in these accumulations are disentangled.
+  Finally IBD segments are pruned off spurious correlated SNVs.
 
 
 }
 \usage{
 
-\S4method{extractHaploClusters}{Factorization,list,data.frame,character,matrix,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric}(res,sPF,annot=NULL,chrom="",labelsA=NULL,ps=0.9,psZ=0.8,inteA=500,thresA=11,mintagSNVs=8,off=0,procMinIndivids=0.1,thresPrune=1e-3)
+\S4method{extractIBDsegments}{Factorization,list,data.frame,character,matrix,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric}(res,sPF,annot=NULL,chrom="",labelsA=NULL,ps=0.9,psZ=0.8,inteA=500,thresA=11,mintagSNVs=8,off=0,procMinIndivids=0.1,thresPrune=1e-3)
 
 
 }
@@ -37,21 +37,21 @@
   \item{labelsA}{labels for the individuals; if it is \code{NULL} then
     dummy labels by enumerating individuals are generated.} 
  \item{ps}{quantile above which the L values are considered for
-   haplotype cluster extraction.} 
+   IBD segment extraction.} 
   \item{psZ}{quantile above which the largest Z values are considered
-    for haplotype cluster extraction.} 
+    for IBD segment extraction.} 
   \item{inteA}{number of SNVs in a histogram bin which correspond to the
-    desired haplotype cluster length.}
+    desired IBD segment length.}
   \item{thresA}{threshold for histogram counts above which SNVs are
     viewed to be locally accumulated in a histogram bin.}
- \item{mintagSNVs}{threshold for minimal tagSNV overlap of segments in a
-   haplotype cluster.} 
+ \item{mintagSNVs}{threshold for minimal tagSNV overlap of intervals in a
+   IBD segment.} 
    \item{off}{offset of the histogram.}
    \item{procMinIndivids}{percent of cluster individuals that must have
-     the minor allele to consider an SNV as haplotype cluster tagSNV.}
+     the minor allele to consider an SNV as IBD segment tagSNV.}
    \item{thresPrune}{threshold on the probability of having minimal
      distance to neighboring tagSNVs; used to prune off SNVs at the
-     border of haplotype clusters.} 
+     border of IBD segments.} 
 }
 \details{
 
@@ -63,7 +63,7 @@
   distribution with 
   the median distance between tagCNVs as parameter (one over the rate).
   Thus, the counts are assumed to be Poisson distributed.
-  At the haplotype cluster border, SNVs that have a large
+  At the IBD segment border, SNVs that have a large
   distance to the closest tagSNV are pruned off.
   \code{thresPrune} gives the pruning threshold via a \eqn{p}{p}-value for
   observing this distance or a larger based on the exponential distribution.
@@ -72,36 +72,36 @@
 
 }
 \value{
-An instance of the class \code{HaploClusterList} containing the
-extracted haplotype clusters.
+An instance of the class \code{IBDsegmentList} containing the
+extracted IBD segments.
     }
 
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -119,18 +119,18 @@ nnL <- length(Z(res)[1,])
 labelsA <- cbind(as.character(1:nnL),
    as.character(1:nnL),as.character(1:nnL),
    as.character(1:nnL))
-resHaploClusterList <- extractHaploClusters(res=res,
+resIBDsegmentList <- extractIBDsegments(res=res,
    sPF=sPF,annot=annot,chrom="1",labelsA=labelsA,
    ps=0.9,psZ=0.8,inteA=50,thresA=6,mintagSNVs=6,
    off=0,procMinIndivids=0.1,thresPrune=1e-3)
 
-summary(resHaploClusterList)
+summary(resIBDsegmentList)
 
-print("Position of the first haplotype cluster:")
-print(haploClusterPos(resHaploClusterList[[1]]))
+print("Position of the first IBD segment:")
+print(IBDsegmentPos(resIBDsegmentList[[1]]))
 
-print("Length of the first haplotype cluster:")
-print(haploClusterLength(resHaploClusterList[[1]]))
+print("Length of the first IBD segment:")
+print(IBDsegmentLength(resIBDsegmentList[[1]]))
 
 
 }
@@ -143,5 +143,5 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNVs,rare IBD segments,short IBD segments}
 

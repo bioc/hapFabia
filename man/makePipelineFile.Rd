@@ -4,20 +4,20 @@
 \description{
 
   \code{makePipelineFile} creates \code{pipleline.R} for sourcing with
-  \code{source("pipleline.R")} to run a whole haplotype cluster
+  \code{source("pipleline.R")} to run a whole IBD segment
   extraction pipeline.
 
 
 }
 \usage{
 
-makePipelineFile(fileName,shiftSize=5000,segmentSize=10000,haplotypes=FALSE,dosage=FALSE) 
+makePipelineFile(fileName,shiftSize=5000,intervalSize=10000,haplotypes=FALSE,dosage=FALSE) 
 
 }
 \arguments{
  \item{fileName}{file name of the genotype file in \code{vcf} format}
- \item{shiftSize}{distance between start of adjacent segments.}
- \item{segmentSize}{number of SNVs in a segment.}
+ \item{shiftSize}{distance between start of adjacent intervals.}
+ \item{intervalSize}{number of SNVs in a interval.}
  \item{haplotypes}{should haplotypes (phased genotypes) be used; default
    FALSE.}
  \item{dosage}{should dosages be used if haplotypes is FALSE; default FALSE.}
@@ -27,37 +27,37 @@ makePipelineFile(fileName,shiftSize=5000,segmentSize=10000,haplotypes=FALSE,dosa
 
 
   \code{makePipelineFile} creates \code{Pipleline.R} for sourcing with
-  \code{source("pipleline.R")} to run a whole haplotype cluster extraction pipeline.
+  \code{source("pipleline.R")} to run a whole IBD segment extraction pipeline.
 
    Attention: this code may run a while for large data sets.
 
 }
 \seealso{
-\code{\link{HaploCluster-class}},
-\code{\link{HaploClusterList-class}},
-\code{\link{analyzeHaploClusters}},
-\code{\link{compareHaploClusterLists}},
-\code{\link{extractHaploClusters}},
+\code{\link{IBDsegment-class}},
+\code{\link{IBDsegmentList-class}},
+\code{\link{analyzeIBDsegments}},
+\code{\link{compareIBDsegmentLists}},
+\code{\link{extractIBDsegments}},
 \code{\link{findDenseRegions}},
 \code{\link{hapFabia}},
 \code{\link{hapFabiaVersion}},
 \code{\link{hapRes}},
 \code{\link{chr1ASW1000G}},
-\code{\link{haploClusterList2excel}},
+\code{\link{IBDsegmentList2excel}},
 \code{\link{identifyDuplicates}},
-\code{\link{iterateSegments}},
+\code{\link{iterateIntervals}},
 \code{\link{makePipelineFile}},
 \code{\link{matrixPlot}},
-\code{\link{mergeHaploClusterLists}},
-\code{\link{mergedHaploClusterList}},
-\code{\link{plotHaplotypeCluster}},
+\code{\link{mergeIBDsegmentLists}},
+\code{\link{mergedIBDsegmentList}},
+\code{\link{plotIBDsegment}},
 \code{\link{res}},
 \code{\link{setAnnotation}},
 \code{\link{setStatistics}},
 \code{\link{sim}},
 \code{\link{simu}},
-\code{\link{simulateHaploClustersFabia}},
-\code{\link{simulateHaplotypeClusters}},
+\code{\link{simulateIBDsegmentsFabia}},
+\code{\link{simulateIBDsegments}},
 \code{\link{split_sparse_matrix}},
 \code{\link{toolsFactorizationClass}},
 \code{\link{vcftoFABIA}}
@@ -73,7 +73,7 @@ old_dir <- getwd()
 setwd(tempdir())
 
 makePipelineFile(fileName="genotypeData",
-   shiftSize=500,segmentSize=1000)
+   shiftSize=500,intervalSize=1000)
 a <- scan(file = "pipeline.R",
    what = "character")
 cat(a)
@@ -90,4 +90,4 @@ Bioinformatics 26(12):1520-1527, 2010.
 
 }
 \keyword{models,multivariate,cluster}
-\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare haplotype clusters,short haplotype clusters}
+\concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation,rare variants,rare SNPs, rare SNVs,rare IBD segments,short IBD segments}
