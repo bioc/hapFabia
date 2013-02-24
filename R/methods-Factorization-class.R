@@ -213,7 +213,7 @@ if (max(L(res)[,n])>0.000001) {
 
 ib <- findDenseRegions(L(res)[,n],p=ps,inte=inteA,thres=thresA,off=off)
 
-topZ <- which(Z(res)[n,]>quantile(Z(res)[n,],psZ))
+topZ <- which(Z(res)[n,]>=quantile(Z(res)[n,],psZ))
 
 
 if ((!is.null(ib$len))&&(length(ib$len)>0)) {
@@ -489,9 +489,14 @@ while (ie == 1) {
         ig <- ig + 1
         if ((lq1A<(nnl-1))&&(lq2A<(nnc-1))) {
 
-            matB <-  matB[-subclM,-subclS]
+# change
 
-            individual1 <- individual1[-subclM]
+            matB <-  matB[,-subclS]
+
+
+#           matB <-  matB[-subclM,-subclS]
+
+#            individual1 <- individual1[-subclM]
 
 
             tagSNV1 <- tagSNV1[-subclS]

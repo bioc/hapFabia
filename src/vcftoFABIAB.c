@@ -82,7 +82,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
   FILE *pFile, *pFile1;
   
-  int i=0,j=0,header_lines=0,individuals=0,ig=0;
+  int i=0,j=0,header_lines=0,individuals=0,ig=0,haplo=0,dsFound=0;
   
   long snps=0;
   int lineC=0;
@@ -386,14 +386,23 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 		  {
 		    posG++;
 		    if (posG==GTpos) {
+		      //phased
 		      bo=sscanf(p1,"%hu|%hu", &gh1,&gh2);
+		      //unphased
 		      if (bo<2) {
 			bo=sscanf(p1,"%hu/%hu", &gh1,&gh2); 
+		      }
+		      //haplotypes or pure genotype data
+		      if (bo<2) {
+			bo=sscanf(p1,"%hu", &gh1);
+			gh2=0;
+			haplo=1;
 		      }
 		    }
 
 		    if (posG==DSpos) {
 		      sscanf(p1,"%f", &dsI);
+		      dsFound=1;
 		    }
 		    
 		    p1 = strtok_rS (NULL, ":",&saveptr2);
@@ -437,25 +446,42 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	      {
 		ig++;
 	      }
+	    if (haplo<1){
 	    if (g2[i][j]>0)
 	      {
 		ig++;
 	      }
+	    }
 	  }
 
-	freq[j] = (float) (1.0*ig)/(2.0*individuals);
+	if (haplo==1){
+	  freq[j] = (float) (1.0*ig)/(1.0*individuals);
+	  change[j]=0;
+	  if (ig > ( (int) individuals/2) )
+	    {
+	      change[j]=1;
+	      for(i = 0; i < individuals; i ++)
+		{
+		  g1[i][j]= 1 - g1[i][j];
+		  g2[i][j]= 0;
+		  ds[i][j] = 1.0 - ds[i][j];
+		}
+	    }
+	} else {
+	  freq[j] = (float) (1.0*ig)/(2.0*individuals);
+	  change[j]=0;
+	  if (ig>individuals)
+	    {
+	      change[j]=1;
+	      for(i = 0; i < individuals; i ++)
+		{
+		  g1[i][j]= 1 - g1[i][j];
+		  g2[i][j]= 1 - g2[i][j];
+		  ds[i][j] = 2.0 - ds[i][j];
+		}
+	    }
+	}
 
-	change[j]=0;
-	if (ig>individuals)
-	  {
-	    change[j]=1;
-	    for(i = 0; i < individuals; i ++)
-	      {
-		g1[i][j]= 1 - g1[i][j];
-		g2[i][j]= 1 - g2[i][j];
-		ds[i][j] = 2.0 - ds[i][j];
-	      }
-	  }
 
       }
 
@@ -511,7 +537,11 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
       Rprintf("File >%s< cannot be opened! Stop.\n", sst);
       return(-1);
     }
-    fprintf(pFile,"%d\n",2*individuals);  
+    if (haplo==1) {
+      fprintf(pFile,"%d\n",individuals);  
+    } else {
+      fprintf(pFile,"%d\n",2*individuals);  
+    }
     fprintf(pFile,"%d\n",(int) snps);  
     for(i = 0; i < individuals; i ++)
     {
@@ -534,6 +564,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	    fprintf(pFile,"%.1f ",Lval[j]);
 	fprintf(pFile,"\n");
 
+        if (haplo<1) {
 	ig=0;
 	for(j = 0; j < snps; j ++)
 	{
@@ -551,6 +582,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	for(j = 0; j < ig; j ++)
 	    fprintf(pFile,"%.1f ",Lval[j]);
 	fprintf(pFile,"\n");
+	}
     }
     fclose (pFile);
 
@@ -572,7 +604,11 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	ig=0;
 	for(j = 0; j < snps; j ++)
 	{
-	  s = g1[i][j]+g2[i][j];
+	  if (haplo<1) {
+	    s = g1[i][j]+g2[i][j];
+	  } else {
+	    s = g1[i][j];
+	  }
 	    if (s>eps){
 		Lind[ig] = j;
 		Lval[ig] = s;
@@ -603,6 +639,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     }
     fprintf(pFile,"%d\n",individuals);  
     fprintf(pFile,"%d\n",(int) snps);  
+    if (dsFound==1) {
     for(i = 0; i < individuals; i ++)
     {
       Rprintf("Write Individual Dosage: %d\r",(i+1));
@@ -626,6 +663,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	fprintf(pFile,"\n");
 
     }
+    } 
     fclose (pFile);
 
 
