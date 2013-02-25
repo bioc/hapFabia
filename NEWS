@@ -37,3 +37,8 @@ CHANGES IN VERSION 1.0.5
 
     o haplotype vcf files are now possible
 
+CHANGES IN VERSION 1.0.6
+------------------------
+
+    o bug fix read haplotype vcf files
+

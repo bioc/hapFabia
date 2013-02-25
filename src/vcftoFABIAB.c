@@ -386,18 +386,20 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 		  {
 		    posG++;
 		    if (posG==GTpos) {
+		      bo=sscanf(p1,"%hu", &gh1);
 		      //phased
-		      bo=sscanf(p1,"%hu|%hu", &gh1,&gh2);
+		      if (bo==1) {
+		      bo=sscanf(p1,"|%hu", &gh2);
 		      //unphased
-		      if (bo<2) {
-			bo=sscanf(p1,"%hu/%hu", &gh1,&gh2); 
+		      if (bo<1) {
+			bo=sscanf(p1,"/%hu", &gh2); 
 		      }
 		      //haplotypes or pure genotype data
-		      if (bo<2) {
-			bo=sscanf(p1,"%hu", &gh1);
+		      if (bo<1) {
 			gh2=0;
 			haplo=1;
 		      }
+		      } 
 		    }
 
 		    if (posG==DSpos) {
