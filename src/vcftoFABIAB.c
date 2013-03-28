@@ -82,7 +82,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
   FILE *pFile, *pFile1;
   
-  int i=0,j=0,header_lines=0,individuals=0,ig=0,haplo=0,dsFound=0;
+  int i=0,j=0,header_lines=0,individuals=0,ig=0,haplo=0,dsFound=0,tte=0;
   
   long snps=0;
   int lineC=0;
@@ -381,26 +381,28 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 		gh2=0;
 		dsI=0.0;
 		posG=0;
+		tte=0;
 
 		while (p1 != NULL)
 		  {
 		    posG++;
 		    if (posG==GTpos) {
-		      bo=sscanf(p1,"%hu", &gh1);
 		      //phased
-		      if (bo==1) {
-		      bo=sscanf(p1,"|%hu", &gh2);
+		      bo=sscanf(p1,"%hu|%hu", &gh1, &gh2);
 		      //unphased
-		      if (bo<1) {
-			bo=sscanf(p1,"/%hu", &gh2); 
+		      if (bo<2) {
+			if (bo==1) {
+			  tte= (int) gh1;
+			}
+			bo=sscanf(p1,"%hu/%hu", &gh1, &gh2);
 		      }
 		      //haplotypes or pure genotype data
-		      if (bo<1) {
+		      if (bo<2) {
 			gh2=0;
-			haplo=1;
+			haplo=1;    
+			gh1=tte;
 		      }
-		      } 
-		    }
+		    } 
 
 		    if (posG==DSpos) {
 		      sscanf(p1,"%f", &dsI);
