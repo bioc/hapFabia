@@ -493,7 +493,7 @@ function(IBDsegmentList1,IBDsegmentList2=NULL,clustIBDsegmentList) {
 
 
     IBDsegmentPos(vv) <- round(median(tagSNVPositions(vv)))
-    IBDsegmentLength(vv) <- max(tagSNVs(vv))-min(tagSNVs(vv))
+    IBDsegmentLength(vv) <- max(tagSNVPositions(vv))-min(tagSNVPositions(vv))
     numberIndividuals(vv) <- length(individuals(vv))
     numbertagSNVs(vv) <- length(tagSNVs(vv))
     coreClusterIndividuals(vv) <- unique(coreClusterIndividuals(vv))
