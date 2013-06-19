@@ -71,8 +71,7 @@ findDenseRegions <- function(obs,p=0.9,inte=500,thres=11,off=0) {
 
 
 
-matrixPlot <- function(x,range=NULL, yLabels=NULL, zlim=NULL,title=NULL,colRamp=12){
-
+matrixPlot <- function(x,range=NULL,yLabels=NULL,zlim=NULL,title=NULL,colRamp=12,grid=FALSE,pairs=FALSE,padj=NA,...){
 
      if (missing(x)) {
             stop("Data matrix x missing. Stopped.")
@@ -213,35 +212,42 @@ matrixPlot <- function(x,range=NULL, yLabels=NULL, zlim=NULL,title=NULL,colRamp=
 # par(mar = c(3,5,2.5,1))
 # Original: par(mar=c(5.1,4.1,4.1,2.1))
  marO <- par("mar")
- par(mar = c(2.5,6,3,1))
+ par(...)
  image(1:ncol(x), 1:nrow(x), t(x), col=ColorRamp, xlab="",
- ylab="", axes=FALSE, zlim=c(min,max))
+	ylab="", axes=FALSE, zlim=c(min,max))
+
  if( !is.null(title) ){
     title(main=title)
  }
 
 xt <- c(1,axTicks(1))
-
 lxt <- length(xt)
 
 if (abs(xt[lxt]-ncol(x))>5) {
     xt <- c(xt,ncol(x))
 }
 
-axis(BELOW<-1, at=xt, labels=prettyNum(xLabels[xt], big.mark = ","), cex.axis=0.7)
+if (grid) {
+	grid(ncol(x), nrow(x), col="grey", lty = 1, lwd = 1)
+}
 
-axis(LEFT <-2, at=1:length(yLabels), labels=yLabels, las= HORIZONTAL<-1,cex.axis=0.7)
+if (pairs) {
+	abline(h=seq(from =2.5, to=(nrow(x)-1), by=2), col="black")
+}
 
- par(mar = marO)
+axis(BELOW<-1, at=xt, labels=prettyNum(xLabels[xt], big.mark = ","), padj=padj)
+axis(LEFT <-2, at=1:length(yLabels), labels=yLabels, las= HORIZONTAL<-1)
 
- layout(1)
+par(mar = marO)
+
+layout(1)
 }
 
 
 
 
 
-plotIBDsegment <- function(Lout,tagSNV,physPos=NULL,colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,labelsNA=NULL,prange=NULL,labelsNA1 = c("model L") ) {
+plotIBDsegment <- function(Lout,tagSNV,physPos=NULL,colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,labelsNA=NULL,prange=NULL,labelsNA1=c("model L"),grid=FALSE,pairs=FALSE,...) {
 
     if (missing(Lout)) {
         stop("Genotype data 'Lout' is missing. Stopped.")
@@ -353,14 +359,13 @@ if (length(labelsNA1)!=n1) {
 labelsNA <- c(labelsNA,"",labelsNA1)
 
 if (count<=0) {
-matrixPlot(mat,range=physRange,yLabels=labelsNA, title=paste("chr: ",chrom,"  ||  pos: ",prettyNum(physPosM, big.mark = ","),"  ||  length: ",physLength,"kbp  ||  #tagSNVs: ",ma,"  ||  #Individuals: ",n,sep=""),colRamp=colRamp)
+matrixPlot(mat,range=physRange,yLabels=labelsNA, title=paste("chr: ",chrom,"  ||  pos: ",prettyNum(physPosM, big.mark = ","),"  ||  length: ",physLength,"kbp  ||  #tagSNVs: ",ma,"  ||  #Individuals: ",n,sep=""),colRamp=colRamp, grid=grid, pairs=pairs, ...)
 } else {
-matrixPlot(mat,range=physRange,yLabels=labelsNA, title=paste("count: ",count,"  ||  chr: ",chrom,"  ||  pos: ",prettyNum(physPosM, big.mark = ","),"  ||  length: ",physLength,"kbp  ||  #tagSNVs: ",ma,"  ||  #Individuals: ",n,sep=""),colRamp=colRamp)
+matrixPlot(mat,range=physRange,yLabels=labelsNA, title=paste("count: ",count,"  ||  chr: ",chrom,"  ||  pos: ",prettyNum(physPosM, big.mark = ","),"  ||  length: ",physLength,"kbp  ||  #tagSNVs: ",ma,"  ||  #Individuals: ",n,sep=""),colRamp=colRamp, grid=grid, pairs=pairs, ...)
 }
 
 
 }
-
 
 
 
@@ -1560,8 +1565,8 @@ split_sparse_matrix <- function(fileName,sparseMatrixPostfix="_mat.txt",interval
     narg <- as.integer(6)
     arg1 <- as.character(fileName)
     arg2 <- as.character(sparseMatrixPostfix)
-    arg3 <- as.character(intervalSize)
-    arg4 <- as.character(shiftSize)
+    arg3 <- format(intervalSize, scientific = FALSE)
+    arg4 <- format(shiftSize, scientific = FALSE)
     if (annotation) {
         arg5 <- as.character(1)
     } else {
@@ -1587,29 +1592,38 @@ split_sparse_matrix <- function(fileName,sparseMatrixPostfix="_mat.txt",interval
 }
 
 
-vcftoFABIA <- function(fileName,prefixPath="",noSnvs=NULL) {
+vcftoFABIA <- function(fileName,prefixPath="",noSnvs=NULL,outputFile=NULL) {
 
 
     arg1 <- as.character(fileName)
     arg2 <- as.character(prefixPath)
     if (is.null(noSnvs)) {
-        narg <- as.integer(3)
-        arg3 <-  as.character(0)
-   } else {
-        narg <- as.integer(4)
-        arg3 <-  as.character(noSnvs)
+        arg3 <-  as.character("NA")
+    } else {
+        arg3 <- format(noSnvs, scientific = FALSE)
+    }
+
+    if (is.null(outputFile)) {
+        arg4 <-  as.character("NA")
+    } else {
+        arg4 <- as.character(outputFile)
     }
 
     message("Running 'vcftoFABIA' on ",fileName)
     message("   Path to file ----------------------- : ",prefixPath)
-    if (narg==4) {
-    message("   Number of SNVs --------------------- :",noSnvs)
+    if (!is.null(noSnvs)) {
+    message("   Number of SNVs --------------------- : ",noSnvs)
     } else {
     message("   Number of SNVs are unknown --------- :")
     }
+    if (!is.null(outputFile)) {
+    message("   Output file prefix------------------ : ",outputFile)
+    } else {
+    message("   Output file prefix given by input ----")
+    }
 
 
-    .Call("vcftoFABIA",narg,arg1,arg2,arg3,PACKAGE="hapFabia")
+    .Call("vcftoFABIA",arg1,arg2,arg3,arg4,PACKAGE="hapFabia")
 
     message("")
     message("Convert End.")

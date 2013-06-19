@@ -279,3 +279,7 @@ setGeneric("IBDsegmentList2excel", signature = c("IBDsegmentList","filename"),
     function(IBDsegmentList,filename) standardGeneric("IBDsegmentList2excel")
 )
 
+setGeneric("plotLarger",signature=c("x","filename","fact","addSamp"),
+           function(x,filename,fact,addSamp, ...) standardGeneric("plotLarger")
+)
+

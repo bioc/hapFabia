@@ -193,6 +193,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 	    }
 	  }
 
+	endP[parts-1]++;
 
 	for(i1 = 0; i1 < parts; i1 ++)
 	{

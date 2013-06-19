@@ -10,7 +10,7 @@
 
 int split_sparse_matrixB(int narg, const char *arg1, const char *arg2, const char *arg3, const char *arg4, const char *arg5);
  
-int vcftoFABIAB(int narg, const char *arg1, const char *arg2, const char *arg3);
+int vcftoFABIAB(const char *arg1, const char *arg2, const char *arg3, const char *arg4);
 
 void split_sparse_matrix(SEXP nargS,SEXP arg1S,SEXP arg2S,SEXP arg3S,SEXP arg4S,SEXP arg5S) {
 
@@ -28,14 +28,14 @@ void split_sparse_matrix(SEXP nargS,SEXP arg1S,SEXP arg2S,SEXP arg3S,SEXP arg4S,
 
 }
 
-void vcftoFABIA(SEXP nargS,SEXP arg1S,SEXP arg2S,SEXP arg3S) {
+void vcftoFABIA(SEXP arg1S,SEXP arg2S,SEXP arg3S,SEXP arg4S) {
 
-  int narg = (int)(INTEGER(nargS)[0]);
   const char *arg1=CHAR(STRING_ELT(arg1S,0));
   const char *arg2=CHAR(STRING_ELT(arg2S,0));
   const char *arg3=CHAR(STRING_ELT(arg3S,0));
+  const char *arg4=CHAR(STRING_ELT(arg4S,0));
   
-  vcftoFABIAB(narg,arg1,arg2,arg3);
+  vcftoFABIAB(arg1,arg2,arg3,arg4);
 
   return;
 }

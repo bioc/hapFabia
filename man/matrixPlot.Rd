@@ -15,8 +15,7 @@
 }
 \usage{
 
-matrixPlot(x,range=NULL, yLabels=NULL, zlim=NULL,
-   title=NULL,colRamp=12)
+matrixPlot(x,range=NULL,yLabels=NULL,zlim=NULL,title=NULL,colRamp=12,grid=FALSE,pairs=FALSE,padj=NA,...)
 
 
 }
@@ -27,7 +26,10 @@ matrixPlot(x,range=NULL, yLabels=NULL, zlim=NULL,
   \item{zlim}{optional: limits imposed onto the matrix values.}
   \item{title}{title of the plot.}
   \item{colRamp}{color representation.}
-
+  \item{grid}{does the plot have a grid?; default FALSE (no).}
+  \item{pairs}{for pairwise groups, e.g. case-control, twins, etc.; default FALSE (no).}
+  \item{padj}{adjustment for each tick label perpendicular to the reading direction.}
+  \item{...}{other graphical parameters may also be passed as arguments to this function.}
 }
 \details{
 

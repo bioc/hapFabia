@@ -88,6 +88,7 @@ exportMethods("plot",
               "setStatistics",
               "compareIBDsegmentLists",
               "mergeIBDsegmentLists",
-              "IBDsegmentList2excel"
+              "IBDsegmentList2excel",
+              "plotLarger"
               )
 

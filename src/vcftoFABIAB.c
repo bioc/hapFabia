@@ -78,11 +78,11 @@ ssize_t getlineS(char **linebuf, size_t *n, FILE *file)
 
 void Rprintf(const char *, ...);
 
-int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) {
+int vcftoFABIAB(const char *agr1, const char *agr2, const char *agr3, const char *agr4) {
 
   FILE *pFile, *pFile1;
   
-  int i=0,j=0,header_lines=0,individuals=0,ig=0,haplo=0,dsFound=0;
+  int i=0,j=0,header_lines=0,individuals=0,ig=0,haplo=0,dsFound=0,Csnps=0;
   
   long snps=0;
   int lineC=0;
@@ -102,7 +102,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
   float dsI;
   
   
-  char sst[500],IsnpName[5000], Imajor[2000000],Iminor[2000000],Ifilter[2000],Iinfo[20000],Iformat[2000],Iqual[2000];
+  char sst[500],outS[500],IsnpName[5000], Imajor[2000000],Iminor[2000000],Ifilter[2000],Iinfo[20000],Iformat[2000],Iqual[2000];
   
   unsigned short **g1= NULL;
   unsigned short **g2= NULL;
@@ -137,18 +137,25 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     return(-1);
   }
 
-
-  if (narg>3) {
-    snps = atoi(agr3);
-  } else {
+  if (strcmp(agr3,"NA")==0) {
     lineC=0;
     while ((getlineS(&line, &len, pFile)) != -1)   
       ++lineC;
     rewind(pFile);
+    Csnps=1;
+  } else {
+    snps = atoi(agr3); 
   }
   
   
-  
+  if (strcmp(agr4,"NA")==0) {
+    outS[0]=0;
+    strcat(outS,agr1);
+  } else {
+    outS[0]=0;
+    strcat(outS,agr4);
+  }
+ 
   countL=0;
   j=0;
   while ((read = getlineS(&line, &len, pFile)) != -1) {
@@ -156,7 +163,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     if ( line[0]=='#' ) {
       if ( line[1]=='C' ) {
 	
-	if (narg<=3) {
+	if (Csnps==1) {
 	  snps = lineC-j;
 	} 
 	
@@ -172,7 +179,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 	p = strtok_rS (line,"\t",&saveptr1);
 	
 	sst[0]=0;
-	strcat(sst,agr1);
+	strcat(sst,outS);
 	strcat(sst,"_individuals.txt");
 	pFile1 = fopen (sst,"w");
 	
@@ -514,7 +521,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
 
 
     sst[0]=0;
-    strcat(sst,agr1);
+    strcat(sst,outS);
     strcat(sst,"_annot.txt");
     pFile = fopen (sst,"w");
     if (pFile==NULL) {
@@ -532,7 +539,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     Rprintf("\n");    
 
     sst[0]=0;
-    strcat(sst,agr1);
+    strcat(sst,outS);
     strcat(sst,"_matH.txt");
     pFile = fopen (sst,"w");
     if (pFile==NULL) {
@@ -591,7 +598,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     Rprintf("\n");    
 
     sst[0]=0;
-    strcat(sst,agr1);
+    strcat(sst,outS);
     strcat(sst,"_matG.txt");
     pFile = fopen (sst,"w");
     if (pFile==NULL) {
@@ -632,7 +639,7 @@ int vcftoFABIAB(int narg, const char *agr1, const char *agr2, const char *agr3) 
     Rprintf("\n");    
 
     sst[0]=0;
-    strcat(sst,agr1);
+    strcat(sst,outS);
     strcat(sst,"_matD.txt");
     pFile = fopen (sst,"w");
     if (pFile==NULL) {

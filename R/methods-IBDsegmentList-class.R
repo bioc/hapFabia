@@ -171,7 +171,7 @@ labels_ALL <- labelIndividuals(x[[i]])
 Lout <- readSamplesSpfabia(X=filename,samples=individ,lowerB=0,upperB=1000.0)
 
 
-plotIBDsegment(Lout=Lout,tagSNV=list(tagSNV),physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=i,labelsNA=labels_ALL)
+plotIBDsegment(Lout=Lout,tagSNV=list(tagSNV),physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=i,labelsNA=labels_ALL,...)
 
 }
 

@@ -20,9 +20,7 @@
 }
 \usage{
 
-plotIBDsegment(Lout,tagSNV,physPos=NULL,
-   colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,
-   labelsNA=NULL,prange=NULL,labelsNA1 = c("model L") )
+plotIBDsegment(Lout,tagSNV,physPos=NULL,colRamp=12,val=c(0.0,2.0,1.0),chrom="",count=0,labelsNA=NULL,prange=NULL,labelsNA1=c("model L"),grid=FALSE,pairs=FALSE,...)
 
 
 }
@@ -43,6 +41,9 @@ plotIBDsegment(Lout,tagSNV,physPos=NULL,
  \item{labelsNA1}{labels for tagSNVs by the model obtained by \pkg{fabia}; other
    tagSNV annotations like match with another genome (Neandertal, Denisova) can
   be visualized.}
+  \item{grid}{does the plot have a grid?; default FALSE (no).}
+  \item{pairs}{for pairwise groups, e.g. case-control, twins, etc.; default FALSE (no).}
+  \item{...}{other graphical parameters may also be passed as arguments to this function.}
 
 
 }

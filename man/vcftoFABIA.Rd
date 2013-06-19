@@ -21,28 +21,31 @@
 }
 \usage{
 
-vcftoFABIA(fileName,prefixPath="",noSnvs=NULL)
+vcftoFABIA(fileName,prefixPath="",noSnvs=NULL,outputFile=NULL)
 
 }
 \arguments{
   \item{fileName}{string giving the file name without the file type '.vcf'. Attention: remove file type!}
   \item{prefixPath}{path to the file.}
   \item{noSnvs}{optional: the number of SNVs; needed for memory allocation; if not known it is determined by first reading all lines of the file.}
+  \item{outputFile}{optional: prefix for the output files, if not given
+    then the input file prefix is used.}
 
 }
 \details{
 
 The function \code{vcftoFABIA} converts \code{fileName.vcf}
-to sparse matrix format giving:
+to sparse matrix format giving (if not outputFile is given then
+Outfilename=fileName):
 \enumerate{
-\item \code{filename_matH.txt} (haplotype data),
-\item \code{filename_matG.txt} (genotype data),
-\item \code{filename_matD.txt} (dosage data),
+\item \code{Outfilename_matH.txt} (haplotype data),
+\item \code{Outfilename_matG.txt} (genotype data),
+\item \code{Outfilename_matD.txt} (dosage data),
 }
 together with the SNV annotation file and individual's label file:
 \enumerate{
-\item \code{filename_annot.txt} and
-\item \code{filename_individuals.txt}.
+\item \code{Outfilename_annot.txt} and
+\item \code{Outfilename_individuals.txt}.
 }
 
 In a subsequent step these files can be split into
