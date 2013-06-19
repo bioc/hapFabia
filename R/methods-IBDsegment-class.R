@@ -475,9 +475,80 @@ labelsK <- c("model L")
 # tagSNVL <- list(tagSNV,tagSNVAnnot1,tagSNVAnnot2)
 # labelsK <- c("model L","Annot1",Annot2")
 
-plotIBDsegment(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=0,labelsNA=labels_ALL,labelsNA1=labelsK)
+plotIBDsegment(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=0,labelsNA=labels_ALL,labelsNA1=labelsK,...)
 
 
 }
 )
+
+
+setMethod("plotLarger",signature(x="IBDsegment", filename="character",fact="numeric",addSamp="ANY"),
+function(x,filename,fact=1.0,addSamp=c(), ...) {
+
+    require(fabia)
+
+    if (missing(x)) {
+        stop("IBD segment 'x' is missing. Stopped.")
+    }
+
+    if (missing(filename)) {
+        stop("File name 'filename' for loading genotype data is missing. Stopped.")
+    }
+
+
+
+
+individ <- individuals(x)
+intss <- intersect(individ,addSamp)
+addSamp <- setdiff(addSamp,intss)
+samp <- c(addSamp,individ)
+l1 <- length(individ)
+l2 <- length(addSamp)
+indik <- c(rep("A",l2),rep("B",l1))
+
+labels1 <- labelIndividuals(x)
+labels2 <- as.character(addSamp)
+labels12 <- c(labels2,labels1)
+labels_ALL <- paste(labels12,indik,sep="_")
+
+sortS <- sort.int(as.integer(unique(samp)),index.return = TRUE)
+individ <- samp[sortS$ix]
+labels_ALL <- labels_ALL[sortS$ix]
+
+
+
+tagSNV <- tagSNVs(x)
+tagSNV <- as.integer(sort.int(as.integer(unique(tagSNV))))
+tagSNVPositions <- tagSNVPositions(x)
+
+
+
+ltagSNV <- length(tagSNV)
+llA <- tagSNV[ltagSNV]-tagSNV[1]
+llAd <- round((llA*fact-llA)/2)
+tagSNVEnd <- tagSNV[ltagSNV]+llAd
+tagSNVBeg <- tagSNV[1]-llAd
+tagSNV <- c(tagSNVBeg,tagSNV,tagSNVEnd)
+tagSNVPositions <- c(tagSNVPositions[1],tagSNVPositions,tagSNVPositions[ltagSNV])
+
+
+chrom <- chromosome(x)
+
+
+Lout <- readSamplesSpfabia(X=filename,samples=individ,lowerB=0,upperB=1000.0)
+
+
+tagSNVL <- list(tagSNV)
+labelsK <- c("model L")
+
+# here other annotations can be included
+# tagSNVL <- list(tagSNV,tagSNVAnnot1,tagSNVAnnot2)
+# labelsK <- c("model L","Annot1",Annot2")
+
+plotIBDsegment(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c(0.0,2.0,1.0),chrom=chrom,count=0,labelsNA=labels_ALL,labelsNA1=labelsK,...)
+
+
+}
+)
+
 

@@ -137,6 +137,11 @@
 % plot method:
 \alias{plot,IBDsegment-method}
 \alias{plot,IBDsegment,missing-method}
+% extended plot method:
+\alias{plotLarger}
+\alias{plotLarger,IBDsegment-method}
+\alias{plotLarger,IBDsegment,character,numeric-method}
+\alias{plotLarger,IBDsegment,missing-method}
 
 
 \title{IBDsegment instances and methods}
@@ -157,7 +162,7 @@
   \item{\code{chromosome}}{the chromosome.}
   \item{\code{IBDsegmentPos}}{genomic location of the IBD segment.}
   \item{\code{IBDsegmentLength}}{length of the IBD segment in
-  the number of SNVs. For the length in kbp: \code{max(tagSNVPositions(x))-min(tagSNVPositions(x))}.}
+  the number of SNVs. For the length in bp: \code{max(tagSNVPositions(x))-min(tagSNVPositions(x))}.}
   \item{\code{numberIndividuals}}{number of samples belonging to the IBD segment.}
   \item{\code{numbertagSNVs}}{number tagSNVs marking the IBD segment.}
   \item{\code{individuals}}{IDs of individuals or chromosomes belonging to the IBD segment.}
@@ -447,6 +452,19 @@ for minor alleles of other SNVs.
 identified by hapFabia in violet.
 }
 
+    \item{\bold{plotLarger}}{Plots an IBD segment where the SNVs within
+    the cluster are shown, however addtional individuals that do not
+    possess the IBD segment can be added.
+    Further the range can be increased by a certain factor.
+    Additional arguments are \code{fact} and \code{addSamp}.
+    \code{fact} gives the factor by which the IBD segment should be
+    extended to both the left and the right.
+    \code{addSamp} is a vector of individuals/haplotypes
+    which are added to the individuals that possess the IBD segment.
+    The plot allows to view the IBD segment in the context of its
+    DNA location and additional indiviuals. 
+    }
+
 
 
 \item{\bold{Summary}}{Prints the ID of the IBD segment, the
@@ -558,6 +576,8 @@ summary(IBDsegment)
 # Plot method
 plot(IBDsegment,filename="dataSim1fabia_mat")
 
+# Extended plot: more examples and borders 
+plotLarger(IBDsegment,filename="dataSim1fabia_mat",3,sample(100,10))
 
 
 # ACCESSORS 

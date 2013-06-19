@@ -51,7 +51,7 @@ iterateIntervals(startRun=1,endRun,shift=5000,intervalSize=10000,
  \item{cyc}{passed to hapFabia: number of cycles per iterations; default 50.}
  \item{non_negative}{passed to hapFabia: non-negative factors and loadings if non_negative = 1; default = 1 (yes).}
  \item{write_file}{passed to hapFabia: results are written to files (L in sparse format), default = 0 (not written).}
- \item{norm}{passed to hapFabia: data normalization; default 1 (no normalization).}
+ \item{norm}{passed to hapFabia: data normalization; default 0 (no normalization).}
  \item{lap}{passed to hapFabia: minimal value of the variational parameter; default 100.0.}
  \item{IBDsegmentLength}{passed to hapFabia: typical IBD segment length in kbp.}
  \item{Lt}{passed to hapFabia: percentage of largest Ls to consider for IBD segment extraction.}

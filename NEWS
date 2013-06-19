@@ -42,3 +42,13 @@ CHANGES IN VERSION 1.2.0
 
     o bug fix vcftoFABIA 
 
+CHANGES IN VERSION 1.2.2
+------------------------
+
+    o bug fix split_sparse_matrix
+    o plot functions with other arguments '...'
+    o plot arguments grid and pairs
+    o new function 'plotLarger' (add samples without IBD and borders)
+    o vcftoFABIA with command line options -s (SNVs_) and -o (output file)
+    o vcftoFABIA in R with output file name
+
