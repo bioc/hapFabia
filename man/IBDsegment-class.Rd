@@ -394,6 +394,8 @@
 
 \S4method{plot}{IBDsegment}(x,filename, ...)
 
+\S4method{plotLarger}{IBDsegment}(x,filename,fact=1.0,addSamp=c(), ...)
+
 \S4method{summary}{IBDsegment}(object, ...) 
 
 }
@@ -405,6 +407,10 @@
 
 \item{plot}{\code{signature(x = "IBDsegment", y = "missing")}}{ Plot
   of an IBD segment, where tagSNVs, minor and major alleles are plotted.}
+
+\item{plotLarger}{\code{signature(x="IBDsegment", filename="character",fact="numeric",addSamp="ANY")}}{ Plot
+  of an IBD segment with additional individuals and the IBD segment
+  extended to the left and to the right.}
 
 
 \item{summary}{\code{signature(object = "IBDsegment")}}{ Summary of
@@ -420,6 +426,10 @@
   \item{filename}{filename of the file that contains the genotyping
     data. Call of \code{readSamplesSpfabia} from the package \pkg{fabia}
   to read genotype data for the plot. ATTENTION: without file type ".txt"!}
+  \item{fact}{factor by which the IBD segment is extended. The extension
+  is done both at the left and at the right hand side.}
+  \item{addSamp}{vector giving additional individuals, e.g. for adding
+  10 individuals out of N the code \code{sample(N,10)} may be used.}
   \item{...}{further arguments.}
 
 }
@@ -436,7 +446,7 @@
 
   \describe{
 
-    \item{\bold{Plot}}{Plots an IBD segment where the SNVs within
+    \item{\bold{plot}}{Plots an IBD segment where the SNVs within
     the cluster are shown. In the plot the $y$-axis
 gives the individuals or the chromosomes
 and the $x$-axis consecutive SNVs.
@@ -453,7 +463,7 @@ identified by hapFabia in violet.
 }
 
     \item{\bold{plotLarger}}{Plots an IBD segment where the SNVs within
-    the cluster are shown, however addtional individuals that do not
+    the cluster are shown, however additional individuals that do not
     possess the IBD segment can be added.
     Further the range can be increased by a certain factor.
     Additional arguments are \code{fact} and \code{addSamp}.
@@ -462,12 +472,12 @@ identified by hapFabia in violet.
     \code{addSamp} is a vector of individuals/haplotypes
     which are added to the individuals that possess the IBD segment.
     The plot allows to view the IBD segment in the context of its
-    DNA location and additional indiviuals. 
+    DNA location and additional individuals. 
     }
 
 
 
-\item{\bold{Summary}}{Prints the ID of the IBD segment, the
+\item{\bold{summary}}{Prints the ID of the IBD segment, the
   bicluster it is derived from, the chromosome and position where it is
   located, its length, the number of individuals/chromosomes that belong
   to it, the number of tagSNVs that mark it.}
