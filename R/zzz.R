@@ -40,11 +40,11 @@
       "|#.....#...#.......#.#....#|  #       #    #  #    #  #  #    # \n",
       "+--------------------------+  #       #    #  #####   #  #    # \n")
     version <- packageDescription("hapFabia",fields="Version")
-    packageStartupMessage( "Citation: S. Hochreiter et al.,","\n",
-      "FABIA: Factor Analysis for Bicluster Acquisition,","\n",
-      "Bioinformatics 26(12):1520-1527, 2010.","\n",
-      "BibTex: enter 'toBibtex(citation(\"fabia\"))'","\n\n",
-      "Homepage: http://www.bioinf.jku.at/software/hapFabia/hapFabia.html","\n\n",
+    packageStartupMessage( "Citation: S. Hochreiter,","\n",
+      "HapFABIA: Identification of very short segments of identity by descent characterized by rare variants in large sequencing data,","\n",
+      "Nucleic Acids Research, 2013, doi: 10.1093/nar/gkt1013.","\n",
+      "BibTex: enter 'toBibtex(citation(\"hapFabia\"))'","\n\n",
+      "Homepage: http://www.bioinf.jku.at/software/hapFabia/index.html","\n\n",
       "hapFabia Package Version ", version, "\n")
 }
 
