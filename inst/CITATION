@@ -9,15 +9,15 @@ citEntry(entry="article",
          title="{HapFABIA}: Identification of very short segments of identity by descent characterized by rare variants in large sequencing data",
          author=personList(as.person("Sepp Hochreiter")),
          journal="Nucleic Acids Research",
-         volume="",
-         number="",
-         pages="",
+         volume="41",
+         number="22",
+         pages="e202",
          note="doi:10.1093/nar/gkt1013",
          year="2013",
          textVersion =
              paste("S. Hochreiter,",
                    "HapFABIA: Identification of very short segments of identity by descent characterized by rare variants in large sequencing data",
-                   "Nucleic Acids Research, 2013, doi: 10.1093/nar/gkt1013."))
+                   "Nucleic Acids Research, 41(22):e202, 2013, doi: 10.1093/nar/gkt1013."))
 
 citFooter("To obtain the references in BibTex format, enter",
           "'toBibtex(citation(\"hapFabia\"))'")
