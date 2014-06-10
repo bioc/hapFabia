@@ -2,7 +2,7 @@ Package: hapFabia
 Title: hapFabia: Identification of very short segments of identity by
         descent (IBD) characterized by rare variants in large
         sequencing data
-Version: 1.7.0
+Version: 1.7.1
 Date: 2013-12-11
 Author: Sepp Hochreiter <hochreit@bioinf.jku.at>
 Maintainer: Sepp Hochreiter <hochreit@bioinf.jku.at>
@@ -30,5 +30,5 @@ Collate: AllClasses.R AllGenerics.R hapFabia.R
         methods-IBDsegmentList-class.R zzz.R
 URL: http://www.bioinf.jku.at/software/hapFabia/hapFabia.html
 biocViews: Genetics, GeneticVariability, SNP, Sequencing, Sequencing,
-        Visualization, Clustering, SequenceMatching, Homo_sapiens,
+        Visualization, Clustering, SequenceMatching,
         Software
