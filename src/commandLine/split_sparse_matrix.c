@@ -6,7 +6,7 @@ int split_sparse_matrixB(int narg, const char *arg1, const char *arg2, const cha
  
 void Rprintf(const char * RSformat, ...) {
 
-  printf(RSformat);
+  printf("%s",RSformat);
 
   return;
 
