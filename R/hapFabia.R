@@ -942,9 +942,6 @@ message("                      ")
 
 
 
-require("fabia")
-
-
 # Compute internal parameters
 
 # ps: quantile above which to consider Ls

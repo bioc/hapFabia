@@ -444,7 +444,6 @@ function(object, ...)
 setMethod("plot",signature(x="IBDsegment", y="missing"),
 function(x,filename, ...) {
 
-    require(fabia)
 
     if (missing(x)) {
         stop("IBD segment 'x' is missing. Stopped.")
@@ -485,7 +484,6 @@ plotIBDsegment(Lout=Lout,tagSNV=tagSNVL,physPos=tagSNVPositions,colRamp=12,val=c
 setMethod("plotLarger",signature(x="IBDsegment", filename="character",fact="numeric",addSamp="ANY"),
 function(x,filename,fact=1.0,addSamp=c(), ...) {
 
-    require(fabia)
 
     if (missing(x)) {
         stop("IBD segment 'x' is missing. Stopped.")
