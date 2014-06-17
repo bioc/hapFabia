@@ -144,7 +144,6 @@ function(object, ...)
 setMethod("plot",signature(x="IBDsegmentList", y="missing"),
 function(x,filename, ...) {
 
-    require(fabia)
 
     if (missing(x)) {
         stop("List of IBD segments 'x' is missing. Stopped.")
