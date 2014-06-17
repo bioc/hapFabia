@@ -7,7 +7,7 @@ int vcftoFABIAB(const char *arg1, const char *arg2, const char *arg3, const char
 
 void Rprintf(const char * RSformat, ...) {
 
-  printf(RSformat);
+  printf("%s",RSformat);
 
   return;
 

@@ -50,8 +50,8 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 
   FILE *pFile,*pFile1;
     
-  int i,i1,j,j1,individuals,snps,size,shift,ig,parts,
-    annotation,inI,start,end,diff,rest;
+  int i=0,i1=0,j=0,j1=0,individuals=0,snps=0,size=0,shift=0,ig=0,parts=0,
+    annotation=0,inI=0,start=0,end=0,diff=0,rest=0,ret=0;
 
     //snps =  3530000;
     
@@ -75,14 +75,14 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 
     char snpName[500], major[2000],minor[2000],filter[200],
       info[2000],format[200],qual[200];
-    int chrom,pos,change;
+    int chrom=0,pos=0,change=0;
     double freq;
 
 
 
 
 
-    sst[0]=0;
+   sst[0]=0;
     strcat(sst,agr1);
     strcat(sst,agr2);
     pFile = fopen(sst,"r");
@@ -92,8 +92,8 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
       return(-1);
     }
 
-    fscanf(pFile,"%d\n",&individuals);  
-    fscanf(pFile,"%d\n",&snps);  
+    ret=fscanf(pFile,"%d\n",&individuals);  
+    ret=fscanf(pFile,"%d\n",&snps);  
  
     parts = (snps-size)/shift+2; 
     rest = snps-(parts-1)*shift;
@@ -158,13 +158,13 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 
       Rprintf("Write Individual: %d\r",(i+1));
 
-	fscanf(pFile,"%d\n",&ig);
+	ret=fscanf(pFile,"%d\n",&ig);
 	for(j = 0; j < ig; j ++)
-	    fscanf(pFile,"%d ",&Lind[j]);
-	fscanf(pFile,"\n");
+	    ret=fscanf(pFile,"%d ",&Lind[j]);
+	ret=fscanf(pFile,"\n");
 	for(j = 0; j < ig; j ++)
-	    fscanf(pFile,"%lf ",&Lval[j]);
-	fscanf(pFile,"\n");
+	    ret=fscanf(pFile,"%lf ",&Lval[j]);
+	ret=fscanf(pFile,"\n");
 
 	for(i1 = 0; i1 < parts; i1 ++)
 	{
@@ -276,8 +276,8 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
     }
  
 
-    fscanf(pFile,"Individuals: %d\n",&individuals);  
-    fscanf(pFile,"SNVs       : %d\n",&snps);  
+    ret=fscanf(pFile,"Individuals: %d\n",&individuals);  
+    ret=fscanf(pFile,"SNVs       : %d\n",&snps);  
  
 
 
@@ -332,7 +332,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
    j1=1;
    for(j = 0; j < snps; j ++)
    {
-     fscanf(pFile,"%d %d %s %s %s %s %s %s %s %lf %d\n",&chrom,&pos, snpName, major, minor,qual,filter,info,format,&freq,&change);
+     ret=fscanf(pFile,"%d %d %s %s %s %s %s %s %s %lf %d\n",&chrom,&pos, snpName, major, minor,qual,filter,info,format,&freq,&change);
      
      
 
