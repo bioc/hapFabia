@@ -60,7 +60,6 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
     //individuals = 1094;
     //snps = 1844361;
 
-
     size = atoi(agr3);
     shift = atoi(agr4);
     annotation = atoi(agr5);
@@ -82,7 +81,7 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
 
 
 
-   sst[0]=0;
+    sst[0]=0;
     strcat(sst,agr1);
     strcat(sst,agr2);
     pFile = fopen(sst,"r");
@@ -93,8 +92,17 @@ int split_sparse_matrixB(int narg, char *agr1,  char *agr2,  char *agr3 , char *
     }
 
     ret=fscanf(pFile,"%d\n",&individuals);  
+    if (ret<1) {
+      Rprintf("Wrong format.\n");
+      return(-1);
+    }
+
     ret=fscanf(pFile,"%d\n",&snps);  
- 
+    if (ret<1) {
+      Rprintf("Wrong format.\n");
+      return(-1);
+    }
+
     parts = (snps-size)/shift+2; 
     rest = snps-(parts-1)*shift;
 

@@ -306,49 +306,81 @@ int vcftoFABIAB(const char *agr1, const char *agr2, const char *agr3, const char
 	      switch(samples) {
 	      case 0:  
 		ret=sscanf(p,"%hu", &gh1);
+		if (ret<1) {
+		  chrom[j] = 1;
+		} else {
 		chrom[j] = gh1;
+		}
 		break;
 
 	      
 	      case 1:  
 		ret=sscanf(p,"%u", &hpp);
-		pos[j] = hpp;
+		if (ret<1) {
+		  pos[j] = 0;
+		} else {
+		  pos[j] = hpp;
+		}
 
 		break;
 
 	      case 2:  
 		ret=sscanf(p,"%s", IsnpName);
-       		strncat(snpName[j],IsnpName,49);
+		if (ret<1) {
+		  strncat(snpName[j],"",49);
+		} else {
+		  strncat(snpName[j],IsnpName,49);
+		}
 		
 		break;
 
 	      case 3:  
 		ret=sscanf(p,"%s", Imajor);
-		strncat(major[j],Imajor,190);
+		if (ret<1) {
+		  strncat(major[j],"",190);
+		} else {
+		  strncat(major[j],Imajor,190);
+		}
 
 		break;
 
 	      case 4:  
 		ret=sscanf(p,"%s",  Iminor);
-		strncat(minor[j],Iminor,190);
+		if (ret<1) {
+		  strncat(minor[j],"",190);
+		} else {
+		  strncat(minor[j],Iminor,190);
+		}
 
 		break;
 
 	      case 5:  
 		ret=sscanf(p,"%s", Iqual);
-		strncat(qual[j],Iqual,19);
+		if (ret<1) {
+		  strncat(qual[j],"",19);
+		} else {
+		  strncat(qual[j],Iqual,19);
+		}
 
 		break;
 
 	      case 6:  
 		ret=sscanf(p,"%s", Ifilter);
-		strncat(filter[j],Ifilter,19);
+		if (ret<1) {
+		  strncat(filter[j],"",19);
+		} else {
+		  strncat(filter[j],Ifilter,19);
+		}
 
 		break;
 
 	      case 7:  
 		ret=sscanf(p,"%s", Iinfo);
-		strncat(info[j],Iinfo,190);
+		if (ret<1) {
+		  strncat(info[j],"",190);
+		} else {
+		  strncat(info[j],Iinfo,190);
+		}
 
 		break;
 
@@ -356,7 +388,11 @@ int vcftoFABIAB(const char *agr1, const char *agr2, const char *agr3, const char
 
 	    case 8:
 		ret=sscanf(p,"%s",Iformat);
-		strncat(format[j],Iformat,19);
+		if (ret<1) {
+		  strncat(format[j],"",19);
+		} else {
+		  strncat(format[j],Iformat,19);
+		}
 		p1 =  strtok_rS (p,":",&saveptr2);
 		GTpos=0;
 		DSpos=0;
