@@ -1,10 +1,5 @@
 citHeader("To cite package 'hapFabia' in publications use:")
 
-desc <- packageDescription("hapFabia")
-year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-vers <- paste("R package version", desc$Version)
-url  <- desc$URL
-
 citEntry(entry="article",
          title="{HapFABIA}: Identification of very short segments of identity by descent characterized by rare variants in large sequencing data",
          author=personList(as.person("Sepp Hochreiter")),
