@@ -230,5 +230,6 @@ S. Hochreiter et al.,
 Bioinformatics 26(12):1520-1527, 2010.
 
 }
+\value{Splits genotyping data in sparse matrix format into intervals}
 \keyword{file,connection}
 \concept{genetics,haplotype,identity by descent,bicluster,next generation sequencing,genotype,single nucleotide polymorphism,single nucleotide variation}

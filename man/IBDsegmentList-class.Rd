@@ -294,13 +294,9 @@ mergedIBDsegmentList[[3]] <-
 
 summary(mergedIBDsegmentList)
 
-mergedIBDsegmentList[c(3,4)] <-
-   mergedIBDsegmentList[c(1,2)]
-
-summary(mergedIBDsegmentList)
-
-
-
+# mergedIBDsegmentList[c(3,4)] <-
+#    mergedIBDsegmentList[c(1,2)]
+# summary(mergedIBDsegmentList)
 }
 
 

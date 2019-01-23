@@ -242,6 +242,9 @@ plot(IBDsegment,filename=paste(fileName,pRange,"_mat",sep=""))
 }
 
 }
+
+\value{Converting genotyping data from vcf to sparse matrix format}
+
 \references{
 
 S. Hochreiter et al.,

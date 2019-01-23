@@ -8,6 +8,7 @@
 \usage{
 hapFabiaVersion()
 }
+\value{Displays version information about the package}
 \seealso{
 \code{\link{IBDsegment-class}},
 \code{\link{IBDsegmentList-class}},

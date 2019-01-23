@@ -95,6 +95,8 @@ setwd(old_dir)
 
 }
 
+\value{Generates simulated genotyping data with IBD segments for fabia}
+
 \references{
 
 S. Hochreiter et al.,

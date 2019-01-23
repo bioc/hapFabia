@@ -120,7 +120,7 @@ list containing:
 \author{Sepp Hochreiter}
 
 \examples{
-
+print("Loop over extracted IBD segments to supply a descriptive statistics")
 \dontrun{
 #########################################
 ## Already run in "iterateIntervals.Rd" ##

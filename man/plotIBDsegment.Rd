@@ -175,7 +175,7 @@ plotIBDsegment(Lout=Lout,tagSNV=tagSNVsL,
 setwd(old_dir)
 
 }
-
+\value{Plots an IBD segment given genotype data and tagSNVs}
 
 
 \references{

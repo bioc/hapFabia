@@ -126,6 +126,7 @@ iterateIntervals(startRun=1,endRun,shift=5000,intervalSize=10000,
  }
  
 }
+\value{Loop over DNA intervals with a call of hapFabia}
 \seealso{
 \code{\link{IBDsegment-class}},
 \code{\link{IBDsegmentList-class}},

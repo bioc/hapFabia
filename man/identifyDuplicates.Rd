@@ -20,11 +20,8 @@
   Results are written to the file "dups.Rda".
 }
 \usage{
-
 identifyDuplicates(fileName,startRun=1,endRun,
    shift=5000,intervalSize=10000)
-
-
 }
 \arguments{
  \item{fileName}{file name prefix without type of the result of \code{hapFabia}; Attention no type!}
@@ -57,6 +54,7 @@ identifyDuplicates(fileName,startRun=1,endRun,
   Implementation in \R.
 
 }
+\value{IBD segments that are similar to each other are identified}
 \seealso{
 \code{\link{IBDsegment-class}},
 \code{\link{IBDsegmentList-class}},
@@ -90,6 +88,7 @@ identifyDuplicates(fileName,startRun=1,endRun,
 \author{Sepp Hochreiter}
 
 \examples{
+print("Identify duplicates of IBD segments")
 \dontrun{
 #########################################
 ## Already run in "iterateIntervals.Rd" ##

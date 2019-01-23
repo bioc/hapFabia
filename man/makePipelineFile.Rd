@@ -81,7 +81,7 @@ cat(a)
 setwd(old_dir)
 
 }
-
+\value{Run a whole IBD segment extraction pipeline}
 \references{
 
 S. Hochreiter et al.,

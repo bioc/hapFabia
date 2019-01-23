@@ -86,7 +86,7 @@ matrixPlot(mat)
 
 
 }
-
+\value{Plots a matrix where different values are coded by different colors}
 \references{
 
 S. Hochreiter et al.,

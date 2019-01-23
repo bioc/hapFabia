@@ -111,6 +111,7 @@ setwd(old_dir)
 }
 
 }
+\value{Generates simulated genotyping data with IBD segments}
 \references{
 
 S. Hochreiter et al.,
